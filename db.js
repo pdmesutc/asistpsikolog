@@ -1,6 +1,6 @@
 /**
  * AsistPsikolog - Merkezi Veritabanı, Yetkilendirme ve Senkronizasyon Motoru (db.js)
- * Şube, Oda, Uzman, Firma, Rol Bazlı Oturum (AsistAuth) ve ID Tabanlı İlişkisel Mimari
+ * Şube, Oda, Uzman, Firma, KDV Motoru, Rol Bazlı Oturum (AsistAuth) ve İlişkisel Mimari
  */
 
 const ASIST_DB_KEY = 'ASIST_PSIKOLOG_CENTRAL_DB_V2';
@@ -12,7 +12,6 @@ function asistTarihISO(d) {
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
-// Başlangıç verisindeki örnek seanslar için tarih: bugün (Pazar ise ertesi gün)
 function asistSeedTarihi() {
     let d = new Date();
     if (d.getDay() === 0) d.setDate(d.getDate() + 1);
@@ -27,7 +26,6 @@ function asistVarsayilanTakvim() {
     }));
 }
 
-// 12 haneli (90...) veya 11 haneli (0...) numaraları 10 haneye indirger
 function asistTel10(raw) {
     let digits = String(raw === null || raw === undefined ? '' : raw).replace(/\D/g, '');
     if (digits.length === 12 && digits.startsWith('90')) digits = digits.slice(2);
@@ -39,6 +37,44 @@ function asistTelGorunum(tel10) {
     return tel10.length === 10
         ? `0(${tel10.slice(0, 3)}) ${tel10.slice(3, 6)} ${tel10.slice(6, 8)} ${tel10.slice(8, 10)}`
         : tel10;
+}
+
+/**
+ * KDV ve Hak Ediş Hesaplama Motoru
+ * kdvDahil true ise: Brüt ücretten iç yüzde ile KDV ayrılır, kalan Matrah üzerinden Ofis ve Uzman payı hesaplanır.
+ */
+function asistHesaplaFinans(ucret, ofisOranYuzde, kdvDahil = false, kdvOrani = 20) {
+    let brut = Number(ucret);
+    if (!Number.isFinite(brut) || brut < 0) brut = 0;
+
+    let oran = Number(ofisOranYuzde);
+    if (!Number.isFinite(oran)) oran = 50;
+    oran = Math.min(100, Math.max(0, oran));
+
+    let kOran = Number(kdvOrani);
+    if (!Number.isFinite(kOran) || kOran < 0) kOran = 20;
+
+    let matrah = brut;
+    let kdvTutari = 0;
+
+    if (kdvDahil && kOran > 0 && brut > 0) {
+        matrah = Math.round(brut / (1 + (kOran / 100)));
+        kdvTutari = brut - matrah;
+    }
+
+    let ofisPay = Math.round(matrah * (oran / 100));
+    let uzmanPay = matrah - ofisPay;
+
+    return {
+        brut: brut,
+        matrah: matrah,
+        kdvDahil: !!kdvDahil,
+        kdvOrani: kdvDahil ? kOran : 0,
+        kdvTutari: kdvTutari,
+        ofisPay: ofisPay,
+        uzmanPay: uzmanPay,
+        ofisKasaToplam: ofisPay + kdvTutari
+    };
 }
 
 const SEED_TARIHI = asistSeedTarihi();
@@ -102,10 +138,10 @@ const DEFAULT_ASIST_DB = {
         { id: 34, ad: "Merve Erkan", tel: "5387268488", subeId: 1, firmaId: null }
     ],
     seanslar: [
-        { id: 1, subeId: 1, tarih: SEED_TARIHI, saat: "10:00", danisanId: 8, basvuruTuru: "ofis", firmaId: null, hizmet: "Yetişkin", uzmanId: 8, odaId: "pnd_oda_1", ucret: 1500, ofisOranSnapshot: 50, durum: "odendi", odemeTipi: "nakit", iptalSebebi: "", ikinciDanisanAd: "", ikinciDanisanTel: "" },
-        { id: 2, subeId: 1, tarih: SEED_TARIHI, saat: "11:00", danisanId: 11, basvuruTuru: "ofis", firmaId: null, hizmet: "Yetişkin", uzmanId: 8, odaId: "pnd_oda_1", ucret: 1500, ofisOranSnapshot: 50, durum: "bekliyor", odemeTipi: "", iptalSebebi: "", ikinciDanisanAd: "", ikinciDanisanTel: "" },
-        { id: 3, subeId: 1, tarih: SEED_TARIHI, saat: "14:00", danisanId: 60, basvuruTuru: "firma", firmaId: 1, hizmet: "Çocuk", uzmanId: 1, odaId: "pnd_oda_3", ucret: 0, ofisOranSnapshot: 0, durum: "odendi", odemeTipi: "firma_cari", iptalSebebi: "", ikinciDanisanAd: "", ikinciDanisanTel: "" },
-        { id: 4, subeId: 1, tarih: SEED_TARIHI, saat: "16:00", danisanId: 34, basvuruTuru: "kendi", firmaId: null, hizmet: "Yetişkin", uzmanId: 2, odaId: "pnd_oda_2", ucret: 1500, ofisOranSnapshot: 30, durum: "iptal", odemeTipi: "", iptalSebebi: "İş yoğunluğu nedeniyle gelemedi", ikinciDanisanAd: "", ikinciDanisanTel: "" }
+        { id: 1, subeId: 1, tarih: SEED_TARIHI, saat: "10:00", danisanId: 8, basvuruTuru: "ofis", firmaId: null, hizmet: "Yetişkin", uzmanId: 8, odaId: "pnd_oda_1", ucret: 1500, ofisOranSnapshot: 50, kdvDahil: false, kdvOrani: 20, kdvTutari: 0, matrahTutar: 1500, durum: "odendi", odemeTipi: "nakit", iptalSebebi: "", ikinciDanisanAd: "", ikinciDanisanTel: "" },
+        { id: 2, subeId: 1, tarih: SEED_TARIHI, saat: "11:00", danisanId: 11, basvuruTuru: "ofis", firmaId: null, hizmet: "Yetişkin", uzmanId: 8, odaId: "pnd_oda_1", ucret: 1500, ofisOranSnapshot: 50, kdvDahil: false, kdvOrani: 20, kdvTutari: 0, matrahTutar: 1500, durum: "bekliyor", odemeTipi: "", iptalSebebi: "", ikinciDanisanAd: "", ikinciDanisanTel: "" },
+        { id: 3, subeId: 1, tarih: SEED_TARIHI, saat: "14:00", danisanId: 60, basvuruTuru: "firma", firmaId: 1, hizmet: "Çocuk", uzmanId: 1, odaId: "pnd_oda_3", ucret: 0, ofisOranSnapshot: 0, kdvDahil: false, kdvOrani: 0, kdvTutari: 0, matrahTutar: 0, durum: "odendi", odemeTipi: "firma_cari", iptalSebebi: "", ikinciDanisanAd: "", ikinciDanisanTel: "" },
+        { id: 4, subeId: 1, tarih: SEED_TARIHI, saat: "16:00", danisanId: 34, basvuruTuru: "kendi", firmaId: null, hizmet: "Yetişkin", uzmanId: 2, odaId: "pnd_oda_2", ucret: 1500, ofisOranSnapshot: 30, kdvDahil: false, kdvOrani: 20, kdvTutari: 0, matrahTutar: 1500, durum: "iptal", odemeTipi: "", iptalSebebi: "İş yoğunluğu nedeniyle gelemedi", ikinciDanisanAd: "", ikinciDanisanTel: "" }
     ],
     uzmanCalismaSaatleri: {
         "8_1": [
@@ -172,6 +208,11 @@ function asistNormalizeDb(db) {
     db.seanslar.forEach(s => {
         if (s.ikinciDanisanAd === undefined) { s.ikinciDanisanAd = ""; degisti = true; }
         if (s.ikinciDanisanTel === undefined) { s.ikinciDanisanTel = ""; degisti = true; }
+        if (typeof s.kdvDahil !== 'boolean') { s.kdvDahil = false; degisti = true; }
+        if (s.kdvOrani === undefined) { s.kdvOrani = 20; degisti = true; }
+        let hesap = asistHesaplaFinans(s.ucret, s.ofisOranSnapshot, s.kdvDahil, s.kdvOrani);
+        if (s.kdvTutari === undefined) { s.kdvTutari = hesap.kdvTutari; degisti = true; }
+        if (s.matrahTutar === undefined) { s.matrahTutar = hesap.matrah; degisti = true; }
     });
 
     [db.yoneticiler, db.asistanlar, db.psikologlar, db.danisanlar].forEach(liste => {
@@ -209,6 +250,7 @@ const AsistDB = {
     },
 
     normalizeTel: asistTel10,
+    hesaplaFinans: asistHesaplaFinans,
 
     get: function() {
         const raw = localStorage.getItem(ASIST_DB_KEY);

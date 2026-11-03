@@ -96,12 +96,16 @@
                         <p class="text-xs text-slate-500"><span id="txt-aktif-sube-gorusmeler">Pendik Merkez Şube</span> • Şube ve saat bazlı seans akışı.</p>
                     </div>
 
-                    <div class="flex items-center space-x-3 text-xs">
+                    <div class="flex flex-wrap items-center gap-2.5 text-xs">
                         <div class="bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-xl">
                             <span class="text-slate-500 font-bold block text-[10px]">Fiziki Kasa Tahsilatı:</span>
                             <strong id="seans-kasa-toplam" class="text-sm font-black text-emerald-800">₺0</strong>
                         </div>
-                        <div class="bg-slate-50 border border-emerald-200 px-3 py-1.5 rounded-xl">
+                        <div class="bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-xl">
+                            <span class="text-amber-800 font-bold block text-[10px]">İçindeki KDV:</span>
+                            <strong id="seans-kasa-kdv" class="text-sm font-black text-amber-900">₺0</strong>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-xl">
                             <span class="text-slate-500 font-bold block text-[10px]">Nakit / Havale:</span>
                             <span class="font-extrabold text-slate-700" id="seans-kasa-detay">₺0 / ₺0</span>
                         </div>
@@ -141,7 +145,7 @@
             </div>
         </div>
 
-        <!-- 2. RANDEVU OLUŞTUR (ÇİFT SEANSI DİNAMİK 2. KİŞİ ALANI VE GEÇMİŞ SAAT ENGELİ) -->
+        <!-- 2. RANDEVU OLUŞTUR -->
         <div id="asekm-randevu-olustur" class="asistan-sekme hidden space-y-6">
             <div class="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-5">
                 <div class="border-b border-slate-100 pb-3 flex items-center justify-between">
@@ -183,7 +187,7 @@
                         </div>
                     </div>
 
-                    <!-- DİNAMİK ÇİFT SEANSI İKİNCİ DANIŞAN ALANLARI (İsim ve Telefonun tam altında) -->
+                    <!-- DİNAMİK ÇİFT SEANSI İKİNCİ DANIŞAN ALANLARI -->
                     <div id="asistan-ikinci-danisan-kapsayici" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-4 bg-purple-50/70 p-4 rounded-2xl border border-purple-200">
                         <div>
                             <label class="block font-bold text-purple-950 mb-1">İkinci Danışan (Eş) Adı Soyadı <span class="text-[10px] font-normal text-slate-500">(İsteğe Bağlı)</span></label>
@@ -294,18 +298,18 @@
             </div>
         </div>
 
-        <!-- 5. KASA & ÖDEMELER (REFERANS TASARIM) -->
+        <!-- 5. KASA & ÖDEMELER (KDV AYRIŞTIRMALI 5'Lİ KART SİSTEMİ) -->
         <div id="asekm-kasa" class="asistan-sekme hidden space-y-6">
             <div class="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-6">
                 <!-- Üst Başlık -->
                 <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
                     <div>
                         <h2 class="text-xl font-extrabold text-slate-900">Kasa & Ödemeler</h2>
-                        <p class="text-xs text-slate-500">Danışanlardan nakit veya havale ile tahsil edilen fiziki kasa girişleri ve uzman hak edişleri.</p>
+                        <p class="text-xs text-slate-500">Danışanlardan nakit veya havale ile tahsil edilen fiziki kasa girişleri, ayrıştırılan KDV ve uzman hak edişleri.</p>
                     </div>
                 </div>
 
-                <!-- Şerit (Referans Tasarım) -->
+                <!-- Şerit -->
                 <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex flex-col lg:flex-row items-center justify-between gap-4 text-xs">
                     <div class="flex flex-wrap items-center gap-1.5 bg-white p-1 rounded-xl border border-slate-200 shadow-2xs">
                         <button onclick="kasaPeriyotDegistir('gun')" id="kflt-gun" class="kasa-periyot-btn px-3 py-1.5 rounded-lg font-bold transition bg-[#256839] text-white shadow-xs cursor-pointer">Gün</button>
@@ -334,27 +338,48 @@
                     </div>
                 </div>
 
-                <!-- 4 Temel Kasa Metriği -->
-                <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
-                    <div class="bg-slate-50 p-5 rounded-2xl border"><span class="text-[10px] font-bold text-slate-400 block uppercase">Fiziki Kasa Girişi</span><h4 id="kasa-toplam-tahsilat" class="text-2xl font-black mt-1">₺0</h4></div>
-                    <div class="bg-emerald-50/70 p-5 rounded-2xl border border-emerald-200"><span class="text-[10px] font-bold text-emerald-800 block uppercase">Ofis Net Payı</span><h4 id="kasa-ofis-payi" class="text-2xl font-black text-[#256839] mt-1">₺0</h4></div>
-                    <div class="bg-slate-50 p-5 rounded-2xl border"><span class="text-[10px] font-bold text-slate-400 block uppercase">Uzman Payı</span><h4 id="kasa-uzman-odemesi" class="text-2xl font-black text-slate-800 mt-1">₺0</h4></div>
-                    <div class="bg-slate-50 p-5 rounded-2xl border"><span class="text-[10px] font-bold text-slate-400 block uppercase">Nakit / Havale</span><p class="text-xs font-bold mt-1" id="kasa-nakit-havale-ozet">₺0 / ₺0</p></div>
+                <!-- 5 Temel Kasa Metriği (KDV Ayrıştırmalı) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                    <div class="bg-slate-50 p-5 rounded-2xl border">
+                        <span class="text-[10px] font-bold text-slate-400 block uppercase">Fiziki Kasa Girişi (Brüt)</span>
+                        <h4 id="kasa-toplam-tahsilat" class="text-2xl font-black mt-1">₺0</h4>
+                        <span class="text-[10px] text-slate-400 block mt-0.5">Kasaya Giren Toplam</span>
+                    </div>
+                    <div class="bg-amber-50/80 p-5 rounded-2xl border border-amber-200">
+                        <span class="text-[10px] font-bold text-amber-800 block uppercase">Ayrılan KDV Tutarı</span>
+                        <h4 id="kasa-kdv-toplam" class="text-2xl font-black text-amber-900 mt-1">₺0</h4>
+                        <span class="text-[10px] text-amber-700 block mt-0.5">Vergi Emaneti (KDV)</span>
+                    </div>
+                    <div class="bg-emerald-50/70 p-5 rounded-2xl border border-emerald-200">
+                        <span class="text-[10px] font-bold text-emerald-800 block uppercase">Ofis Net Payı</span>
+                        <h4 id="kasa-ofis-payi" class="text-2xl font-black text-[#256839] mt-1">₺0</h4>
+                        <span class="text-[10px] text-emerald-700 block mt-0.5" id="kasa-ofis-arti-kdv-alt">KDV Hariç Net Kâr</span>
+                    </div>
+                    <div class="bg-slate-50 p-5 rounded-2xl border">
+                        <span class="text-[10px] font-bold text-slate-400 block uppercase">Uzman Payı (Net)</span>
+                        <h4 id="kasa-uzman-odemesi" class="text-2xl font-black text-slate-800 mt-1">₺0</h4>
+                        <span class="text-[10px] text-slate-400 block mt-0.5">Matrahtan Hesaplanan</span>
+                    </div>
+                    <div class="bg-slate-50 p-5 rounded-2xl border">
+                        <span class="text-[10px] font-bold text-slate-400 block uppercase">Nakit / Havale</span>
+                        <p class="text-sm font-black mt-2 text-slate-800" id="kasa-nakit-havale-ozet">₺0 / ₺0</p>
+                        <span class="text-[10px] text-slate-400 block mt-1">Ödeme Kanalı Dağılımı</span>
+                    </div>
                 </div>
 
                 <div class="border border-slate-200 rounded-2xl overflow-hidden shadow-2xs">
-                    <div class="bg-slate-50 px-4 py-3 border-b border-slate-200 font-extrabold text-xs text-slate-800">
-                        Uzmanlara Dağıtılacak Hak Ediş Listesi
+                    <div class="bg-slate-50 px-4 py-3 border-b border-slate-200 font-extrabold text-xs text-slate-800 flex items-center justify-between">
+                        <span>Uzmanlara Dağıtılacak Hak Ediş Listesi</span>
+                        <span class="text-[10px] font-semibold text-slate-400">KDV hariç net matrah üzerinden hesaplanmıştır</span>
                     </div>
                     <div id="kasa-uzman-dagitim-listesi" class="divide-y divide-slate-100 text-xs"></div>
                 </div>
             </div>
         </div>
 
-        <!-- 6. KURUMSAL FİRMA RAPORU (KASA İLE BİREBİR AYNI STİL, KONUM VE ŞERİT) -->
+        <!-- 6. KURUMSAL FİRMA RAPORU -->
         <div id="asekm-firma-rapor" class="asistan-sekme hidden space-y-6">
             <div class="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-6">
-                <!-- Üst Başlık (Kasa ile birebir aynı sol konum) -->
                 <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
                     <div>
                         <h2 class="text-xl font-extrabold text-slate-900">Kurumsal Firma Seans Raporu</h2>
@@ -362,7 +387,6 @@
                     </div>
                 </div>
 
-                <!-- Kasa ile Birebir Aynı Filtreleme Şeridi (Başlığın hemen altında, tam boy şerit) -->
                 <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex flex-col lg:flex-row items-center justify-between gap-4 text-xs">
                     <div class="flex flex-wrap items-center gap-1.5 bg-white p-1 rounded-xl border border-slate-200 shadow-2xs">
                         <button onclick="firmaZamanFiltrele('gun')" id="fflt-gun" class="firma-flt-btn px-3 py-1.5 rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Gün</button>
@@ -424,9 +448,9 @@
         </div>
     </div>
 
-    <!-- DÜZENLE & ÖDEME AL MODALI -->
+    <!-- DÜZENLE & ÖDEME AL MODALI (KDV TİKİ VE CANLI AYRIŞTIRMA EKLENDİ) -->
     <div id="islem-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center z-50 p-4">
-        <div class="bg-white max-w-sm w-full p-6 rounded-3xl shadow-xl space-y-4 text-xs">
+        <div class="bg-white max-w-md w-full p-6 rounded-3xl shadow-xl space-y-4 text-xs">
             <div class="flex items-center justify-between pb-2 border-b">
                 <h3 class="font-extrabold text-slate-900 text-sm">Seansı Düzenle & Ödeme</h3>
                 <button onclick="modalKapat()" class="text-slate-400 font-bold cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
@@ -460,21 +484,37 @@
             </div>
 
             <div id="modal-odeme-alanlari" class="space-y-3 pt-2 border-t border-slate-100">
-                <div id="modal-ucret-kapsayici">
-                    <label class="block font-bold text-slate-700 mb-1">Danışandan Alınan Ücret (₺)</label>
+                <div id="modal-ucret-kapsayici" class="space-y-2">
+                    <label class="block font-bold text-slate-700">Danışandan Alınan Toplam Ücret (₺)</label>
                     <input type="number" id="modal-ucret" min="0" oninput="modalUcretVeOranHesapla()" class="w-full bg-slate-50 p-2.5 rounded-xl border font-black text-slate-900 text-sm">
+
+                    <!-- KDV TİKİ VE ORAN SEÇENEĞİ -->
+                    <div class="flex items-center justify-between bg-amber-50/90 border border-amber-200 p-2.5 rounded-xl">
+                        <label class="flex items-center space-x-2 cursor-pointer font-extrabold text-amber-950">
+                            <input type="checkbox" id="modal-kdv-dahil" onchange="modalUcretVeOranHesapla()" class="w-4 h-4 rounded text-[#256839] cursor-pointer">
+                            <span>KDV'li Ücret (İçinden KDV Ayır)</span>
+                        </label>
+                        <div id="modal-kdv-oran-kutu" class="hidden flex items-center space-x-1">
+                            <span class="text-[10px] font-bold text-amber-800">KDV %</span>
+                            <input type="number" id="modal-kdv-orani" value="20" min="1" max="100" oninput="modalUcretVeOranHesapla()" class="w-12 bg-white border border-amber-300 rounded-lg p-1 text-center font-black text-amber-900 text-xs">
+                        </div>
+                    </div>
                 </div>
 
-                <div id="modal-oran-kapsayici" class="bg-slate-50 p-3 rounded-2xl border border-slate-200 space-y-2">
+                <!-- CANLI HAK EDİŞ VE KDV DÖKÜM KUTUSU -->
+                <div id="modal-oran-kapsayici" class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 space-y-2.5">
                     <div class="flex items-center justify-between">
                         <label class="font-extrabold text-slate-800 text-[11px]">Ofis Payı Oranı (%)</label>
                         <span id="modal-varsayilan-ipucu" class="text-[10px] text-slate-400 italic"></span>
                     </div>
-                    <div class="grid grid-cols-2 gap-2 items-center">
-                        <input type="number" id="modal-ofis-orani" min="0" max="100" oninput="modalUcretVeOranHesapla()" class="w-full bg-white p-2 rounded-xl border border-slate-300 font-black text-emerald-800 text-center">
-                        <div class="text-right">
-                            <div class="text-[11px] font-bold text-slate-600">Ofis: <strong id="modal-hesap-ofis" class="text-[#256839]">₺0</strong></div>
-                            <div class="text-[11px] font-bold text-slate-600">Uzman: <strong id="modal-hesap-uzman" class="text-slate-900">₺0</strong></div>
+                    <div class="grid grid-cols-2 gap-3 items-center">
+                        <input type="number" id="modal-ofis-orani" min="0" max="100" oninput="modalUcretVeOranHesapla()" class="w-full bg-white p-2.5 rounded-xl border border-slate-300 font-black text-emerald-800 text-center text-sm">
+                        <div class="text-right space-y-0.5">
+                            <div id="modal-kdv-satir" class="hidden text-[11px] font-bold text-amber-800">
+                                KDV: <strong id="modal-hesap-kdv">₺0</strong> • Matrah: <strong id="modal-hesap-matrah">₺0</strong>
+                            </div>
+                            <div class="text-[11px] font-bold text-slate-600">Ofis Net: <strong id="modal-hesap-ofis" class="text-[#256839]">₺0</strong></div>
+                            <div class="text-[11px] font-bold text-slate-600">Uzman Hak Ediş: <strong id="modal-hesap-uzman" class="text-slate-900">₺0</strong></div>
                         </div>
                     </div>
                 </div>
@@ -588,7 +628,6 @@
             return { baslangic: formatTarihISO(pazartesi), bitis: formatTarihISO(pazar) };
         }
 
-        // GEÇMİŞ TARİH VE GEÇMİŞ SAAT KONTROLÜ
         function gecmisTarihSaatMi(tarih, saat) {
             if (!tarih || !saat) return true;
             let bugun = new Date();
@@ -601,6 +640,21 @@
             return false;
         }
 
+        function seansFinansHesapla(s) {
+            let ucret = numOrDefault(s.ucret, 1500);
+            let oran = numOrDefault(s.ofisOranSnapshot, 50);
+            let kdvDahil = !!s.kdvDahil;
+            let kdvOrani = numOrDefault(s.kdvOrani, 20);
+            if (typeof AsistDB !== 'undefined' && typeof AsistDB.hesaplaFinans === 'function') {
+                return AsistDB.hesaplaFinans(ucret, oran, kdvDahil, kdvOrani);
+            }
+            let matrah = kdvDahil ? Math.round(ucret / (1 + (kdvOrani / 100))) : ucret;
+            let kdvTutari = ucret - matrah;
+            let ofisPay = Math.round(matrah * (oran / 100));
+            let uzmanPay = matrah - ofisPay;
+            return { brut: ucret, matrah, kdvDahil, kdvOrani, kdvTutari, ofisPay, uzmanPay, ofisKasaToplam: ofisPay + kdvTutari };
+        }
+
         function tarihVeyaSaatDegisti() {
             secilenUzmanId = null;
             secilenOdaId = null;
@@ -611,7 +665,6 @@
             document.getElementById('sonuc-alani').classList.add('hidden');
         }
 
-        // ÇİFT SEÇİLİNCE DİNAMİK 2. KİŞİ BİLGİ ALANLARINI GÖSTER
         function asistanHizmetTuruDegisti(tur) {
             tarihVeyaSaatDegisti();
             const ikinciKapsayici = document.getElementById('asistan-ikinci-danisan-kapsayici');
@@ -859,15 +912,17 @@
 
             filtrelenmis.sort((a,b) => a.tarih.localeCompare(b.tarih) || a.saat.localeCompare(b.saat));
 
-            let b = 0, o = 0, i = 0, ciro = 0, nakit = 0, havale = 0;
+            let b = 0, o = 0, i = 0, ciro = 0, nakit = 0, havale = 0, toplamKdv = 0;
 
             if (filtrelenmis.length === 0) {
                 list.innerHTML = `<div class="p-8 text-center bg-slate-50 rounded-2xl border text-xs font-bold text-slate-500">Seçilen dönemde planlanmış görüşme yok.</div>`;
             } else {
                 filtrelenmis.forEach(rawS => {
                     let s = AsistDB.resolveSeans(rawS, db);
-                    let seansUcreti = numOrDefault(s.ucret, 1500);
+                    let fHesap = seansFinansHesapla(s);
+                    let seansUcreti = fHesap.brut;
                     let rozet = '';
+                    let kdvEtiket = '';
                     let butonlar = '';
 
                     let basvuruRozet = s.basvuruTuru === 'firma' 
@@ -880,8 +935,12 @@
                             rozet = `<span class="bg-blue-50 text-blue-800 text-[10px] font-extrabold px-2.5 py-1 rounded-lg border border-blue-200">Firma Carisi (₺0)</span>`;
                         } else {
                             ciro += seansUcreti;
+                            toplamKdv += fHesap.kdvTutari;
                             if (s.odemeTipi === 'nakit') nakit += seansUcreti; else havale += seansUcreti;
                             rozet = `<span class="bg-emerald-100 text-[#256839] text-[10px] font-extrabold px-2.5 py-1 rounded-lg">Ödendi (₺${seansUcreti.toLocaleString('tr-TR')})</span>`;
+                            if (fHesap.kdvDahil && fHesap.kdvTutari > 0) {
+                                kdvEtiket = `<span class="bg-amber-100 text-amber-900 text-[10px] font-extrabold px-2 py-0.5 rounded-lg border border-amber-200">KDV: ₺${fHesap.kdvTutari.toLocaleString('tr-TR')} • Matrah: ₺${fHesap.matrah.toLocaleString('tr-TR')}</span>`;
+                            }
                         }
                         butonlar = `
                             <button onclick="duzenleModalAc(${s.id})" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-xl font-bold transition cursor-pointer">Düzenle</button>
@@ -913,10 +972,11 @@
                             <div class="flex items-center space-x-3.5">
                                 <span class="font-black text-slate-900 w-12 text-sm">${escapeHTML(s.saat)}</span>
                                 <div>
-                                    <div class="flex items-center space-x-2">
+                                    <div class="flex flex-wrap items-center gap-1.5">
                                         <h4 class="font-extrabold text-slate-900 text-sm">${escapeHTML(s.danisanAdi)}</h4>
                                         ${basvuruRozet}
                                         ${rozet}
+                                        ${kdvEtiket}
                                     </div>
                                     ${ikinciKisiBilgi}
                                     <p class="text-slate-500 font-semibold mt-0.5">${escapeHTML(s.uzmanAdi)} • ${escapeHTML(s.odaAdi)} <span class="text-[10px] text-slate-400">(${escapeHTML(s.tarih)})</span></p>
@@ -933,6 +993,7 @@
             document.getElementById('sayac-iptal').innerText = i + " İptal";
             document.getElementById('badge-bugun-sayi').innerText = filtrelenmis.length;
             document.getElementById('seans-kasa-toplam').innerText = '₺' + ciro.toLocaleString('tr-TR');
+            if (document.getElementById('seans-kasa-kdv')) document.getElementById('seans-kasa-kdv').innerText = '₺' + toplamKdv.toLocaleString('tr-TR');
             document.getElementById('seans-kasa-detay').innerText = `₺${nakit.toLocaleString('tr-TR')} / ₺${havale.toLocaleString('tr-TR')}`;
         }
 
@@ -940,7 +1001,7 @@
         function seansBuguneGit() { seciliTarih = new Date(); seanslarTablosunuYenile(); }
 
         // ==========================================
-        // KASA İÇİN GÜN/HAFTA/AY ŞERİT KONTROLÜ
+        // KASA İÇİN GÜN/HAFTA/AY ŞERİT VE KDV HESAPLAMASI
         // ==========================================
         function kasaPeriyotDegistir(p) {
             kasaAktifPeriyot = p;
@@ -997,35 +1058,44 @@
                 }
             }
 
-            let toplamCiro = filtrelenmis.reduce((acc, c) => acc + numOrDefault(c.ucret, 1500), 0);
-            let nakit = filtrelenmis.filter(s => s.odemeTipi === 'nakit').reduce((acc, c) => acc + numOrDefault(c.ucret, 1500), 0);
-            let havale = filtrelenmis.filter(s => s.odemeTipi === 'havale').reduce((acc, c) => acc + numOrDefault(c.ucret, 1500), 0);
-
+            let toplamCiro = 0;
+            let nakit = 0;
+            let havale = 0;
+            let toplamKdv = 0;
             let ofisNet = 0;
             let uzmanPayiToplam = 0;
             let map = {};
 
             filtrelenmis.forEach(s => {
-                let ucret = numOrDefault(s.ucret, 1500);
-                let ofisOran = numOrDefault(s.ofisOranSnapshot, 50) / 100;
-                let oPay = Math.round(ucret * ofisOran);
-                let uzPay = ucret - oPay;
+                let f = seansFinansHesapla(s);
+                toplamCiro += f.brut;
+                if (s.odemeTipi === 'nakit') nakit += f.brut; else havale += f.brut;
 
-                ofisNet += oPay;
-                uzmanPayiToplam += uzPay;
+                toplamKdv += f.kdvTutari;
+                ofisNet += f.ofisPay;
+                uzmanPayiToplam += f.uzmanPay;
 
                 let uz = db.psikologlar.find(p => p.id === s.uzmanId);
                 let uzKey = `uz_${s.uzmanId}`;
                 let uzAd = uz ? uz.ad : `Silinmiş Uzman (#${s.uzmanId})`;
 
-                if (!map[uzKey]) map[uzKey] = { ad: uzAd, adet: 0, hak: 0, ofis: 0 };
+                if (!map[uzKey]) map[uzKey] = { ad: uzAd, adet: 0, brut: 0, kdv: 0, matrah: 0, hak: 0, ofis: 0 };
                 map[uzKey].adet++;
-                map[uzKey].hak += uzPay;
-                map[uzKey].ofis += oPay;
+                map[uzKey].brut += f.brut;
+                map[uzKey].kdv += f.kdvTutari;
+                map[uzKey].matrah += f.matrah;
+                map[uzKey].hak += f.uzmanPay;
+                map[uzKey].ofis += f.ofisPay;
             });
 
             document.getElementById('kasa-toplam-tahsilat').innerText = '₺' + toplamCiro.toLocaleString('tr-TR');
+            if (document.getElementById('kasa-kdv-toplam')) document.getElementById('kasa-kdv-toplam').innerText = '₺' + toplamKdv.toLocaleString('tr-TR');
             document.getElementById('kasa-ofis-payi').innerText = '₺' + ofisNet.toLocaleString('tr-TR');
+            if (document.getElementById('kasa-ofis-arti-kdv-alt')) {
+                document.getElementById('kasa-ofis-arti-kdv-alt').innerText = toplamKdv > 0
+                    ? `KDV Dahil Kasada Kalan: ₺${(ofisNet + toplamKdv).toLocaleString('tr-TR')}`
+                    : 'KDV Hariç Net Kâr';
+            }
             document.getElementById('kasa-uzman-odemesi').innerText = '₺' + uzmanPayiToplam.toLocaleString('tr-TR');
             document.getElementById('kasa-nakit-havale-ozet').innerText = `₺${nakit.toLocaleString('tr-TR')} / ₺${havale.toLocaleString('tr-TR')}`;
 
@@ -1041,13 +1111,20 @@
             } else {
                 keys.forEach(k => {
                     let item = map[k];
+                    let kdvAciklama = item.kdv > 0
+                        ? `Brüt: ₺${item.brut.toLocaleString('tr-TR')} • Ayrılan KDV: ₺${item.kdv.toLocaleString('tr-TR')} • Matrah: ₺${item.matrah.toLocaleString('tr-TR')} • Ofis Net: ₺${item.ofis.toLocaleString('tr-TR')}`
+                        : `Brüt/Matrah: ₺${item.brut.toLocaleString('tr-TR')} • Ofise Bıraktığı Net: ₺${item.ofis.toLocaleString('tr-TR')}`;
+
                     container.innerHTML += `
                         <div class="flex justify-between items-center p-3.5 bg-white text-xs">
                             <div>
-                                <span class="font-extrabold text-slate-900">${escapeHTML(item.ad)}</span>
-                                <span class="text-slate-400 block text-[10px]">${item.adet} Seans (Ofise Bıraktığı: ₺${item.ofis.toLocaleString('tr-TR')})</span>
+                                <span class="font-extrabold text-slate-900">${escapeHTML(item.ad)} <span class="text-slate-400 font-bold">(${item.adet} Seans)</span></span>
+                                <span class="text-slate-500 block text-[10px] mt-0.5">${kdvAciklama}</span>
                             </div>
-                            <strong class="text-emerald-800 font-extrabold text-sm">₺${item.hak.toLocaleString('tr-TR')}</strong>
+                            <div class="text-right">
+                                <span class="text-[10px] text-slate-400 block">Uzmana Ödenecek</span>
+                                <strong class="text-emerald-800 font-extrabold text-sm">₺${item.hak.toLocaleString('tr-TR')}</strong>
+                            </div>
                         </div>
                     `;
                 });
@@ -1055,7 +1132,7 @@
         }
 
         // ==========================================
-        // 6. KURUMSAL FİRMA RAPORU (KASA İLE BİREBİR AYNI STİL ŞERİT MANTIĞI)
+        // 6. KURUMSAL FİRMA RAPORU
         // ==========================================
         function firmaZamanFiltrele(periyot) {
             firmaAktifPeriyot = periyot;
@@ -1197,6 +1274,9 @@
                 document.getElementById('modal-firma-id').value = s.firmaId;
             }
 
+            document.getElementById('modal-kdv-dahil').checked = !!s.kdvDahil;
+            document.getElementById('modal-kdv-orani').value = numOrDefault(s.kdvOrani, 20) || 20;
+
             modalBasvuruTuruDegisti(basvuruSelect.value, false);
 
             if (s.odemeTipi === 'havale') document.getElementById('radio-havale').checked = true;
@@ -1222,6 +1302,7 @@
                 oranKapsayici.classList.add('hidden');
                 odemeYontemiKapsayici.classList.add('hidden');
                 document.getElementById('modal-ucret').value = 0;
+                document.getElementById('modal-kdv-dahil').checked = false;
             } else {
                 firmaSecimAlani.classList.add('hidden');
                 ucretKapsayici.classList.remove('hidden');
@@ -1251,14 +1332,18 @@
         function modalUcretVeOranHesapla() {
             let ucret = numOrDefault(document.getElementById('modal-ucret').value, 0);
             let ofisOran = numOrDefault(document.getElementById('modal-ofis-orani').value, 0);
-            if (ofisOran < 0) ofisOran = 0;
-            if (ofisOran > 100) ofisOran = 100;
+            let kdvDahil = document.getElementById('modal-kdv-dahil').checked;
+            let kdvOrani = numOrDefault(document.getElementById('modal-kdv-orani').value, 20);
 
-            let ofisPay = Math.round(ucret * (ofisOran / 100));
-            let uzPay = ucret - ofisPay;
+            document.getElementById('modal-kdv-oran-kutu').classList.toggle('hidden', !kdvDahil);
+            document.getElementById('modal-kdv-satir').classList.toggle('hidden', !kdvDahil);
 
-            document.getElementById('modal-hesap-ofis').innerText = `₺${ofisPay.toLocaleString('tr-TR')}`;
-            document.getElementById('modal-hesap-uzman').innerText = `₺${uzPay.toLocaleString('tr-TR')}`;
+            let f = AsistDB.hesaplaFinans(ucret, ofisOran, kdvDahil, kdvOrani);
+
+            document.getElementById('modal-hesap-kdv').innerText = `₺${f.kdvTutari.toLocaleString('tr-TR')}`;
+            document.getElementById('modal-hesap-matrah').innerText = `₺${f.matrah.toLocaleString('tr-TR')}`;
+            document.getElementById('modal-hesap-ofis').innerText = `₺${f.ofisPay.toLocaleString('tr-TR')}`;
+            document.getElementById('modal-hesap-uzman').innerText = `₺${f.uzmanPay.toLocaleString('tr-TR')}`;
         }
 
         function modalDurumDegisti(durum) {
@@ -1298,21 +1383,38 @@
                 s.firmaId = seciliFirmaId;
                 s.ucret = 0;
                 s.ofisOranSnapshot = 0;
+                s.kdvDahil = false;
+                s.kdvOrani = 0;
+                s.kdvTutari = 0;
+                s.matrahTutar = 0;
                 s.odemeTipi = "firma_cari";
                 s.iptalSebebi = "";
             } else {
                 s.firmaId = null;
                 if (yeniDurum === 'odendi') {
-                    s.ucret = Math.max(0, numOrDefault(document.getElementById('modal-ucret').value, 1500));
+                    let girilenUcret = Math.max(0, numOrDefault(document.getElementById('modal-ucret').value, 1500));
                     let seciliRadio = document.querySelector('input[name="modal_odeme_tipi"]:checked');
+                    let girilenOran = Math.min(100, Math.max(0, numOrDefault(document.getElementById('modal-ofis-orani').value, 50)));
+                    let kdvDahil = document.getElementById('modal-kdv-dahil').checked;
+                    let kdvOrani = numOrDefault(document.getElementById('modal-kdv-orani').value, 20);
+
+                    let f = AsistDB.hesaplaFinans(girilenUcret, girilenOran, kdvDahil, kdvOrani);
+
+                    s.ucret = f.brut;
+                    s.ofisOranSnapshot = girilenOran;
+                    s.kdvDahil = f.kdvDahil;
+                    s.kdvOrani = f.kdvOrani;
+                    s.kdvTutari = f.kdvTutari;
+                    s.matrahTutar = f.matrah;
                     s.odemeTipi = seciliRadio ? seciliRadio.value : 'nakit';
-                    let girilenOran = numOrDefault(document.getElementById('modal-ofis-orani').value, 50);
-                    s.ofisOranSnapshot = Math.min(100, Math.max(0, girilenOran));
                     s.iptalSebebi = "";
                 } else if (yeniDurum === 'bekliyor') {
                     if (!(numOrDefault(s.ucret, 0) > 0)) s.ucret = 1500;
                     let girilenOran = numOrDefault(document.getElementById('modal-ofis-orani').value, 50);
                     s.ofisOranSnapshot = Math.min(100, Math.max(0, girilenOran));
+                    s.kdvDahil = false;
+                    s.kdvTutari = 0;
+                    s.matrahTutar = s.ucret;
                     s.odemeTipi = "";
                     s.iptalSebebi = "";
                 }
@@ -1494,6 +1596,10 @@
                 hizmet: hizmetTuru,
                 ucret: seansUcreti,
                 ofisOranSnapshot: varsayilanOfisOrani,
+                kdvDahil: false,
+                kdvOrani: 20,
+                kdvTutari: 0,
+                matrahTutar: seansUcreti,
                 durum: "bekliyor",
                 odemeTipi: basvuruTuru === 'firma' ? "firma_cari" : "",
                 iptalSebebi: "",
@@ -1607,8 +1713,11 @@
             } else {
                 seanslar.forEach(rawS => {
                     let s = AsistDB.resolveSeans(rawS, db);
-                    let ucretGosterim = numOrDefault(s.ucret, 1500);
-                    let rozet = (s.odemeTipi === 'firma_cari' || s.basvuruTuru === 'firma') ? '<span class="text-[10px] font-bold text-blue-800 bg-blue-50 px-2 py-0.5 rounded">Firma Carisi</span>' : `<span class="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded">${escapeHTML(s.durum)} (₺${ucretGosterim})</span>`;
+                    let f = seansFinansHesapla(s);
+                    let kdvBilgi = (f.kdvDahil && f.kdvTutari > 0) ? ` [KDV: ₺${f.kdvTutari}]` : '';
+                    let rozet = (s.odemeTipi === 'firma_cari' || s.basvuruTuru === 'firma')
+                        ? '<span class="text-[10px] font-bold text-blue-800 bg-blue-50 px-2 py-0.5 rounded">Firma Carisi</span>'
+                        : `<span class="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded">${escapeHTML(s.durum)} (₺${f.brut}${kdvBilgi})</span>`;
                     container.innerHTML += `
                         <div class="p-2.5 bg-slate-50 border rounded-xl flex justify-between items-center text-xs">
                             <div>
