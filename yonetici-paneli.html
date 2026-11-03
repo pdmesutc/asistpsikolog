@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AsistPsikolog | Yönetici Paneli</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="db.js"></script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        :root { --primary: #256839; --primary-dark: #12612d; }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-900 min-h-screen flex flex-col md:flex-row">
+
+    <!-- SOL DİKEY MENÜ -->
+    <aside class="w-full md:w-72 bg-white border-r border-slate-200 flex flex-col justify-between shrink-0 sticky top-0 md:h-screen z-40">
+        <div class="overflow-y-auto">
+            <div class="h-20 px-6 flex items-center space-x-3.5 border-b border-slate-100">
+                <div class="w-10 h-10 rounded-xl bg-[#256839] flex items-center justify-center text-white text-lg shadow-md">
+                    <i class="fa-solid fa-user-shield"></i>
+                </div>
+                <div>
+                    <span class="text-xl font-black tracking-tight text-slate-900">asist<span class="text-[#256839]">psikolog</span></span>
+                    <span class="block text-[10px] tracking-widest text-slate-500 font-extrabold uppercase">Yönetici Paneli</span>
+                </div>
+            </div>
+
+            <!-- Hızlı Geçiş -->
+            <div class="p-4 border-b border-slate-100 bg-emerald-50/40 space-y-2">
+                <span class="text-[10px] font-extrabold text-[#256839] uppercase tracking-wider block">Hızlı Panel Geçişi (Gözlem)</span>
+                <div class="relative" id="asistan-gecis-kapsayici">
+                    <button onclick="asistanGecisDropdownToggle()" class="w-full bg-white hover:bg-emerald-50 text-slate-800 border border-emerald-200 py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-between shadow-2xs cursor-pointer">
+                        <span class="flex items-center"><i class="fa-solid fa-headset mr-2 text-[#256839]"></i> Asistan Paneli</span>
+                        <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
+                    </button>
+                    <div id="asistan-gecis-menu" class="hidden absolute top-full left-0 w-full mt-1.5 bg-white border border-slate-200 rounded-xl shadow-lg z-50 py-1.5 text-xs">
+                        <p class="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase">Şube Seçin:</p>
+                        <div id="asistan-gecis-subeler-listesi"></div>
+                    </div>
+                </div>
+                <a href="psikolog-paneli.html" class="w-full bg-[#256839] hover:bg-[#12612d] text-white py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-between shadow-xs">
+                    <span class="flex items-center"><i class="fa-solid fa-user-doctor mr-2"></i> Psikolog Paneli</span>
+                    <i class="fa-solid fa-arrow-right text-[10px] opacity-70"></i>
+                </a>
+            </div>
+
+            <nav class="p-4 space-y-1.5">
+                <button onclick="tabDegistir('subeler')" id="btn-subeler" class="tab-btn w-full py-3 px-4 rounded-xl font-bold text-xs transition flex items-center space-x-3 bg-[#256839] text-white shadow-xs cursor-pointer">
+                    <i class="fa-solid fa-building w-5 text-center"></i><span>Şube & Odalar</span>
+                </button>
+                <button onclick="tabDegistir('asistanlar')" id="btn-asistanlar" class="tab-btn w-full py-3 px-4 rounded-xl font-bold text-xs transition flex items-center space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer">
+                    <i class="fa-solid fa-headset w-5 text-center"></i><span>Asistanlar</span>
+                </button>
+                <button onclick="tabDegistir('psikologlar')" id="btn-psikologlar" class="tab-btn w-full py-3 px-4 rounded-xl font-bold text-xs transition flex items-center space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer">
+                    <i class="fa-solid fa-user-doctor w-5 text-center"></i><span>Psikologlar & Oranlar</span>
+                </button>
+                <button onclick="tabDegistir('firmalar')" id="btn-firmalar" class="tab-btn w-full py-3 px-4 rounded-xl font-bold text-xs transition flex items-center space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer">
+                    <i class="fa-solid fa-handshake w-5 text-center"></i><span>Kurumsal Firmalar</span>
+                </button>
+                <button onclick="tabDegistir('muhasebe')" id="btn-muhasebe" class="tab-btn w-full py-3 px-4 rounded-xl font-bold text-xs transition flex items-center space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer">
+                    <i class="fa-solid fa-chart-line w-5 text-center"></i><span>Muhasebe & İstatistik</span>
+                </button>
+            </nav>
+        </div>
+
+        <!-- Oturum ve Çıkış Alanı -->
+        <div class="p-4 border-t border-slate-100 bg-slate-50/60">
+            <div class="flex items-center justify-between">
+                <div class="truncate pr-2">
+                    <p class="text-xs font-extrabold text-slate-800 truncate" id="aktif-yonetici-ad">Merkez Yöneticisi</p>
+                    <p class="text-[10px] text-emerald-700 font-bold">Tam Yetkili Oturum</p>
+                </div>
+                <button onclick="yoneticiCikisYap()" class="bg-white hover:bg-red-50 text-red-600 border border-slate-200 hover:border-red-200 px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer flex items-center space-x-1 shrink-0" title="Oturumu Kapat">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>Çıkış</span>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- SAĞ ANA İÇERİK -->
+    <main class="flex-grow p-6 md:p-10 max-w-7xl w-full mx-auto overflow-y-auto space-y-8">
+        
+        <!-- 1. ŞUBE & ODALAR -->
+        <div id="tab-subeler" class="tab-content space-y-6">
+            <div class="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-xs">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h2 class="text-xl font-extrabold text-slate-900">Şube ve Oda Yönetimi</h2>
+                        <p class="text-xs text-slate-500">Şubeleri, çalışma saatlerini ve odaları ID tabanlı olarak yönetin.</p>
+                    </div>
+                    <button onclick="subeFormunuAc('yeni')" class="bg-[#256839] hover:bg-[#12612d] text-white px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center space-x-2 shadow-sm cursor-pointer">
+                        <i class="fa-solid fa-plus"></i><span>Yeni Şube Ekle</span>
+                    </button>
+                </div>
+
+                <div id="sube-form-card" class="hidden mb-8 bg-emerald-50/60 p-6 rounded-2xl border border-emerald-200">
+                    <form id="sube-form" onsubmit="subeKaydet(event)" class="space-y-4 text-xs">
+                        <input type="hidden" id="input-sube-id">
+                        <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                            <div class="sm:col-span-2">
+                                <label class="block font-bold text-slate-700 mb-1">Şube Adı</label>
+                                <input type="text" id="input-sube-adi" required class="w-full bg-white p-2.5 rounded-xl border border-slate-200 font-bold">
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-700 mb-1">Açılış - Kapanış</label>
+                                <div class="flex items-center space-x-1">
+                                    <input type="time" id="input-sube-baslangic" value="09:00" required class="w-full bg-white p-2 rounded-xl border border-slate-200 font-bold text-center">
+                                    <span>-</span>
+                                    <input type="time" id="input-sube-bitis" value="21:00" required class="w-full bg-white p-2 rounded-xl border border-slate-200 font-bold text-center">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-700 mb-1">Durum</label>
+                                <select id="input-sube-durum" class="w-full bg-white p-2.5 rounded-xl border border-slate-200 font-bold">
+                                    <option value="aktif">Aktif</option><option value="pasif">Pasif</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">Adres</label>
+                            <input type="text" id="input-sube-adres" required class="w-full bg-white p-2.5 rounded-xl border border-slate-200">
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-emerald-200 space-y-3">
+                            <label class="font-bold text-slate-800 block">Şube Odaları</label>
+                            <div id="oda-listesi-container" class="space-y-2"></div>
+                            <button type="button" onclick="odaSatiriEkle('', '', 'yetiskin')" class="mt-2 bg-emerald-50 text-[#256839] border border-emerald-200 px-3.5 py-1.5 rounded-xl font-bold flex items-center space-x-1.5 cursor-pointer">
+                                <i class="fa-solid fa-plus text-xs"></i><span>Yeni Oda Ekle</span>
+                            </button>
+                        </div>
+                        <div class="flex justify-end space-x-2 pt-2">
+                            <button type="button" onclick="subeFormunuKapat()" class="bg-white border px-4 py-2 rounded-xl font-bold cursor-pointer">Vazgeç</button>
+                            <button type="submit" class="bg-[#256839] text-white px-6 py-2 rounded-xl font-bold shadow-md cursor-pointer">Kaydet</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="sube-liste-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+            </div>
+        </div>
+
+        <!-- 2. ASİSTANLAR -->
+        <div id="tab-asistanlar" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-xs">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h2 class="text-xl font-extrabold text-slate-900">Asistan Yönetimi</h2>
+                        <p class="text-xs text-slate-500">Asistan ekleyin, şubelerini ve giriş bilgilerini güncelleyin.</p>
+                    </div>
+                    <button onclick="asistanFormunuAc('yeni')" class="bg-[#256839] hover:bg-[#12612d] text-white px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center space-x-2 shadow-sm cursor-pointer">
+                        <i class="fa-solid fa-plus"></i><span>Yeni Asistan Ekle</span>
+                    </button>
+                </div>
+
+                <div id="asistan-form-card" class="hidden mb-8 bg-emerald-50/60 p-6 rounded-2xl border border-emerald-200">
+                    <form id="asistan-form" onsubmit="asistanKaydet(event)" class="space-y-4 text-xs">
+                        <input type="hidden" id="input-asistan-id">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block font-bold text-slate-700 mb-1">Ad Soyad</label>
+                                <input type="text" id="input-asistan-ad" required placeholder="Örn: Nilüfer Akpınar" class="w-full bg-white p-2.5 rounded-xl border border-slate-200 font-bold">
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-700 mb-1">Atandığı Şube</label>
+                                <select id="input-asistan-sube" class="w-full bg-white p-2.5 rounded-xl border border-slate-200 font-bold"></select>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block font-bold text-slate-700 mb-1">Telefon Numarası (10 Hane)</label>
+                                <input type="text" id="input-asistan-tel" required placeholder="5076012945" class="w-full bg-white p-2.5 rounded-xl border border-slate-200 font-medium">
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-700 mb-1">E-Posta</label>
+                                <input type="email" id="input-asistan-mail" required placeholder="asistan@herapsikoloji.com" class="w-full bg-white p-2.5 rounded-xl border border-slate-200 font-medium">
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-700 mb-1">Giriş Şifresi</label>
+                                <input type="text" id="input-asistan-sifre" required placeholder="123456" class="w-full bg-white p-2.5 rounded-xl border border-slate-200 font-medium">
+                            </div>
+                        </div>
+                        <div class="flex justify-end space-x-2 pt-2 border-t border-emerald-200/60">
+                            <button type="button" onclick="asistanFormunuKapat()" class="bg-white border px-4 py-2 rounded-xl font-bold cursor-pointer">Vazgeç</button>
+                            <button type="submit" class="bg-[#256839] text-white px-6 py-2 rounded-xl font-bold shadow-md cursor-pointer">Asistanı Kaydet</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="asistan-liste-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+            </div>
+        </div>
+
+        <!-- 3. PSİKOLOGLAR & ORANLAR -->
+        <div id="tab-psikologlar" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-xs">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h2 class="text-xl font-extrabold text-slate-900">Psikologlar & Hak Ediş Oranları</h2>
+                        <p class="text-xs text-slate-500">Uzmanları ekleyin, giriş şifrelerini, görev şubelerini ve ofis kesinti yüzdelerini belirleyin.</p>
+                    </div>
+                    <button onclick="psikologFormunuAc('yeni')" class="bg-[#256839] hover:bg-[#12612d] text-white px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center space-x-2 shadow-sm cursor-pointer">
+                        <i class="fa-solid fa-plus"></i><span>Yeni Uzman Ekle</span>
+                    </button>
+                </div>
+
+                <div id="psikolog-form-card" class="hidden mb-8 bg-emerald-50/60 p-6 rounded-2xl border border-emerald-200">
+                    <form id="psikolog-form" onsubmit="psikologKaydet(event)" class="space-y-4 text-xs">
+                        <input type="hidden" id="input-psikolog-id">
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div>
+                                <label class="block font-bold text-slate-700 mb-1">Unvan ve Ad Soyad</label>
+                                <input type="text" id="input-psikolog-ad" required placeholder="Örn: Uzm. Psk. Nurperi HASTÜRK" class="w-full bg-white p-2.5 rounded-xl border border-slate-200 font-bold">
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-700 mb-1">Telefon Numarası (10 Hane)</label>
+                                <input type="text" id="input-psikolog-tel" required placeholder="5059283434" class="w-full bg-white p-2.5 rounded-xl border border-slate-200 font-medium">
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-700 mb-1">E-Posta Adresi</label>
+                                <input type="email" id="input-psikolog-mail" placeholder="uzman@herapsikoloji.com" class="w-full bg-white p-2.5 rounded-xl border border-slate-200 font-medium">
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-700 mb-1">Panel Giriş Şifresi</label>
+                                <input type="text" id="input-psikolog-sifre" required placeholder="123456" class="w-full bg-white p-2.5 rounded-xl border border-slate-200 font-medium">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block font-bold text-slate-700 mb-1">Kendi Danışanında Ofis Payı (%)</label>
+                                <input type="number" id="input-psikolog-oran-kendi" required min="0" max="100" placeholder="30" class="w-full bg-white p-2.5 rounded-xl border border-slate-200 font-black text-[#256839]">
+                                <span class="text-[10px] text-slate-400 mt-0.5 block">Uzmanın kendi getirdiği danışanda merkeze kalan yüzde (0-100 arası)</span>
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-700 mb-1">Ofis Danışanında Ofis Payı (%)</label>
+                                <input type="number" id="input-psikolog-oran-yonlendirme" required min="0" max="100" placeholder="50" class="w-full bg-white p-2.5 rounded-xl border border-slate-200 font-black text-[#256839]">
+                                <span class="text-[10px] text-slate-400 mt-0.5 block">Ofisin yönlendirdiği danışanda merkeze kalan yüzde (0-100 arası)</span>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block font-bold text-slate-700 mb-1">Görev Yaptığı Şubeler</label>
+                                <div id="psikolog-subeler-checkbox-listesi" class="bg-white p-2.5 rounded-xl border border-slate-200 flex flex-wrap gap-3"></div>
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-700 mb-1">Yetkili Hizmet / Seans Alanları</label>
+                                <div id="psikolog-alanlar-checkbox-listesi" class="bg-white p-2.5 rounded-xl border border-slate-200 flex flex-wrap gap-3">
+                                    <label class="flex items-center space-x-1.5 cursor-pointer"><input type="checkbox" value="Çocuk" class="psk-alan-check"><span>Çocuk</span></label>
+                                    <label class="flex items-center space-x-1.5 cursor-pointer"><input type="checkbox" value="Ergen" class="psk-alan-check"><span>Ergen</span></label>
+                                    <label class="flex items-center space-x-1.5 cursor-pointer"><input type="checkbox" value="Yetişkin" class="psk-alan-check"><span>Yetişkin</span></label>
+                                    <label class="flex items-center space-x-1.5 cursor-pointer"><input type="checkbox" value="Çift" class="psk-alan-check"><span>Çift</span></label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end space-x-2 pt-2 border-t border-emerald-200/60">
+                            <button type="button" onclick="psikologFormunuKapat()" class="bg-white border px-4 py-2 rounded-xl font-bold cursor-pointer">Vazgeç</button>
+                            <button type="submit" class="bg-[#256839] text-white px-6 py-2 rounded-xl font-bold shadow-md cursor-pointer">Uzmanı Kaydet</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="psikolog-liste-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+            </div>
+        </div>
+
+        <!-- 4. KURUMSAL FİRMALAR -->
+        <div id="tab-firmalar" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-xs">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h2 class="text-xl font-extrabold text-slate-900">Kurumsal Firmalar</h2>
+                        <p class="text-xs text-slate-500">Anlaşmalı kurumları, geçerli şubeleri ve görevli uzmanları yönetin.</p>
+                    </div>
+                    <button onclick="firmaFormunuAc('yeni')" class="bg-[#256839] hover:bg-[#12612d] text-white px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center space-x-2 shadow-sm cursor-pointer">
+                        <i class="fa-solid fa-plus"></i><span>Yeni Firma Ekle</span>
+                    </button>
+                </div>
+
+                <div id="firma-form-card" class="hidden mb-8 bg-emerald-50/60 p-6 rounded-2xl border border-emerald-200">
+                    <form id="firma-form" onsubmit="firmaKaydet(event)" class="space-y-4 text-xs">
+                        <input type="hidden" id="input-firma-id">
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div class="sm:col-span-2">
+                                <label class="block font-bold text-slate-700 mb-1">Firma / Kurum Adı</label>
+                                <input type="text" id="input-firma-adi" required placeholder="Örn: Goodyear Sakarya Fabrikası" class="w-full bg-white p-2.5 rounded-xl border border-slate-200 font-bold">
+                            </div>
+                            <div>
+                                <label class="block font-bold text-slate-700 mb-1">Durum</label>
+                                <select id="input-firma-durum" class="w-full bg-white p-2.5 rounded-xl border border-slate-200 font-bold">
+                                    <option value="aktif">Aktif</option>
+                                    <option value="pasif">Pasif</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">Geçerli Olduğu Şubeler</label>
+                            <div id="firma-subeler-checkbox-listesi" class="bg-white p-2.5 rounded-xl border border-slate-200 flex flex-wrap gap-3"></div>
+                        </div>
+
+                        <div class="bg-white p-3.5 rounded-xl border border-slate-200 space-y-2.5">
+                            <div class="flex items-center justify-between">
+                                <label class="font-bold text-slate-700">Kurumla Çalışacak Uzmanlar</label>
+                                <label class="flex items-center space-x-1.5 cursor-pointer text-[#256839] font-extrabold">
+                                    <input type="checkbox" id="input-firma-tum-uzmanlar" onchange="firmaTumUzmanlarDegisti(this.checked)" class="rounded text-[#256839]">
+                                    <span>Tüm Uzmanlar Geçerli</span>
+                                </label>
+                            </div>
+                            <div id="firma-uzmanlar-checkbox-listesi" class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-2 border-t border-slate-100"></div>
+                        </div>
+
+                        <div class="flex justify-end space-x-2 pt-2 border-t border-emerald-200/60">
+                            <button type="button" onclick="firmaFormunuKapat()" class="bg-white border px-4 py-2 rounded-xl font-bold cursor-pointer">Vazgeç</button>
+                            <button type="submit" class="bg-[#256839] text-white px-6 py-2 rounded-xl font-bold shadow-md cursor-pointer">Firmayı Kaydet</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="firma-liste-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+            </div>
+        </div>
+
+        <!-- 5. GELİŞMİŞ MUHASEBE -->
+        <div id="tab-muhasebe" class="tab-content hidden space-y-8">
+            <div class="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-6">
+                
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+                    <div>
+                        <h2 class="text-xl font-extrabold text-slate-900">Merkez ve Şube Muhasebesi</h2>
+                        <p class="text-xs text-slate-500">Mali hesaplamalar sadece bireysel seanslardan yapılır; firmalar yalnızca seans adedi olarak takip edilir.</p>
+                    </div>
+
+                    <div class="flex items-center space-x-2">
+                        <span class="text-xs font-bold text-slate-500">Şube Filtresi:</span>
+                        <select id="muh-sube-secimi" onchange="ofisMuhasebeHesapla()" class="bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2 font-extrabold text-xs text-slate-800">
+                            <option value="hepsi">Tüm Şubeler (Genel)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex flex-col lg:flex-row items-center justify-between gap-4 text-xs">
+                    <div class="flex flex-wrap items-center gap-1.5 bg-white p-1 rounded-xl border border-slate-200 shadow-2xs">
+                        <button onclick="muhZamanFiltrele('gunluk')" id="mflt-gunluk" class="muh-flt-btn px-3 py-1.5 rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Gün</button>
+                        <button onclick="muhZamanFiltrele('haftalik')" id="mflt-haftalik" class="muh-flt-btn px-3 py-1.5 rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Hafta</button>
+                        <button onclick="muhZamanFiltrele('aylik')" id="mflt-aylik" class="muh-flt-btn px-3 py-1.5 rounded-lg font-bold transition bg-[#256839] text-white shadow-xs cursor-pointer">Ay</button>
+                        <button onclick="muhZamanFiltrele('ozel')" id="mflt-ozel" class="muh-flt-btn px-3 py-1.5 rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Özel Aralık</button>
+                    </div>
+
+                    <div id="muh-ozel-tarih-alani" class="hidden flex items-center space-x-2 bg-white p-1.5 rounded-xl border border-slate-200 shadow-2xs">
+                        <input type="date" id="muh-ozel-baslangic" class="bg-slate-50 border border-slate-200 p-1.5 rounded-lg font-bold text-slate-700 text-xs">
+                        <span class="text-slate-400 font-bold">-</span>
+                        <input type="date" id="muh-ozel-bitis" class="bg-slate-50 border border-slate-200 p-1.5 rounded-lg font-bold text-slate-700 text-xs">
+                        <button onclick="ofisMuhasebeHesapla()" class="bg-[#256839] hover:bg-[#12612d] text-white px-3 py-1.5 rounded-lg font-bold cursor-pointer transition">Filtrele</button>
+                    </div>
+
+                    <div id="muh-standart-nav" class="flex items-center space-x-2">
+                        <button onclick="muhTarihKaydir(-1)" class="w-8 h-8 rounded-xl bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 flex items-center justify-center font-bold cursor-pointer"><i class="fa-solid fa-chevron-left text-xs"></i></button>
+                        <button onclick="muhBuguneGit()" class="bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 font-extrabold px-3 py-1.5 rounded-xl cursor-pointer">Bugün</button>
+                        <div class="px-3 py-1.5 bg-white border border-slate-200 rounded-xl font-extrabold text-slate-900 min-w-[200px] text-center" id="muh-aktif-tarih-etiket"></div>
+                        <button onclick="muhTarihKaydir(1)" class="w-8 h-8 rounded-xl bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 flex items-center justify-center font-bold cursor-pointer"><i class="fa-solid fa-chevron-right text-xs"></i></button>
+                    </div>
+
+                    <div class="flex items-center space-x-2 text-[11px]">
+                        <span class="font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-xl border border-emerald-200" id="muh-sayac-bireysel">0 Bireysel</span>
+                        <span class="font-bold text-blue-800 bg-blue-50 px-2.5 py-1 rounded-xl border border-blue-200" id="muh-sayac-kurumsal">0 Kurumsal</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-5">
+                    <div class="bg-slate-50 p-5 rounded-2xl border">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase block">Fiziki Kasa Girişi (Nakit/Havale)</span>
+                        <h3 id="stat-ciro" class="text-2xl font-black text-slate-900 mt-1">₺0</h3>
+                    </div>
+                    <div class="bg-blue-50/70 p-5 rounded-2xl border border-blue-200">
+                        <span class="text-[10px] font-bold text-blue-900 uppercase block">Toplam Kurumsal Seans</span>
+                        <h3 id="stat-firma-alacak" class="text-2xl font-black text-blue-900 mt-1">0 Seans</h3>
+                    </div>
+                    <div class="bg-slate-50 p-5 rounded-2xl border">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase block">Uzman Hak Edişleri (Bireysel)</span>
+                        <h3 id="stat-psikolog" class="text-2xl font-black text-slate-800 mt-1">₺0</h3>
+                    </div>
+                    <div class="bg-emerald-50/70 p-5 rounded-2xl border border-emerald-200">
+                        <span class="text-[10px] font-bold text-emerald-800 uppercase block">Ofis Net Geliri (Bireysel)</span>
+                        <h3 id="stat-ofis" class="text-2xl font-black text-[#256839] mt-1">₺0</h3>
+                    </div>
+                </div>
+
+                <div class="border border-slate-200 rounded-2xl overflow-hidden shadow-2xs">
+                    <div class="bg-slate-50 px-4 py-3 border-b border-slate-200 font-extrabold text-xs text-slate-800 flex justify-between items-center">
+                        <span>Kurumsal Firma Seans Sayıları Özeti</span>
+                        <span class="text-[10px] text-slate-400 font-normal">Dönem içinde gerçekleştirilen seans sayıları</span>
+                    </div>
+                    <div id="muhasebe-firma-fatura-listesi" class="divide-y divide-slate-100 text-xs"></div>
+                </div>
+
+                <div class="overflow-x-auto border border-slate-200 rounded-2xl shadow-2xs">
+                    <div class="bg-slate-50 px-4 py-3 border-b border-slate-200 font-extrabold text-xs text-slate-800">
+                        Uzman Özelinde Seans Dağılımı ve Hak Ediş Matrisi
+                    </div>
+                    <table class="w-full text-left border-collapse text-xs whitespace-nowrap">
+                        <thead>
+                            <tr id="muhasebe-tablo-header-tr" class="bg-slate-50/50 border-b border-slate-200 text-slate-700 font-extrabold"></tr>
+                        </thead>
+                        <tbody id="muhasebe-uzman-tablo-body" class="divide-y divide-slate-100"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- JAVASCRIPT ÇALIŞMA MANTIĞI -->
+    <script>
+        const AKTIF_OTURUM = (typeof AsistAuth !== 'undefined') ? AsistAuth.requireAuth(['yonetici']) : null;
+
+        let seciliZamanPeriyodu = 'aylik';
+        let yoneticiSeciliTarih = new Date();
+
+        function yoneticiCikisYap() {
+            if (typeof AsistAuth !== 'undefined') {
+                AsistAuth.logout('giris.html?rol=yonetici');
+            } else {
+                window.location.href = 'giris.html?rol=yonetici';
+            }
+        }
+
+        function escapeHtml(str) {
+            if (str === null || str === undefined) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function normalizeTelefon10Hane(rawTel) {
+            if (typeof AsistDB !== 'undefined' && typeof AsistDB.normalizeTel === 'function') {
+                return AsistDB.normalizeTel(rawTel);
+            }
+            let digits = String(rawTel || '').replace(/\D/g, '');
+            if (digits.length === 12 && digits.startsWith('90')) digits = digits.slice(2);
+            else if (digits.length === 11 && digits.startsWith('0')) digits = digits.slice(1);
+            return digits;
+        }
+
+        function formatTelefonGorunum(tel10) {
+            let d = normalizeTelefon10Hane(tel10);
+            return d.length === 10 ? `0(${d.slice(0,3)}) ${d.slice(3,6)} ${d.slice(6,8)} ${d.slice(8,10)}` : d;
+        }
+
+        function formatTarihISO(d) {
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        }
+
+        function formatTarihTurkce(d) {
+            const aylar = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
+            const gunler = ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"];
+            return `${d.getDate()} ${aylar[d.getMonth()]} ${d.getFullYear()} ${gunler[d.getDay()]} `;
+        }
+
+        function getHaftaAraligi(dateObj) {
+            let d = new Date(dateObj);
+            let day = d.getDay();
+            let diff = d.getDate() - day + (day === 0 ? -6 : 1);
+            let pazartesi = new Date(d.setDate(diff));
+            let pazar = new Date(pazartesi);
+            pazar.setDate(pazartesi.getDate() + 6);
+            return { baslangic: formatTarihISO(pazartesi), bitis: formatTarihISO(pazar) };
+        }
+
+        function yeniKayitId() {
+            return (typeof AsistDB !== 'undefined' && typeof AsistDB.yeniId === 'function')
+                ? AsistDB.yeniId()
+                : (Date.now() * 1000 + Math.floor(Math.random() * 1000));
+        }
+
+        function tumYoneticiGorunumleriniYenile() {
+            subeleriCiz();
+            asistanlariCiz();
+            psikologlariCiz();
+            firmalariCiz();
+            muhasebeSubeSecenekleriniDoldur();
+            asistanGecisSubeleriniDoldur();
+            ofisMuhasebeHesapla();
+        }
+
+        window.onload = function() {
+            if (AKTIF_OTURUM && document.getElementById('aktif-yonetici-ad')) {
+                document.getElementById('aktif-yonetici-ad').innerText = AKTIF_OTURUM.ad;
+            }
+
+            let bugunISO = formatTarihISO(yoneticiSeciliTarih);
+            let ayBasiISO = `${yoneticiSeciliTarih.getFullYear()}-${String(yoneticiSeciliTarih.getMonth() + 1).padStart(2, '0')}-01`;
+
+            if(document.getElementById('muh-ozel-baslangic')) document.getElementById('muh-ozel-baslangic').value = ayBasiISO;
+            if(document.getElementById('muh-ozel-bitis')) document.getElementById('muh-ozel-bitis').value = bugunISO;
+
+            tumYoneticiGorunumleriniYenile();
+        };
+
+        window.addEventListener('asist-db-updated', function() {
+            tumYoneticiGorunumleriniYenile();
+        });
+        window.addEventListener('storage', function(e) {
+            if (!e.key || e.key.startsWith('ASIST_PSIKOLOG_CENTRAL_DB')) {
+                tumYoneticiGorunumleriniYenile();
+            }
+        });
+
+        document.addEventListener('click', function(e) {
+            const kapsayici = document.getElementById('asistan-gecis-kapsayici');
+            const menu = document.getElementById('asistan-gecis-menu');
+            if (kapsayici && menu && !kapsayici.contains(e.target)) {
+                menu.classList.add('hidden');
+            }
+        });
+
+        function asistanGecisDropdownToggle() {
+            document.getElementById('asistan-gecis-menu').classList.toggle('hidden');
+        }
+
+        function asistanGecisSubeleriniDoldur() {
+            let db = AsistDB.get();
+            const container = document.getElementById('asistan-gecis-subeler-listesi');
+            if(!container) return;
+            container.innerHTML = '';
+            db.subeler.forEach(s => {
+                let a = document.createElement('a');
+                a.href = `asistan-paneli.html?subeId=${s.id}`;
+                a.className = "w-full text-left px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-emerald-50 hover:text-[#256839] flex items-center justify-between";
+                a.innerHTML = `<span>${escapeHtml(s.adi)}</span> <i class="fa-solid fa-arrow-right text-[10px]"></i>`;
+                container.appendChild(a);
+            });
+        }
+
+        function tabDegistir(tabAdi) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-[#256839]', 'text-white', 'shadow-xs');
+                btn.classList.add('text-slate-600', 'hover:bg-slate-50');
+            });
+            document.getElementById('tab-' + tabAdi).classList.remove('hidden');
+            const aktifBtn = document.getElementById('btn-' + tabAdi);
+            if (aktifBtn) {
+                aktifBtn.classList.remove('text-slate-600', 'hover:bg-slate-50');
+                aktifBtn.classList.add('bg-[#256839]', 'text-white', 'shadow-xs');
+            }
+            if (tabAdi === 'muhasebe') ofisMuhasebeHesapla();
+            if (tabAdi === 'firmalar') firmalariCiz();
+            if (tabAdi === 'asistanlar') asistanlariCiz();
+            if (tabAdi === 'psikologlar') psikologlariCiz();
+        }
+
+        // ==========================================
+        // 1. ŞUBE & ODA YÖNETİMİ
+        // ==========================================
+        function subeleriCiz() {
+            let db = AsistDB.get();
+            const grid = document.getElementById('sube-liste-grid');
+            if(!grid) return;
+            grid.innerHTML = '';
+
+            db.subeler.forEach(sube => {
+                let odalarHtml = (sube.odalar || []).map(o => {
+                    let odaAdi = typeof o === 'object' ? o.adi : o;
+                    let odaTip = (typeof o === 'object' && o.tip === 'cocuk') ? 'Oyun/Çocuk' : 'Yetişkin';
+                    return `<span class="bg-white px-2.5 py-1 rounded-lg text-xs font-bold border border-slate-200 text-slate-700">${escapeHtml(odaAdi)} <span class="text-[10px] text-slate-400">(${odaTip})</span></span>`;
+                }).join('');
+
+                let saatBilgi = `${escapeHtml(sube.saatBaslangic || '09:00')} - ${escapeHtml(sube.saatBitis || '21:00')}`;
+
+                let card = document.createElement('div');
+                card.className = "bg-slate-50 p-6 rounded-2xl border border-slate-200 flex flex-col justify-between";
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-extrabold text-slate-900 text-base">${escapeHtml(sube.adi)}</h3>
+                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${sube.durum==='aktif'?'bg-emerald-100 text-[#256839]':'bg-slate-200 text-slate-600'}">${escapeHtml(sube.durum)}</span>
+                        </div>
+                        <p class="text-xs text-slate-500 mb-1"><i class="fa-solid fa-location-dot mr-1 text-[#256839]"></i> ${escapeHtml(sube.adres)}</p>
+                        <p class="text-[11px] text-slate-400 font-semibold mb-3"><i class="fa-regular fa-clock mr-1"></i> Çalışma Saatleri: ${saatBilgi}</p>
+                        <div class="border-t pt-3 mb-4">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Şube Odaları:</span>
+                            <div class="flex flex-wrap gap-1.5">${odalarHtml || '<span class="text-slate-400 italic text-xs">Henüz oda eklenmemiş</span>'}</div>
+                        </div>
+                    </div>
+                    <div class="flex justify-end space-x-2 pt-3 border-t text-xs font-bold">
+                        <button onclick="subeFormunuAc('duzenle', ${sube.id})" class="bg-white border px-3 py-1.5 rounded-xl hover:bg-slate-100 transition cursor-pointer">Düzenle</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function subeFormunuAc(mod, id = null) {
+            let db = AsistDB.get();
+            document.getElementById('sube-form-card').classList.remove('hidden');
+            const container = document.getElementById('oda-listesi-container');
+            container.innerHTML = '';
+
+            if (mod === 'yeni') {
+                document.getElementById('input-sube-id').value = '';
+                document.getElementById('input-sube-adi').value = '';
+                document.getElementById('input-sube-adres').value = '';
+                document.getElementById('input-sube-baslangic').value = '09:00';
+                document.getElementById('input-sube-bitis').value = '21:00';
+                document.getElementById('input-sube-durum').value = 'aktif';
+                odaSatiriEkle('', '1. Yetişkin Odası', 'yetiskin');
+            } else {
+                let s = db.subeler.find(x => x.id === id);
+                if (!s) return;
+                document.getElementById('input-sube-id').value = s.id;
+                document.getElementById('input-sube-adi').value = s.adi;
+                document.getElementById('input-sube-adres').value = s.adres;
+                document.getElementById('input-sube-baslangic').value = s.saatBaslangic || '09:00';
+                document.getElementById('input-sube-bitis').value = s.saatBitis || '21:00';
+                document.getElementById('input-sube-durum').value = s.durum;
+                (s.odalar || []).forEach(o => {
+                    let oId = typeof o === 'object' ? o.id : ('oda_' + Math.random().toString(36).substr(2, 6));
+                    let oAd = typeof o === 'object' ? o.adi : o;
+                    let oTip = (typeof o === 'object' && o.tip) ? o.tip : 'yetiskin';
+                    odaSatiriEkle(oId, oAd, oTip);
+                });
+            }
+        }
+
+        function odaSatiriEkle(odaId = '', odaAdi = '', odaTip = 'yetiskin') {
+            const container = document.getElementById('oda-listesi-container');
+            let tempId = 'row_' + Math.random().toString(36).substr(2, 6);
+            let finalOdaId = odaId || ('oda_' + Math.random().toString(36).substr(2, 6));
+
+            let div = document.createElement('div');
+            div.id = tempId;
+            div.className = 'flex items-center space-x-2';
+            div.innerHTML = `
+                <input type="hidden" class="oda-id-input" value="${escapeHtml(finalOdaId)}">
+                <input type="text" value="${escapeHtml(odaAdi)}" placeholder="Oda Adı" class="oda-ad-input flex-grow bg-slate-50 p-2.5 rounded-xl border border-slate-200 font-bold text-slate-800">
+                <select class="oda-tip-input bg-slate-50 p-2.5 rounded-xl border border-slate-200 font-bold text-slate-700">
+                    <option value="yetiskin" ${odaTip === 'yetiskin' ? 'selected' : ''}>Yetişkin / Çift Odası</option>
+                    <option value="cocuk" ${odaTip === 'cocuk' ? 'selected' : ''}>Çocuk / Oyun Odası</option>
+                </select>
+                <button type="button" onclick="document.getElementById('${tempId}').remove()" class="bg-red-50 text-red-600 p-2.5 rounded-xl cursor-pointer"><i class="fa-solid fa-trash text-xs"></i></button>
+            `;
+            container.appendChild(div);
+        }
+
+        function subeKaydet(e) {
+            e.preventDefault();
+            let db = AsistDB.get();
+            let id = document.getElementById('input-sube-id').value;
+            let adi = document.getElementById('input-sube-adi').value.trim();
+            let adres = document.getElementById('input-sube-adres').value.trim();
+            let saatBaslangic = document.getElementById('input-sube-baslangic').value || '09:00';
+            let saatBitis = document.getElementById('input-sube-bitis').value || '21:00';
+            let durum = document.getElementById('input-sube-durum').value;
+
+            let odalar = [];
+            let adInputs = document.querySelectorAll('.oda-ad-input');
+            let idInputs = document.querySelectorAll('.oda-id-input');
+            let tipInputs = document.querySelectorAll('.oda-tip-input');
+
+            adInputs.forEach((inp, idx) => {
+                let oAd = inp.value.trim();
+                let oId = idInputs[idx].value.trim();
+                let oTip = tipInputs[idx] ? tipInputs[idx].value : 'yetiskin';
+                if (oAd) {
+                    odalar.push({ id: oId, adi: oAd, tip: oTip });
+                }
+            });
+
+            if (odalar.length === 0) {
+                alert("Lütfen şube için en az bir oda ekleyiniz!");
+                return;
+            }
+            if (!(saatBaslangic < saatBitis)) {
+                alert("Şube kapanış saati, açılış saatinden sonra olmalıdır!");
+                return;
+            }
+            if (id !== "") {
+                let eskiSube = db.subeler.find(x => x.id === parseInt(id, 10));
+                if (eskiSube) {
+                    let yeniOdaIdleri = new Set(odalar.map(o => o.id));
+                    let kaldirilanlar = (eskiSube.odalar || []).filter(o => !yeniOdaIdleri.has(o.id));
+                    let kullanimdaki = kaldirilanlar.filter(o => db.seanslar.some(sn => sn.subeId === eskiSube.id && sn.odaId === o.id));
+                    if (kullanimdaki.length > 0) {
+                        alert("Şu odalar geçmiş veya planlı seanslarda kullanıldığı için silinemez: " + kullanimdaki.map(o => o.adi).join(', ') + "\nOdayı silmek yerine adını/tipini düzenleyebilirsiniz.");
+                        return;
+                    }
+                }
+            }
+
+            if (id === "") {
+                db.subeler.push({ id: yeniKayitId(), adi, adres, saatBaslangic, saatBitis, durum, odalar });
+            } else {
+                let s = db.subeler.find(x => x.id === parseInt(id, 10));
+                if (s) {
+                    s.adi = adi;
+                    s.adres = adres;
+                    s.saatBaslangic = saatBaslangic;
+                    s.saatBitis = saatBitis;
+                    s.durum = durum;
+                    s.odalar = odalar;
+                }
+            }
+
+            if (!AsistDB.save(db)) return;
+            subeFormunuKapat();
+            tumYoneticiGorunumleriniYenile();
+            alert("✅ Şube ve Odalar kaydedildi!");
+        }
+
+        function subeFormunuKapat() { document.getElementById('sube-form-card').classList.add('hidden'); }
+
+        // ==========================================
+        // 2. ASİSTAN YÖNETİMİ
+        // ==========================================
+        function asistanlariCiz() {
+            let db = AsistDB.get();
+            const grid = document.getElementById('asistan-liste-grid');
+            if(!grid) return;
+            grid.innerHTML = '';
+
+            db.asistanlar.forEach(a => {
+                let sube = db.subeler.find(s => s.id === a.subeId);
+                let card = document.createElement('div');
+                card.className = "bg-slate-50 p-6 rounded-2xl border border-slate-200 flex flex-col justify-between";
+                card.innerHTML = `
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-extrabold text-slate-900 text-base">${escapeHtml(a.ad)}</h3>
+                            <span class="text-xs bg-emerald-100 text-[#256839] px-2.5 py-0.5 rounded-full font-bold">${escapeHtml(sube ? sube.adi : 'Şube Atanmadı')}</span>
+                        </div>
+                        <p class="text-xs text-slate-500"><i class="fa-solid fa-phone mr-1.5 text-slate-400"></i>${escapeHtml(a.telGorunum || formatTelefonGorunum(a.tel))}</p>
+                        <p class="text-xs text-slate-500"><i class="fa-solid fa-envelope mr-1.5 text-slate-400"></i>${escapeHtml(a.mail)}</p>
+                    </div>
+                    <div class="flex justify-end space-x-2 pt-4 border-t border-slate-200 mt-4 text-xs font-bold">
+                        <button onclick="asistanSil(${a.id})" class="text-red-600 hover:bg-red-50 px-3 py-1.5 rounded-xl transition cursor-pointer">Sil</button>
+                        <button onclick="asistanFormunuAc('duzenle', ${a.id})" class="bg-white border px-4 py-1.5 rounded-xl hover:bg-slate-100 transition cursor-pointer">Düzenle</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function asistanFormunuAc(mod, id = null) {
+            let db = AsistDB.get();
+            document.getElementById('asistan-form-card').classList.remove('hidden');
+
+            const subeSelect = document.getElementById('input-asistan-sube');
+            subeSelect.innerHTML = db.subeler.map(s => `<option value="${s.id}">${escapeHtml(s.adi)}</option>`).join('');
+
+            if (mod === 'yeni') {
+                document.getElementById('input-asistan-id').value = '';
+                document.getElementById('input-asistan-ad').value = '';
+                document.getElementById('input-asistan-tel').value = '';
+                document.getElementById('input-asistan-mail').value = '';
+                document.getElementById('input-asistan-sifre').value = '123456';
+            } else {
+                let a = db.asistanlar.find(x => x.id === id);
+                if (!a) return;
+                document.getElementById('input-asistan-id').value = a.id;
+                document.getElementById('input-asistan-ad').value = a.ad;
+                document.getElementById('input-asistan-tel').value = normalizeTelefon10Hane(a.tel);
+                document.getElementById('input-asistan-mail').value = a.mail;
+                document.getElementById('input-asistan-sifre').value = a.sifre || '123456';
+                document.getElementById('input-asistan-sube').value = a.subeId;
+            }
+        }
+
+        function asistanFormunuKapat() { document.getElementById('asistan-form-card').classList.add('hidden'); }
+
+        function asistanKaydet(e) {
+            e.preventDefault();
+            let db = AsistDB.get();
+            let id = document.getElementById('input-asistan-id').value;
+            let ad = document.getElementById('input-asistan-ad').value.trim();
+            let tel = normalizeTelefon10Hane(document.getElementById('input-asistan-tel').value);
+            let mail = document.getElementById('input-asistan-mail').value.trim();
+            let sifre = document.getElementById('input-asistan-sifre').value.trim() || '123456';
+            let subeId = parseInt(document.getElementById('input-asistan-sube').value, 10);
+
+            if (tel.length !== 10) {
+                alert("Lütfen telefon numarasını başında 0 olmadan 10 haneli (5XXXXXXXXX) giriniz!");
+                return;
+            }
+
+            let telGorunum = formatTelefonGorunum(tel);
+
+            if (id === "") {
+                db.asistanlar.push({ id: yeniKayitId(), ad, tel, telGorunum, mail, sifre, subeId, durum: 'aktif' });
+            } else {
+                let a = db.asistanlar.find(x => x.id === parseInt(id, 10));
+                if (a) {
+                    a.ad = ad; a.tel = tel; a.telGorunum = telGorunum; a.mail = mail; a.sifre = sifre; a.subeId = subeId;
+                }
+            }
+
+            if (!AsistDB.save(db)) return;
+            asistanFormunuKapat();
+            asistanlariCiz();
+            alert("✅ Asistan bilgileri başarıyla kaydedildi!");
+        }
+
+        function asistanSil(id) {
+            let db0 = AsistDB.get();
+            let hedef = db0.asistanlar.find(x => x.id === id);
+            let sonAsistanMi = hedef && db0.asistanlar.filter(x => x.subeId === hedef.subeId).length === 1;
+            let mesaj = sonAsistanMi
+                ? "Bu, ilgili şubenin son asistanıdır. Silerseniz şubede asistan kalmayacaktır. Yine de silmek istiyor musunuz?"
+                : "Bu asistanı sistemden silmek istediğinize emin misiniz?";
+            if(!confirm(mesaj)) return;
+            let db = AsistDB.get();
+            db.asistanlar = db.asistanlar.filter(x => x.id !== id);
+            if (!AsistDB.save(db)) return;
+            asistanlariCiz();
+        }
+
+        // ==========================================
+        // 3. PSİKOLOGLAR VE ORANLAR
+        // ==========================================
+        function psikologlariCiz() {
+            let db = AsistDB.get();
+            const grid = document.getElementById('psikolog-liste-grid');
+            if(!grid) return;
+            grid.innerHTML = '';
+
+            db.psikologlar.forEach(p => {
+                let subeler = db.subeler.filter(s => (p.subeIds || []).includes(s.id)).map(s => s.adi).join(', ');
+                let alanlar = (p.alanlar || []).join(', ');
+                let pasifMi = p.durum === 'pasif';
+
+                let card = document.createElement('div');
+                card.className = `bg-slate-50 p-6 rounded-2xl border border-slate-200 flex flex-col justify-between ${pasifMi ? 'opacity-60' : ''}`;
+                card.innerHTML = `
+                    <div class="space-y-2.5">
+                        <div class="flex items-center justify-between gap-2">
+                            <h3 class="font-extrabold text-slate-900 text-base">${escapeHtml(p.ad)}</h3>
+                            <span class="text-[10px] ${pasifMi ? 'bg-red-100 text-red-700' : 'bg-slate-200 text-slate-700'} px-2 py-0.5 rounded font-bold">${pasifMi ? 'Pasif (Arşiv)' : escapeHtml(subeler || 'Şube Yok')}</span>
+                        </div>
+                        <p class="text-xs text-slate-500">Alanlar: <strong class="text-slate-800">${escapeHtml(alanlar || '-')}</strong></p>
+                        <p class="text-[11px] text-slate-400 font-medium">${escapeHtml(p.telGorunum || formatTelefonGorunum(p.tel))} ${p.mail ? '• ' + escapeHtml(p.mail) : ''}</p>
+                        <div class="bg-white p-2.5 rounded-xl border border-slate-200 text-xs space-y-1">
+                            <div class="flex justify-between">
+                                <span class="text-slate-500">Kendi Danışanı Ofis Payı:</span>
+                                <strong class="text-[#256839]">%${p.oranKendi !== undefined ? p.oranKendi : 30}</strong>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-500">Ofis Danışanı Ofis Payı:</span>
+                                <strong class="text-[#256839]">%${p.oranYonlendirme !== undefined ? p.oranYonlendirme : 50}</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-end space-x-2 pt-4 border-t border-slate-200 mt-4 text-xs font-bold">
+                        <button onclick="psikologSil(${p.id})" class="text-red-600 hover:bg-red-50 px-3 py-1.5 rounded-xl transition cursor-pointer">${pasifMi ? 'Kalıcı Sil' : 'Sil / Pasife Al'}</button>
+                        <button onclick="psikologFormunuAc('duzenle', ${p.id})" class="bg-white border px-4 py-1.5 rounded-xl hover:bg-slate-100 transition cursor-pointer">Düzenle</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function psikologFormunuAc(mod, id = null) {
+            let db = AsistDB.get();
+            document.getElementById('psikolog-form-card').classList.remove('hidden');
+
+            const subeCheckList = document.getElementById('psikolog-subeler-checkbox-listesi');
+            subeCheckList.innerHTML = '';
+            db.subeler.forEach(s => {
+                subeCheckList.innerHTML += `
+                    <label class="flex items-center space-x-1.5 cursor-pointer">
+                        <input type="checkbox" value="${s.id}" class="psk-sube-check rounded text-[#256839]">
+                        <span class="font-bold text-slate-700">${escapeHtml(s.adi)}</span>
+                    </label>
+                `;
+            });
+
+            if (mod === 'yeni') {
+                document.getElementById('input-psikolog-id').value = '';
+                document.getElementById('input-psikolog-ad').value = '';
+                document.getElementById('input-psikolog-tel').value = '';
+                document.getElementById('input-psikolog-mail').value = '';
+                document.getElementById('input-psikolog-sifre').value = '123456';
+                document.getElementById('input-psikolog-oran-kendi').value = '30';
+                document.getElementById('input-psikolog-oran-yonlendirme').value = '50';
+                document.querySelectorAll('.psk-sube-check').forEach(c => c.checked = true);
+                document.querySelectorAll('.psk-alan-check').forEach(c => c.checked = true);
+            } else {
+                let p = db.psikologlar.find(x => x.id === id);
+                if (!p) return;
+                document.getElementById('input-psikolog-id').value = p.id;
+                document.getElementById('input-psikolog-ad').value = p.ad;
+                document.getElementById('input-psikolog-tel').value = normalizeTelefon10Hane(p.tel);
+                document.getElementById('input-psikolog-mail').value = p.mail || '';
+                document.getElementById('input-psikolog-sifre').value = p.sifre || '123456';
+                document.getElementById('input-psikolog-oran-kendi').value = (p.oranKendi !== undefined && p.oranKendi !== null) ? p.oranKendi : 30;
+                document.getElementById('input-psikolog-oran-yonlendirme').value = (p.oranYonlendirme !== undefined && p.oranYonlendirme !== null) ? p.oranYonlendirme : 50;
+
+                document.querySelectorAll('.psk-sube-check').forEach(c => {
+                    c.checked = (p.subeIds || []).includes(parseInt(c.value, 10));
+                });
+                document.querySelectorAll('.psk-alan-check').forEach(c => {
+                    c.checked = (p.alanlar || []).includes(c.value);
+                });
+            }
+        }
+
+        function psikologFormunuKapat() { document.getElementById('psikolog-form-card').classList.add('hidden'); }
+
+        function psikologKaydet(e) {
+            e.preventDefault();
+            let db = AsistDB.get();
+            let id = document.getElementById('input-psikolog-id').value;
+            let ad = document.getElementById('input-psikolog-ad').value.trim();
+            let tel = normalizeTelefon10Hane(document.getElementById('input-psikolog-tel').value);
+            let mail = document.getElementById('input-psikolog-mail').value.trim();
+            let sifre = document.getElementById('input-psikolog-sifre').value.trim() || '123456';
+
+            if (tel.length !== 10) {
+                alert("Lütfen telefon numarasını başında 0 olmadan 10 haneli (5XXXXXXXXX) giriniz!");
+                return;
+            }
+
+            let rawKendi = parseInt(document.getElementById('input-psikolog-oran-kendi').value, 10);
+            let rawYonlendirme = parseInt(document.getElementById('input-psikolog-oran-yonlendirme').value, 10);
+            if (isNaN(rawKendi) || isNaN(rawYonlendirme)) {
+                alert("Ofis pay oranları 0 ile 100 arasında bir sayı olmalıdır!");
+                return;
+            }
+            let oranKendi = Math.min(100, Math.max(0, rawKendi));
+            let oranYonlendirme = Math.min(100, Math.max(0, rawYonlendirme));
+
+            let seciliSubeler = [];
+            document.querySelectorAll('.psk-sube-check:checked').forEach(c => seciliSubeler.push(parseInt(c.value, 10)));
+            if (seciliSubeler.length === 0) { alert("Lütfen en az bir şube seçiniz!"); return; }
+
+            let seciliAlanlar = [];
+            document.querySelectorAll('.psk-alan-check:checked').forEach(c => seciliAlanlar.push(c.value));
+            if (seciliAlanlar.length === 0) { alert("Lütfen en az bir hizmet alanı seçiniz!"); return; }
+
+            let telGorunum = formatTelefonGorunum(tel);
+
+            if (id === "") {
+                db.psikologlar.push({
+                    id: yeniKayitId(),
+                    ad, tel, telGorunum, mail, sifre,
+                    subeIds: seciliSubeler,
+                    alanlar: seciliAlanlar,
+                    oranKendi, oranYonlendirme,
+                    durum: 'aktif',
+                    sms: true, telGor: true
+                });
+            } else {
+                let p = db.psikologlar.find(x => x.id === parseInt(id, 10));
+                if (p) {
+                    p.ad = ad; p.tel = tel; p.telGorunum = telGorunum; p.mail = mail; p.sifre = sifre;
+                    p.subeIds = seciliSubeler; p.alanlar = seciliAlanlar;
+                    p.oranKendi = oranKendi; p.oranYonlendirme = oranYonlendirme;
+                    p.durum = 'aktif';
+                }
+            }
+
+            if (!AsistDB.save(db)) return;
+            psikologFormunuKapat();
+            psikologlariCiz();
+            ofisMuhasebeHesapla();
+            alert("✅ Uzman psikolog bilgileri ve oranları kaydedildi!");
+        }
+
+        function psikologSil(id) {
+            let db = AsistDB.get();
+            let p = db.psikologlar.find(x => x.id === id);
+            if (!p) return;
+
+            let seansiVarMi = db.seanslar.some(s => s.uzmanId === id);
+            if (seansiVarMi && p.durum === 'pasif') {
+                alert("Bu uzman zaten pasif (arşiv) durumdadır. Geçmiş seans ve muhasebe kayıtları bulunduğu için sistemden tamamen silinemez.");
+                return;
+            }
+            if (seansiVarMi && p.durum !== 'pasif') {
+                if (!confirm("Bu uzmana ait geçmiş veya planlı seans kayıtları bulunmaktadır. Muhasebe geçmişinin bozulmaması için uzman 'Pasif (Arşiv)' duruma alınacaktır. Onaylıyor musunuz?")) return;
+                p.durum = 'pasif';
+                p.subeIds = [];
+                if (!AsistDB.save(db)) return;
+                psikologlariCiz();
+                ofisMuhasebeHesapla();
+                return;
+            }
+
+            if(!confirm("Bu uzmanı sistemden tamamen silmek istediğinize emin misiniz?")) return;
+            db.psikologlar = db.psikologlar.filter(x => x.id !== id);
+            if (!AsistDB.save(db)) return;
+            psikologlariCiz();
+            ofisMuhasebeHesapla();
+        }
+
+        // ==========================================
+        // 4. KURUMSAL FİRMALAR
+        // ==========================================
+        function firmaTumUzmanlarDegisti(tumUzmanlarMi) {
+            const container = document.getElementById('firma-uzmanlar-checkbox-listesi');
+            if (!container) return;
+            container.classList.toggle('opacity-50', tumUzmanlarMi);
+            container.classList.toggle('pointer-events-none', tumUzmanlarMi);
+            if (tumUzmanlarMi) {
+                document.querySelectorAll('.firma-uzman-check').forEach(c => c.checked = true);
+            }
+        }
+
+        function firmalariCiz() {
+            let db = AsistDB.get();
+            const grid = document.getElementById('firma-liste-grid');
+            if(!grid) return;
+            grid.innerHTML = '';
+
+            db.firmalar.forEach(f => {
+                let subeAdlari = db.subeler.filter(s => (f.subeIds || []).includes(s.id)).map(s => s.adi).join(', ');
+                let uzmanBilgi = f.tumUzmanlar
+                    ? 'Tüm Uzmanlar'
+                    : (db.psikologlar.filter(p => (f.uzmanIds || []).includes(p.id)).map(p => p.ad).join(', ') || 'Uzman Seçilmedi');
+
+                let card = document.createElement('div');
+                card.className = "bg-slate-50 p-6 rounded-2xl border border-slate-200 flex flex-col justify-between";
+                card.innerHTML = `
+                    <div class="space-y-2.5">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-extrabold text-slate-900 text-base">${escapeHtml(f.adi)}</h3>
+                            <span class="text-[10px] font-bold px-2.5 py-1 rounded-full ${f.durum==='aktif'?'bg-emerald-100 text-[#256839]':'bg-slate-200 text-slate-600'}">${escapeHtml(f.durum)}</span>
+                        </div>
+                        <p class="text-xs text-slate-600"><strong>Geçerli Şubeler:</strong> ${escapeHtml(subeAdlari || 'Şube Seçilmedi')}</p>
+                        <p class="text-xs text-slate-600"><strong>Yetkili Uzmanlar:</strong> ${escapeHtml(uzmanBilgi)}</p>
+                    </div>
+                    <div class="flex justify-end space-x-2 pt-4 border-t border-slate-200 mt-4 text-xs font-bold">
+                        <button onclick="firmaSil(${f.id})" class="text-red-600 hover:bg-red-50 px-3 py-1.5 rounded-xl transition cursor-pointer">Sil</button>
+                        <button onclick="firmaFormunuAc('duzenle', ${f.id})" class="bg-white border px-4 py-1.5 rounded-xl hover:bg-slate-100 transition cursor-pointer">Düzenle</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function firmaFormunuAc(mod, id = null) {
+            let db = AsistDB.get();
+            document.getElementById('firma-form-card').classList.remove('hidden');
+
+            const checkList = document.getElementById('firma-subeler-checkbox-listesi');
+            checkList.innerHTML = '';
+            db.subeler.forEach(s => {
+                checkList.innerHTML += `
+                    <label class="flex items-center space-x-1.5 cursor-pointer">
+                        <input type="checkbox" value="${s.id}" class="firma-sube-check rounded text-[#256839]">
+                        <span class="font-bold text-slate-700">${escapeHtml(s.adi)}</span>
+                    </label>
+                `;
+            });
+
+            const uzmanList = document.getElementById('firma-uzmanlar-checkbox-listesi');
+            uzmanList.innerHTML = '';
+            db.psikologlar.forEach(p => {
+                uzmanList.innerHTML += `
+                    <label class="flex items-center space-x-1.5 cursor-pointer">
+                        <input type="checkbox" value="${p.id}" class="firma-uzman-check rounded text-[#256839]">
+                        <span class="font-semibold text-slate-700 truncate">${escapeHtml(p.ad)}</span>
+                    </label>
+                `;
+            });
+
+            if (mod === 'yeni') {
+                document.getElementById('input-firma-id').value = '';
+                document.getElementById('input-firma-adi').value = '';
+                document.getElementById('input-firma-durum').value = 'aktif';
+                document.getElementById('input-firma-tum-uzmanlar').checked = true;
+                document.querySelectorAll('.firma-sube-check').forEach(c => c.checked = true);
+                firmaTumUzmanlarDegisti(true);
+            } else {
+                let f = db.firmalar.find(x => x.id === id);
+                if (!f) return;
+                document.getElementById('input-firma-id').value = f.id;
+                document.getElementById('input-firma-adi').value = f.adi;
+                document.getElementById('input-firma-durum').value = f.durum || 'aktif';
+                document.querySelectorAll('.firma-sube-check').forEach(c => {
+                    c.checked = (f.subeIds || []).includes(parseInt(c.value, 10));
+                });
+
+                let tumUzmanlar = !!f.tumUzmanlar;
+                document.getElementById('input-firma-tum-uzmanlar').checked = tumUzmanlar;
+                document.querySelectorAll('.firma-uzman-check').forEach(c => {
+                    c.checked = tumUzmanlar || (f.uzmanIds || []).includes(parseInt(c.value, 10));
+                });
+                firmaTumUzmanlarDegisti(tumUzmanlar);
+            }
+        }
+
+        function firmaFormunuKapat() { document.getElementById('firma-form-card').classList.add('hidden'); }
+
+        function firmaKaydet(e) {
+            e.preventDefault();
+            let db = AsistDB.get();
+            let id = document.getElementById('input-firma-id').value;
+            let adi = document.getElementById('input-firma-adi').value.trim();
+            let durum = document.getElementById('input-firma-durum').value;
+            let tumUzmanlar = document.getElementById('input-firma-tum-uzmanlar').checked;
+
+            let seciliSubeler = [];
+            document.querySelectorAll('.firma-sube-check:checked').forEach(c => seciliSubeler.push(parseInt(c.value, 10)));
+            if (seciliSubeler.length === 0) { alert("Lütfen en az bir şube seçiniz!"); return; }
+
+            let seciliUzmanlar = [];
+            if (!tumUzmanlar) {
+                document.querySelectorAll('.firma-uzman-check:checked').forEach(c => seciliUzmanlar.push(parseInt(c.value, 10)));
+                if (seciliUzmanlar.length === 0) {
+                    alert("Lütfen kurumla çalışacak en az bir uzman seçiniz veya 'Tüm Uzmanlar Geçerli' seçeneğini işaretleyiniz!");
+                    return;
+                }
+            }
+
+            if (id === "") {
+                db.firmalar.push({
+                    id: yeniKayitId(),
+                    adi: adi,
+                    subeIds: seciliSubeler,
+                    uzmanIds: seciliUzmanlar,
+                    tumUzmanlar: tumUzmanlar,
+                    durum: durum
+                });
+            } else {
+                let f = db.firmalar.find(x => x.id === parseInt(id, 10));
+                if (f) {
+                    f.adi = adi;
+                    f.subeIds = seciliSubeler;
+                    f.uzmanIds = seciliUzmanlar;
+                    f.tumUzmanlar = tumUzmanlar;
+                    f.durum = durum;
+                }
+            }
+
+            if (!AsistDB.save(db)) return;
+            firmaFormunuKapat();
+            firmalariCiz();
+            ofisMuhasebeHesapla();
+            alert("✅ Firma bilgileri başarıyla kaydedildi!");
+        }
+
+        function firmaSil(id) {
+            let db = AsistDB.get();
+            let f = db.firmalar.find(x => x.id === id);
+            if (!f) return;
+
+            let bagliKayitVarMi = db.seanslar.some(s => s.firmaId === id) || db.danisanlar.some(d => d.firmaId === id);
+            if (bagliKayitVarMi && f.durum === 'pasif') {
+                alert("Bu firma zaten pasif durumdadır. Bağlı danışan/seans kayıtları bulunduğu için sistemden tamamen silinemez.");
+                return;
+            }
+            if (bagliKayitVarMi && f.durum !== 'pasif') {
+                if (!confirm("Bu kurumsal firmaya bağlı danışan veya seans kayıtları bulunmaktadır. Rapor bütünlüğünü korumak adına firma 'Pasif' duruma alınacaktır. Onaylıyor musunuz?")) return;
+                f.durum = 'pasif';
+                if (!AsistDB.save(db)) return;
+                firmalariCiz();
+                ofisMuhasebeHesapla();
+                return;
+            }
+
+            if(!confirm("Bu kurumsal firmayı tamamen silmek istediğinize emin misiniz?")) return;
+            db.firmalar = db.firmalar.filter(x => x.id !== id);
+            if (!AsistDB.save(db)) return;
+            firmalariCiz();
+            ofisMuhasebeHesapla();
+        }
+
+        // ==========================================
+        // 5. GELİŞMİŞ MUHASEBE (TARİH ŞERİTLİ VE ID BAZLI)
+        // ==========================================
+        function muhasebeSubeSecenekleriniDoldur() {
+            let db = AsistDB.get();
+            const sel = document.getElementById('muh-sube-secimi');
+            if(!sel) return;
+            let mevcutSecim = sel.value || 'hepsi';
+            sel.innerHTML = '<option value="hepsi">Tüm Şubeler (Genel)</option>';
+            db.subeler.forEach(s => {
+                sel.innerHTML += `<option value="${s.id}">${escapeHtml(s.adi)}</option>`;
+            });
+            if (mevcutSecim === 'hepsi' || db.subeler.some(s => String(s.id) === String(mevcutSecim))) {
+                sel.value = mevcutSecim;
+            }
+        }
+
+        function muhZamanFiltrele(p) {
+            seciliZamanPeriyodu = p;
+            document.querySelectorAll('.muh-flt-btn').forEach(b => {
+                b.classList.remove('bg-[#256839]', 'text-white', 'shadow-xs');
+                b.classList.add('text-slate-600');
+            });
+            const aktifBtn = document.getElementById('mflt-' + p);
+            if(aktifBtn) {
+                aktifBtn.classList.add('bg-[#256839]', 'text-white', 'shadow-xs');
+                aktifBtn.classList.remove('text-slate-600');
+            }
+
+            const ozelAlan = document.getElementById('muh-ozel-tarih-alani');
+            const standartNav = document.getElementById('muh-standart-nav');
+            if (p === 'ozel') {
+                ozelAlan.classList.remove('hidden');
+                if (standartNav) standartNav.classList.add('hidden');
+            } else {
+                ozelAlan.classList.add('hidden');
+                if (standartNav) standartNav.classList.remove('hidden');
+            }
+
+            ofisMuhasebeHesapla();
+        }
+
+        function muhTarihKaydir(yon) {
+            if (seciliZamanPeriyodu === 'aylik') {
+                yoneticiSeciliTarih.setMonth(yoneticiSeciliTarih.getMonth() + yon);
+            } else if (seciliZamanPeriyodu === 'haftalik') {
+                yoneticiSeciliTarih.setDate(yoneticiSeciliTarih.getDate() + (yon * 7));
+            } else {
+                yoneticiSeciliTarih.setDate(yoneticiSeciliTarih.getDate() + yon);
+            }
+            ofisMuhasebeHesapla();
+        }
+
+        function muhBuguneGit() {
+            yoneticiSeciliTarih = new Date();
+            ofisMuhasebeHesapla();
+        }
+
+        function ofisMuhasebeHesapla() {
+            let db = AsistDB.get();
+            const labelEl = document.getElementById('muh-aktif-tarih-etiket');
+            if (labelEl) {
+                labelEl.innerText = formatTarihTurkce(yoneticiSeciliTarih);
+            }
+
+            const seciliSubeVal = document.getElementById('muh-sube-secimi').value;
+
+            let filtrelenmis = db.seanslar.filter(s => {
+                let subeUygun = (seciliSubeVal === 'hepsi') || (s.subeId === parseInt(seciliSubeVal, 10));
+                return subeUygun && s.durum === 'odendi';
+            });
+
+            if (seciliZamanPeriyodu === 'gunluk') {
+                let seciliISO = formatTarihISO(yoneticiSeciliTarih);
+                filtrelenmis = filtrelenmis.filter(s => s.tarih === seciliISO);
+            } else if (seciliZamanPeriyodu === 'haftalik') {
+                let aralik = getHaftaAraligi(yoneticiSeciliTarih);
+                filtrelenmis = filtrelenmis.filter(s => s.tarih >= aralik.baslangic && s.tarih <= aralik.bitis);
+            } else if (seciliZamanPeriyodu === 'aylik') {
+                let ayPrefix = `${yoneticiSeciliTarih.getFullYear()}-${String(yoneticiSeciliTarih.getMonth() + 1).padStart(2, '0')}`;
+                filtrelenmis = filtrelenmis.filter(s => s.tarih.startsWith(ayPrefix));
+            } else if (seciliZamanPeriyodu === 'ozel') {
+                let bas = document.getElementById('muh-ozel-baslangic').value;
+                let bit = document.getElementById('muh-ozel-bitis').value;
+                if(bas && bit) {
+                    filtrelenmis = filtrelenmis.filter(s => s.tarih >= bas && s.tarih <= bit);
+                }
+            }
+
+            let fizikiKasaCiro = 0;
+            let kurumsalToplamSeans = 0;
+            let bireyselToplamSeans = 0;
+            let uzmanPayiToplam = 0;
+            let ofisNetToplam = 0;
+
+            let firmaSeansAdetMap = {};
+            let uzmanHakEdisMap = {};
+
+            let tumFirmalar = db.firmalar || [];
+
+            filtrelenmis.forEach(s => {
+                let uz = db.psikologlar.find(p => p.id === s.uzmanId);
+                let uzKey = `uz_${s.uzmanId}`;
+                let uzAd = uz ? uz.ad : `Silinmiş Uzman (#${s.uzmanId})`;
+                let ofisYuzde = (s.ofisOranSnapshot !== undefined && s.ofisOranSnapshot !== null && !isNaN(s.ofisOranSnapshot) ? Number(s.ofisOranSnapshot) : 50) / 100;
+
+                if (!uzmanHakEdisMap[uzKey]) {
+                    uzmanHakEdisMap[uzKey] = {
+                        uzmanAdi: uzAd,
+                        ofisDanisanAdet: 0,
+                        kendiDanisanAdet: 0,
+                        firmaAdetleri: {},
+                        toplamOfisPay: 0,
+                        toplamUzmanHak: 0
+                    };
+                }
+
+                if (s.basvuruTuru === 'firma') {
+                    let firma = db.firmalar.find(f => f.id === s.firmaId);
+                    let fId = s.firmaId || 0;
+                    let fAd = firma ? firma.adi : `Belirtilmemiş Firma (#${fId})`;
+
+                    kurumsalToplamSeans++;
+
+                    if (!uzmanHakEdisMap[uzKey].firmaAdetleri[fId]) {
+                        uzmanHakEdisMap[uzKey].firmaAdetleri[fId] = 0;
+                    }
+                    uzmanHakEdisMap[uzKey].firmaAdetleri[fId]++;
+
+                    if (!firmaSeansAdetMap[fId]) {
+                        firmaSeansAdetMap[fId] = { adi: fAd, adet: 0 };
+                    }
+                    firmaSeansAdetMap[fId].adet++;
+
+                } else {
+                    bireyselToplamSeans++;
+                    let ucret = (s.ucret !== undefined && s.ucret !== null && !isNaN(s.ucret)) ? Number(s.ucret) : 1500;
+                    fizikiKasaCiro += ucret;
+
+                    let ofisPay = Math.round(ucret * ofisYuzde);
+                    let uzmanaKalan = ucret - ofisPay;
+
+                    uzmanPayiToplam += uzmanaKalan;
+                    ofisNetToplam += ofisPay;
+
+                    if (s.basvuruTuru === 'kendi') {
+                        uzmanHakEdisMap[uzKey].kendiDanisanAdet++;
+                    } else {
+                        uzmanHakEdisMap[uzKey].ofisDanisanAdet++;
+                    }
+
+                    uzmanHakEdisMap[uzKey].toplamOfisPay += ofisPay;
+                    uzmanHakEdisMap[uzKey].toplamUzmanHak += uzmanaKalan;
+                }
+            });
+
+            document.getElementById('stat-ciro').innerText = '₺' + fizikiKasaCiro.toLocaleString('tr-TR');
+            document.getElementById('stat-firma-alacak').innerText = kurumsalToplamSeans + " Seans";
+            document.getElementById('stat-psikolog').innerText = '₺' + uzmanPayiToplam.toLocaleString('tr-TR');
+            document.getElementById('stat-ofis').innerText = '₺' + ofisNetToplam.toLocaleString('tr-TR');
+
+            if (document.getElementById('muh-sayac-bireysel')) document.getElementById('muh-sayac-bireysel').innerText = `${bireyselToplamSeans} Bireysel`;
+            if (document.getElementById('muh-sayac-kurumsal')) document.getElementById('muh-sayac-kurumsal').innerText = `${kurumsalToplamSeans} Kurumsal`;
+
+            const faturaContainer = document.getElementById('muhasebe-firma-fatura-listesi');
+            if(faturaContainer) {
+                faturaContainer.innerHTML = '';
+                for (let fId in firmaSeansAdetMap) {
+                    let item = firmaSeansAdetMap[fId];
+                    faturaContainer.innerHTML += `
+                        <div class="flex justify-between items-center p-3.5 bg-white text-xs">
+                            <span class="font-extrabold text-slate-900">${escapeHtml(item.adi)}</span>
+                            <span class="bg-blue-100 text-blue-900 px-3 py-1 rounded-xl font-black text-xs">${item.adet} Seans</span>
+                        </div>
+                    `;
+                }
+                if (Object.keys(firmaSeansAdetMap).length === 0) {
+                    faturaContainer.innerHTML = `<div class="p-3.5 text-center text-slate-400 italic">Döneme ait tamamlanmış kurumsal seans bulunmuyor.</div>`;
+                }
+            }
+
+            const theadTr = document.getElementById('muhasebe-tablo-header-tr');
+            if(theadTr) {
+                let headerHtml = `
+                    <th class="p-3.5">Uzman Psikolog</th>
+                    <th class="p-3.5 text-center">Ofis Danışanı</th>
+                    <th class="p-3.5 text-center">Kendi Danışanı</th>
+                `;
+
+                tumFirmalar.forEach(f => {
+                    headerHtml += `<th class="p-3.5 text-center bg-blue-50/50 text-blue-900 border-x border-slate-200/60">${escapeHtml(f.adi)}</th>`;
+                });
+
+                headerHtml += `
+                    <th class="p-3.5 text-right text-emerald-800">Ofis Payı</th>
+                    <th class="p-3.5 text-right text-slate-900 font-black">Uzmana Ödenecek</th>
+                `;
+                theadTr.innerHTML = headerHtml;
+            }
+
+            const tbody = document.getElementById('muhasebe-uzman-tablo-body');
+            if(tbody) {
+                tbody.innerHTML = '';
+
+                for (let uzKey in uzmanHakEdisMap) {
+                    let d = uzmanHakEdisMap[uzKey];
+                    let rowHtml = `
+                        <td class="p-3.5 font-bold text-slate-900">${escapeHtml(d.uzmanAdi)}</td>
+                        <td class="p-3.5 text-center font-bold text-slate-700">${d.ofisDanisanAdet > 0 ? d.ofisDanisanAdet + ' Seans' : '-'}</td>
+                        <td class="p-3.5 text-center font-bold text-purple-900">${d.kendiDanisanAdet > 0 ? d.kendiDanisanAdet + ' Seans' : '-'}</td>
+                    `;
+
+                    tumFirmalar.forEach(f => {
+                        let adet = d.firmaAdetleri[f.id] || 0;
+                        if (adet > 0) {
+                            rowHtml += `
+                                <td class="p-3.5 text-center border-x border-slate-100 bg-blue-50/20">
+                                    <span class="font-extrabold text-blue-900 bg-blue-100/70 px-2.5 py-1 rounded-lg">${adet} Seans</span>
+                                </td>
+                            `;
+                        } else {
+                            rowHtml += `<td class="p-3.5 text-center text-slate-300 border-x border-slate-100">-</td>`;
+                        }
+                    });
+
+                    rowHtml += `
+                        <td class="p-3.5 text-right font-extrabold text-[#256839]">₺${d.toplamOfisPay.toLocaleString('tr-TR')}</td>
+                        <td class="p-3.5 text-right font-black text-slate-900 text-sm">₺${d.toplamUzmanHak.toLocaleString('tr-TR')}</td>
+                    `;
+
+                    let tr = document.createElement('tr');
+                    tr.className = "hover:bg-slate-50/80 transition";
+                    tr.innerHTML = rowHtml;
+                    tbody.appendChild(tr);
+                }
+
+                if (Object.keys(uzmanHakEdisMap).length === 0) {
+                    let toplamKolon = 5 + tumFirmalar.length;
+                    tbody.innerHTML = `<tr><td colspan="${toplamKolon}" class="p-4 text-center text-slate-400 italic">Döneme ait seans bulunmuyor.</td></tr>`;
+                }
+            }
+        }
+    </script>
+</body>
+</html>

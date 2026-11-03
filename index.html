@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AsistPsikolog | Profesyonel Danışmanlık ve Randevu Yönetim Ekosistemi</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="db.js"></script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        :root {
+            --primary: #256839;
+            --primary-dark: #12612d;
+        }
+        .hero-glow {
+            background: radial-gradient(circle at 50% 0%, rgba(37, 104, 57, 0.12) 0%, transparent 60%);
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(226, 232, 240, 0.9);
+        }
+    </style>
+</head>
+<body class="bg-[#f9fafb] text-slate-900 min-h-screen flex flex-col justify-between selection:bg-[#256839] selection:text-white">
+
+    <!-- Üst Menü -->
+    <header class="bg-white/80 backdrop-blur-md border-b border-slate-100 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3.5">
+                <div class="w-11 h-11 rounded-2xl bg-[#256839] flex items-center justify-center text-white text-xl shadow-lg shadow-emerald-900/10">
+                    <i class="fa-solid fa-brain"></i>
+                </div>
+                <div>
+                    <span class="text-2xl font-black tracking-tight text-slate-900">asist<span class="text-[#256839]">psikolog</span></span>
+                    <span class="block text-[10px] tracking-widest text-emerald-800 font-extrabold uppercase">Kurumsal Randevu Sistemi</span>
+                </div>
+            </div>
+            
+            <div class="hidden md:flex items-center space-x-8 text-sm font-semibold text-slate-600">
+                <a href="#faydalar" class="hover:text-[#256839] transition">Sistemin Faydaları</a>
+                <a href="#disiplin" class="hover:text-[#256839] transition">Çalışma Disiplini</a>
+                <a href="#roller" class="hover:text-[#256839] transition">Giriş Panelleri</a>
+            </div>
+
+            <div class="flex items-center space-x-2" id="ust-giris-alani">
+                <a href="giris.html" class="bg-[#256839] hover:bg-[#12612d] text-white px-6 py-3 rounded-xl font-bold text-sm transition duration-300 shadow-md shadow-emerald-900/10 flex items-center space-x-2">
+                    <span>Sisteme Giriş</span>
+                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Ana İçerik -->
+    <main class="flex-grow hero-glow">
+        <section id="faydalar" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16 lg:pt-28 lg:pb-24">
+            <div class="text-center max-w-4xl mx-auto">
+                <div class="inline-flex items-center space-x-2 px-4 py-2 rounded-full text-xs font-bold bg-emerald-50 text-[#256839] border border-emerald-200/60 mb-8 shadow-2xs">
+                    <i class="fa-solid fa-shield-heart"></i>
+                    <span>Danışmanlık Merkezleri İçin Profesyonel Operasyon Standardı</span>
+                </div>
+                <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black text-slate-900 tracking-tight leading-[1.15]">
+                    Danışmanlık Sürecinde <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#256839] to-[#12612d]">Kusursuz Düzen ve Akış</span>
+                </h1>
+                <p class="mt-8 text-lg sm:text-xl text-slate-600 leading-relaxed max-w-2xl mx-auto font-normal">
+                    Kaos barındırmayan randevu takvimi, esnek oda yönetimi, alan eşleştirmeleri ve anlık koordinasyonla ofis disiplininizi en üst seviyeye taşıyın.
+                </p>
+            </div>
+
+            <div id="disiplin" class="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="glass-panel p-8 rounded-3xl shadow-xl shadow-slate-200/50 hover:border-emerald-200 transition duration-300">
+                    <div class="w-14 h-14 bg-emerald-50 text-[#256839] rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-inner">
+                        <i class="fa-solid fa-calendar-check"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">Çakışmasız Randevu Mimarisi</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Asistanın danışan bilgilerini girmesiyle başlayan süreç; uzmanlık alanı, psikolog uygunluğu ve odaların dinamik doluluk sorgulamasıyla hatasız şekilde kilitlenir.
+                    </p>
+                </div>
+
+                <div class="glass-panel p-8 rounded-3xl shadow-xl shadow-slate-200/50 hover:border-emerald-200 transition duration-300">
+                    <div class="w-14 h-14 bg-emerald-50 text-[#256839] rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-inner">
+                        <i class="fa-solid fa-door-open"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">Esnek Oda ve Alan Yönetimi</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Çocuk oyun odaları ve yetişkin odalarının çok amaçlı ortak kullanımına uyumlu; çocuk, ergen, yetişkin ve çift seanslarını en doğru mekânla buluşturan akıllı yapı.
+                    </p>
+                </div>
+
+                <div class="glass-panel p-8 rounded-3xl shadow-xl shadow-slate-200/50 hover:border-emerald-200 transition duration-300">
+                    <div class="w-14 h-14 bg-emerald-50 text-[#256839] rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-inner">
+                        <i class="fa-solid fa-handshake"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">Kurumsal Firma Yönetimi</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Anlaşmalı firma seanslarını danışandan ücret almadan doğrudan firma cari kaydına işleyen, matriste seans adetleriyle izlenen şeffaf yapı.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Rol Bazlı Giriş Modülü -->
+        <section id="roller" class="bg-slate-50 border-t border-slate-200 py-24 relative overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-2xl mx-auto mb-16">
+                    <span class="text-xs font-extrabold uppercase tracking-widest text-[#256839] mb-3 block bg-emerald-50 px-3 py-1 rounded-full w-fit mx-auto">Yetkilendirme Matrisi</span>
+                    <h2 class="text-3xl sm:text-4xl font-black text-slate-900">Sisteme Giriş Yapın</h2>
+                    <p class="mt-4 text-slate-600 text-base">Rolünüze en uygun panele geçiş yaparak ofis operasyonunu yönetmeye başlayın.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                    <!-- Yönetici Kartı -->
+                    <div class="bg-white border border-slate-200 rounded-3xl p-8 text-center flex flex-col justify-between hover:border-[#256839] hover:shadow-xl transition duration-300 group">
+                        <div>
+                            <div class="w-16 h-16 bg-slate-50 text-[#256839] rounded-2xl flex items-center justify-center text-2xl mx-auto mb-6 shadow-xs border border-slate-100 group-hover:bg-[#256839] group-hover:text-white transition duration-300">
+                                <i class="fa-solid fa-user-shield"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-2">Yönetici Paneli</h3>
+                            <p class="text-slate-600 text-sm mb-8 leading-relaxed">
+                                Şube ve oda yapılandırması, asistan/psikolog yönetimi, kurumsal anlaşmalar ve merkez muhasebesi.
+                            </p>
+                        </div>
+                        <a href="giris.html?rol=yonetici" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 px-4 rounded-xl transition duration-200 flex items-center justify-center space-x-2 shadow-md">
+                            <span>Yönetici Olarak Gir</span>
+                            <i class="fa-solid fa-arrow-right text-xs"></i>
+                        </a>
+                    </div>
+
+                    <!-- Asistan Kartı (Öne Çıkan) -->
+                    <div class="bg-gradient-to-b from-[#12612d] to-[#256839] text-white rounded-3xl p-8 text-center flex flex-col justify-between shadow-2xl relative ring-4 ring-emerald-500/20 transform md:-translate-y-3">
+                        <div class="absolute -top-3.5 left-1/2 transform -translate-x-1/2 bg-white text-[#256839] text-xs px-4 py-1.5 rounded-full font-extrabold shadow-md tracking-wider uppercase">
+                            Aktif Operasyon
+                        </div>
+                        <div>
+                            <div class="w-16 h-16 bg-white/10 text-white rounded-2xl flex items-center justify-center text-2xl mx-auto mb-6 backdrop-blur-md border border-white/20">
+                                <i class="fa-solid fa-headset"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-2">Asistan Paneli</h3>
+                            <p class="text-emerald-100/90 text-sm mb-8 leading-relaxed">
+                                Randevu oluşturma, danışan rehberi, oda/saat takvimi ve günlük seans ödeme takibinin yürütülmesi.
+                            </p>
+                        </div>
+                        <a href="giris.html?rol=asistan" class="w-full bg-white hover:bg-emerald-50 text-[#256839] font-bold py-3.5 px-4 rounded-xl transition duration-200 flex items-center justify-center space-x-2 shadow-xl">
+                            <span>Asistan Olarak Gir</span>
+                            <i class="fa-solid fa-arrow-right text-xs"></i>
+                        </a>
+                    </div>
+
+                    <!-- Psikolog Kartı -->
+                    <div class="bg-white border border-slate-200 rounded-3xl p-8 text-center flex flex-col justify-between hover:border-[#256839] hover:shadow-xl transition duration-300 group">
+                        <div>
+                            <div class="w-16 h-16 bg-slate-50 text-[#256839] rounded-2xl flex items-center justify-center text-2xl mx-auto mb-6 shadow-xs border border-slate-100 group-hover:bg-[#256839] group-hover:text-white transition duration-300">
+                                <i class="fa-solid fa-user-doctor"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-2">Psikolog Paneli</h3>
+                            <p class="text-slate-600 text-sm mb-8 leading-relaxed">
+                                Şubelere göre çalışma gün ve saatlerini belirleme, randevu oluşturma ve bireysel seans takvimi yönetimi.
+                            </p>
+                        </div>
+                        <a href="giris.html?rol=psikolog" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 px-4 rounded-xl transition duration-200 flex items-center justify-center space-x-2 shadow-md">
+                            <span>Psikolog Olarak Gir</span>
+                            <i class="fa-solid fa-arrow-right text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Alt Bilgi (Footer) -->
+    <footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-sm gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded-lg bg-[#256839] flex items-center justify-center text-white">
+                    <i class="fa-solid fa-brain text-xs"></i>
+                </div>
+                <span class="font-bold text-white">asistpsikolog &copy; 2026</span>
+            </div>
+            <div class="flex items-center space-x-6 text-xs text-slate-400">
+                <span>Profesyonel Danışmanlık ve Çalışma Standardı</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        window.onload = function() {
+            if (typeof AsistAuth === 'undefined') return;
+            const sess = AsistAuth.getSession();
+            if (!sess) return;
+            const alan = document.getElementById('ust-giris-alani');
+            if (!alan) return;
+            const hedef = AsistAuth.hedefSayfa(sess);
+            alan.innerHTML = `
+                <a href="${hedef}" class="bg-[#256839] hover:bg-[#12612d] text-white px-5 py-2.5 rounded-xl font-bold text-xs transition shadow-md flex items-center space-x-2">
+                    <i class="fa-solid fa-gauge-high"></i>
+                    <span>Panele Dön</span>
+                </a>
+                <button onclick="AsistAuth.logout('index.html')" class="bg-slate-100 hover:bg-red-50 text-red-600 px-3.5 py-2.5 rounded-xl font-bold text-xs transition cursor-pointer">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </button>
+            `;
+        };
+    </script>
+</body>
+</html>

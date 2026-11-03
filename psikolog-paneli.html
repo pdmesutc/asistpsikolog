@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AsistPsikolog | Uzman Çalışma Masası</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="db.js"></script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        :root { --primary: #256839; --primary-dark: #12612d; }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-900 min-h-screen flex flex-col md:flex-row">
+
+    <!-- SOL MENÜ -->
+    <aside class="w-full md:w-72 bg-white border-r border-slate-200 flex flex-col justify-between shrink-0 sticky top-0 md:h-screen z-40">
+        <div class="overflow-y-auto">
+            <div class="p-5 flex flex-col justify-center border-b border-slate-100 space-y-2.5">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-[#256839] flex items-center justify-center text-white text-lg shadow-md">
+                        <i class="fa-solid fa-user-doctor"></i>
+                    </div>
+                    <div>
+                        <span class="text-xl font-black tracking-tight text-slate-900">asist<span class="text-[#256839]">psikolog</span></span>
+                        <span class="block text-[10px] tracking-widest text-slate-500 font-extrabold uppercase">Uzman Çalışma Masası</span>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Aktif Uzman Profili</label>
+                    <select id="aktif-uzman-secici" onchange="aktifUzmanDegistir(this.value)" class="w-full text-[11px] font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1.5 rounded-lg border border-emerald-200 focus:outline-none cursor-pointer"></select>
+                    <span id="uzman-profil-ad" class="hidden"></span>
+                </div>
+            </div>
+
+            <!-- Yönetici Gözlem Modu Bildirimi (Sadece Yönetici Girişinde Görünür) -->
+            <div id="yonetici-gozlem-kutusu" class="hidden mx-4 mt-3 p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-[11px] flex items-center justify-between">
+                <span class="font-extrabold text-amber-900"><i class="fa-solid fa-eye mr-1"></i>Yönetici Gözlem</span>
+                <a href="yonetici-paneli.html" class="font-black text-[#256839] hover:underline">Panele Dön →</a>
+            </div>
+
+            <nav class="p-4 space-y-1.5 text-xs font-bold">
+                <button onclick="psikologSekmeDegistir('gorusmeler')" id="pbtn-gorusmeler" class="psikolog-nav-btn w-full py-3 px-4 rounded-xl transition flex items-center space-x-3 bg-[#256839] text-white shadow-xs cursor-pointer">
+                    <i class="fa-solid fa-calendar-day w-5 text-center"></i>
+                    <span>Görüşmelerim</span>
+                    <span id="badge-psk-seans" class="ml-auto bg-white/20 text-white text-[10px] px-2 py-0.5 rounded-full">0</span>
+                </button>
+                <button onclick="psikologSekmeDegistir('randevu-olustur')" id="pbtn-randevu-olustur" class="psikolog-nav-btn w-full py-3 px-4 rounded-xl transition flex items-center space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer">
+                    <i class="fa-solid fa-calendar-plus w-5 text-center text-[#256839]"></i>
+                    <span>Randevu Oluştur</span>
+                </button>
+                <button onclick="psikologSekmeDegistir('danisanlar')" id="pbtn-danisanlar" class="psikolog-nav-btn w-full py-3 px-4 rounded-xl transition flex items-center space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer">
+                    <i class="fa-solid fa-address-book w-5 text-center"></i>
+                    <span>Danışan Rehberi</span>
+                </button>
+                <button onclick="psikologSekmeDegistir('calisma-saatleri')" id="pbtn-calisma-saatleri" class="psikolog-nav-btn w-full py-3 px-4 rounded-xl transition flex items-center space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer">
+                    <i class="fa-solid fa-clock w-5 text-center text-[#256839]"></i>
+                    <span>Çalışma Saatlerim</span>
+                </button>
+            </nav>
+        </div>
+
+        <!-- Oturum ve Çıkış Alanı -->
+        <div class="p-4 border-t border-slate-100 bg-slate-50/50 flex items-center justify-between">
+            <div class="truncate pr-2">
+                <p class="text-xs font-extrabold text-slate-800 truncate" id="aktif-uzman-footer-ad">Uzman Oturumu</p>
+                <p class="text-[10px] text-emerald-700 font-bold">Uzman Masası</p>
+            </div>
+            <button onclick="psikologCikisYap()" class="bg-white hover:bg-red-50 text-red-600 border border-slate-200 hover:border-red-200 px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer flex items-center space-x-1 shrink-0" title="Oturumu Kapat">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Çıkış</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- SAĞ ANA GÖVDE -->
+    <main class="flex-grow p-6 md:p-10 max-w-7xl w-full mx-auto overflow-y-auto space-y-6">
+
+        <!-- 1. GÖRÜŞMELERİM -->
+        <div id="psekm-gorusmeler" class="psikolog-sekme space-y-6">
+            <div class="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-5">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-100 gap-3">
+                    <div>
+                        <h2 class="text-xl font-extrabold text-slate-900">Tüm Şubelerdeki Görüşmelerim</h2>
+                        <p class="text-xs text-slate-500">Yetkili olduğunuz tüm ofislerdeki seans akışınız.</p>
+                    </div>
+                    <div class="flex space-x-2 text-xs">
+                        <span class="font-bold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-xl border border-amber-200" id="psk-sayac-bekleyen">0 Bekliyor</span>
+                        <span class="font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-xl border border-emerald-200" id="psk-sayac-odenen">0 Tamamlandı</span>
+                        <span class="font-bold text-red-700 bg-red-50 px-2.5 py-1 rounded-xl border border-red-200" id="psk-sayac-iptal">0 İptal</span>
+                    </div>
+                </div>
+                <div id="psikolog-seans-listesi" class="space-y-3"></div>
+            </div>
+        </div>
+
+        <!-- 2. RANDEVU OLUŞTUR (ŞUBE SEÇİMLİ + CANLI ARAMA) -->
+        <div id="psekm-randevu-olustur" class="psikolog-sekme hidden space-y-6">
+            <div class="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-5">
+                <div class="border-b pb-3">
+                    <h2 class="text-xl font-extrabold text-slate-900">Randevu Oluştur (Kendi Danışanım)</h2>
+                    <p class="text-xs text-slate-500">Lütfen randevu yazmak istediğiniz ofisi ve danışan bilgilerini seçiniz.</p>
+                </div>
+
+                <form id="psk-randevu-form" onsubmit="pskMusaittlikSorgula(event)" class="space-y-4 text-xs">
+                    <input type="hidden" id="psk-secili-danisan-id" value="">
+                    
+                    <!-- ŞUBE SEÇİM ALANI -->
+                    <div class="bg-emerald-50/70 p-4 rounded-2xl border border-emerald-200">
+                        <label class="block font-bold text-emerald-950 mb-1.5">1. Randevu Açılacak Şubeyi Seçin</label>
+                        <select id="pr-sube-id" required onchange="pskFormSubeDegisti()" class="w-full bg-white p-2.5 rounded-xl border border-emerald-300 font-extrabold text-[#256839] focus:outline-none"></select>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="relative">
+                            <label class="block font-bold text-slate-700 mb-1">2. Danışan Adı Soyadı</label>
+                            <input type="text" id="pr-danisan-ad" required autocomplete="off" oninput="pskCanliDanisanAra('ad', this.value)" placeholder="Danışan Ad Soyad" class="w-full bg-slate-50 p-2.5 rounded-xl border border-slate-200 font-medium">
+                            <div id="psk-oneri-kutusu-ad" class="hidden absolute top-full left-0 w-full mt-1 bg-white border border-slate-200 rounded-2xl shadow-xl z-50 max-h-48 overflow-y-auto divide-y divide-slate-100"></div>
+                        </div>
+                        <div class="relative">
+                            <label class="block font-bold text-slate-700 mb-1">3. Telefon Numarası (10 Hane)</label>
+                            <input type="text" id="pr-danisan-tel" required autocomplete="off" oninput="pskCanliDanisanAra('tel', this.value)" placeholder="5072727136" class="w-full bg-slate-50 p-2.5 rounded-xl border border-slate-200 font-medium">
+                            <div id="psk-oneri-kutusu-tel" class="hidden absolute top-full left-0 w-full mt-1 bg-white border border-slate-200 rounded-2xl shadow-xl z-50 max-h-48 overflow-y-auto divide-y divide-slate-100"></div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-1">
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">4. Hizmet Türü</label>
+                            <select id="pr-hizmet-turu" onchange="pskFormSubeDegisti()" class="w-full bg-slate-50 p-2.5 rounded-xl border border-slate-200 font-bold">
+                                <option value="Çocuk">Çocuk</option>
+                                <option value="Ergen">Ergen</option>
+                                <option value="Yetişkin" selected>Yetişkin</option>
+                                <option value="Çift">Çift</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">5. Seans Tarihi</label>
+                            <input type="date" id="pr-tarih" required onchange="pskFormSubeDegisti()" class="w-full bg-slate-50 p-2.5 rounded-xl border border-slate-200 font-medium">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">6. Seans Saati</label>
+                            <select id="pr-saat" onchange="pskFormSubeDegisti()" class="w-full bg-slate-50 p-2.5 rounded-xl border border-slate-200 font-bold">
+                                <option value="09:00">09:00</option>
+                                <option value="10:00">10:00</option>
+                                <option value="11:00" selected>11:00</option>
+                                <option value="12:00">12:00</option>
+                                <option value="13:00">13:00</option>
+                                <option value="14:00">14:00</option>
+                                <option value="15:00">15:00</option>
+                                <option value="16:00">16:00</option>
+                                <option value="17:00">17:00</option>
+                                <option value="18:00">18:00</option>
+                                <option value="19:00">19:00</option>
+                                <option value="20:00">20:00</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="text-right pt-2">
+                        <button type="submit" class="bg-[#256839] hover:bg-[#12612d] text-white px-7 py-2.5 rounded-xl font-bold cursor-pointer transition shadow-sm">
+                            <i class="fa-solid fa-magnifying-glass mr-1.5"></i>Bu Şubede Müsaitlik Sorgula
+                        </button>
+                    </div>
+                </form>
+
+                <div id="psk-sonuc-alani" class="hidden space-y-4 pt-4 border-t border-slate-100">
+                    <div class="p-3.5 rounded-2xl border text-xs" id="psk-uzman-durum-kutu"></div>
+                    <div class="space-y-2">
+                        <span class="font-extrabold text-slate-800 text-xs block">Seçilen Şubenin Odaları ve Uygunluk Durumu:</span>
+                        <div id="pr-oda-kart-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-3"></div>
+                    </div>
+                    <div class="flex justify-between items-center pt-2">
+                        <p class="font-bold text-slate-700 text-xs">Seçilen Oda: <span id="pr-secim-oda-yazi" class="text-slate-400 italic">Seçilmedi</span></p>
+                        <button onclick="pskRandevuyuKesinlestir()" id="pr-btn-onayla" disabled class="opacity-50 cursor-not-allowed bg-[#256839] text-white px-7 py-2.5 rounded-xl font-bold text-xs shadow-md">
+                            Randevuyu Kesinleştir
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. DANIŞAN REHBERİ (SADECE BU UZMANIN DANIŞANLARI + ARAMA) -->
+        <div id="psekm-danisanlar" class="psikolog-sekme hidden space-y-6">
+            <div class="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-3">
+                    <div>
+                        <h2 class="text-xl font-extrabold text-slate-900">Danışan Rehberim (<span id="psk-rehber-sayisi">0</span>)</h2>
+                        <p class="text-xs text-slate-500">Yalnızca sizinle görüşmesi bulunan danışanlar listelenir.</p>
+                    </div>
+                    <input type="text" id="psk-danisan-arama-input" onkeyup="pskRehberiCiz()" placeholder="Danışan veya Tel Ara..." class="p-2 bg-slate-50 border border-slate-200 rounded-xl text-xs w-full sm:w-64">
+                </div>
+                <div class="overflow-x-auto border border-slate-200 rounded-2xl max-h-[550px]">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead class="sticky top-0 bg-slate-50 border-b font-extrabold">
+                            <tr>
+                                <th class="p-3.5">Ad Soyad</th>
+                                <th class="p-3.5">Telefon</th>
+                                <th class="p-3.5 text-center">Benimle Seans Sayısı</th>
+                                <th class="p-3.5 text-center">İşlem</th>
+                            </tr>
+                        </thead>
+                        <tbody id="psk-danisan-body" class="divide-y divide-slate-100"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. ÇALIŞMA SAATLERİ (ŞUBE SEÇİMLİ) -->
+        <div id="psekm-calisma-saatleri" class="psikolog-sekme hidden space-y-6">
+            <div class="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-100 gap-3">
+                    <div>
+                        <h2 class="text-xl font-extrabold text-slate-900">Çalışma Saatlerim</h2>
+                        <p class="text-xs text-slate-500">Her şube için haftalık çalışma slotlarınızı bağımsız olarak ayarlayın.</p>
+                    </div>
+                    <div class="flex items-center space-x-1.5 bg-slate-100 p-1.5 rounded-2xl" id="psk-sube-secim-bar"></div>
+                </div>
+                <div class="space-y-4" id="calisma-saatleri-slot-kapsayici"></div>
+                <div class="flex items-center justify-between pt-4 border-t border-slate-100">
+                    <button onclick="calismaSaatleriniKaydet()" class="bg-[#256839] hover:bg-[#12612d] text-white px-8 py-3 rounded-xl font-extrabold text-xs shadow-md cursor-pointer transition">
+                        Bu Şubenin Saatlerini Kaydet
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- DETAY MODAL -->
+    <div id="psk-danisan-detay-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center z-50 p-4">
+        <div class="bg-white max-w-lg w-full p-6 rounded-3xl shadow-xl space-y-4 text-xs">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                <h3 id="pd-baslik" class="font-extrabold text-slate-900 text-sm"></h3>
+                <button onclick="pskDetayKapat()" class="text-slate-400 font-bold cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="pd-seans-listesi" class="space-y-2 max-h-60 overflow-y-auto"></div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT ÇALIŞMA MANTIĞI -->
+    <script>
+        const AKTIF_OTURUM = (typeof AsistAuth !== 'undefined') ? AsistAuth.requireAuth(['psikolog', 'yonetici']) : null;
+
+        let AKTIF_UZMAN_ID = AKTIF_OTURUM && AKTIF_OTURUM.rol === 'psikolog' ? AKTIF_OTURUM.userId : 8;
+        let calismaAyarSubeId = 1;
+        let pskSecilenOdaId = null;
+        const TUM_SAATLER = ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"];
+        const VARSAYILAN_ACIK_SAATLER = ["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
+
+        function psikologCikisYap() {
+            if (typeof AsistAuth !== 'undefined') {
+                AsistAuth.logout('giris.html?rol=psikolog');
+            } else {
+                window.location.href = 'giris.html?rol=psikolog';
+            }
+        }
+
+        function escapeHtml(str) {
+            if (str === null || str === undefined) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function normalizeTelefon10Hane(rawTel) {
+            if (typeof AsistDB !== 'undefined' && typeof AsistDB.normalizeTel === 'function') {
+                return AsistDB.normalizeTel(rawTel);
+            }
+            let digits = String(rawTel || '').replace(/\D/g, '');
+            if (digits.length === 12 && digits.startsWith('90')) digits = digits.slice(2);
+            else if (digits.length === 11 && digits.startsWith('0')) digits = digits.slice(1);
+            return digits;
+        }
+
+        function formatTelefonGorunum(tel, telefonGorunurMu = true) {
+            if (!telefonGorunurMu) return '0(5**) *** ** ** (Gizli)';
+            let d = normalizeTelefon10Hane(tel);
+            return d.length === 10 ? `0(${d.slice(0,3)}) ${d.slice(3,6)} ${d.slice(6,8)} ${d.slice(8,10)}` : (d || '-');
+        }
+
+        function formatTarihISO(d) {
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        }
+
+        const GUN_ADLARI = ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"];
+        function tarihGecerliMi(tarih) {
+            if (!/^\d{4}-\d{2}-\d{2}$/.test(tarih || '')) return false;
+            let p = tarih.split('-').map(Number);
+            let d = new Date(p[0], p[1] - 1, p[2]);
+            return d.getFullYear() === p[0] && d.getMonth() === p[1] - 1 && d.getDate() === p[2];
+        }
+        function tarihGunAdi(tarih) {
+            let p = tarih.split('-').map(Number);
+            return GUN_ADLARI[new Date(p[0], p[1] - 1, p[2]).getDay()];
+        }
+
+        function varsayilanTarihiAyarla() {
+            const tarihInput = document.getElementById('pr-tarih');
+            if (!tarihInput) return;
+            let bugunISO = formatTarihISO(new Date());
+            tarihInput.min = bugunISO;
+            if (!tarihInput.value || tarihInput.value < bugunISO) {
+                tarihInput.value = bugunISO;
+            }
+        }
+
+        function uzmanSeciciyiDoldur(db) {
+            const sel = document.getElementById('aktif-uzman-secici');
+            if (!sel) return;
+            let aktifUzmanlar = db.psikologlar.filter(p => p.durum !== 'pasif');
+
+            if (AKTIF_OTURUM && AKTIF_OTURUM.rol === 'psikolog') {
+                sel.innerHTML = aktifUzmanlar.map(p => `<option value="${p.id}">${escapeHtml(p.ad)}</option>`).join('');
+                sel.value = String(AKTIF_UZMAN_ID);
+                sel.disabled = true; // Psikolog başka uzmanın paneline geçemez
+                sel.title = "Kendi oturumunuza kilitlisiniz";
+            } else {
+                sel.innerHTML = aktifUzmanlar.map(p => `<option value="${p.id}">${escapeHtml(p.ad)}</option>`).join('');
+                sel.value = String(AKTIF_UZMAN_ID);
+                sel.disabled = false;
+            }
+        }
+
+        function aktifUzmanDegistir(yeniId) {
+            if (AKTIF_OTURUM && AKTIF_OTURUM.rol === 'psikolog') return;
+            let db = AsistDB.get();
+            AKTIF_UZMAN_ID = parseInt(yeniId, 10);
+            let uz = db.psikologlar.find(p => p.id === AKTIF_UZMAN_ID) || db.psikologlar[0];
+            if (uz) {
+                AKTIF_UZMAN_ID = uz.id;
+                calismaAyarSubeId = (uz.subeIds && uz.subeIds.length > 0) ? uz.subeIds[0] : (db.subeler[0] ? db.subeler[0].id : 1);
+                document.getElementById('uzman-profil-ad').innerText = uz.ad;
+                pskHizmetTurleriniDoldur(uz);
+            }
+            pskFormSubeDegisti();
+            pskRandevuSubeSecenekleriniDoldur();
+            pskSeanslariCiz();
+            pskRehberiCiz();
+            subeSecimButonlariniCiz();
+            calismaSaatleriniCiz();
+        }
+
+        function pskHizmetTurleriniDoldur(uz) {
+            const hizmetSel = document.getElementById('pr-hizmet-turu');
+            if (!hizmetSel || !uz) return;
+            let alanlar = (uz.alanlar && uz.alanlar.length > 0) ? uz.alanlar : ["Yetişkin"];
+            hizmetSel.innerHTML = alanlar.map(a => `<option value="${escapeHtml(a)}">${escapeHtml(a)}</option>`).join('');
+        }
+
+        window.onload = function() {
+            let db = AsistDB.get();
+            let urlParams = new URLSearchParams(window.location.search);
+
+            if (AKTIF_OTURUM && AKTIF_OTURUM.rol === 'psikolog') {
+                AKTIF_UZMAN_ID = AKTIF_OTURUM.userId;
+            } else if (urlParams.get('uzmanId')) {
+                AKTIF_UZMAN_ID = parseInt(urlParams.get('uzmanId'), 10);
+            }
+
+            let uz = db.psikologlar.find(p => p.id === AKTIF_UZMAN_ID) || db.psikologlar[0];
+            if (uz) {
+                AKTIF_UZMAN_ID = uz.id;
+                if (!uz.subeIds || !uz.subeIds.includes(calismaAyarSubeId)) {
+                    calismaAyarSubeId = (uz.subeIds && uz.subeIds.length > 0) ? uz.subeIds[0] : 1;
+                }
+                document.getElementById('uzman-profil-ad').innerText = uz.ad;
+                if (document.getElementById('aktif-uzman-footer-ad')) {
+                    document.getElementById('aktif-uzman-footer-ad').innerText = uz.ad;
+                }
+                pskHizmetTurleriniDoldur(uz);
+            }
+
+            if (AKTIF_OTURUM && AKTIF_OTURUM.rol === 'yonetici') {
+                document.getElementById('yonetici-gozlem-kutusu').classList.remove('hidden');
+            } else {
+                document.getElementById('yonetici-gozlem-kutusu').classList.add('hidden');
+            }
+
+            uzmanSeciciyiDoldur(db);
+            varsayilanTarihiAyarla();
+            pskRandevuSubeSecenekleriniDoldur();
+            pskSeanslariCiz();
+            pskRehberiCiz();
+            subeSecimButonlariniCiz();
+            calismaSaatleriniCiz();
+        };
+
+        window.addEventListener('asist-db-updated', function() {
+            pskSeanslariCiz();
+            pskRehberiCiz();
+            subeSecimButonlariniCiz();
+            calismaSaatleriniCiz();
+        });
+
+        window.addEventListener('storage', function(e) {
+            if (!e.key || e.key.startsWith('ASIST_PSIKOLOG_CENTRAL_DB')) {
+                pskRandevuSubeSecenekleriniDoldur();
+                pskSeanslariCiz();
+                pskRehberiCiz();
+                subeSecimButonlariniCiz();
+                calismaSaatleriniCiz();
+            }
+        });
+
+        document.addEventListener('click', function(e) {
+            const adKutu = document.getElementById('psk-oneri-kutusu-ad');
+            const telKutu = document.getElementById('psk-oneri-kutusu-tel');
+            if (adKutu && !adKutu.contains(e.target) && e.target.id !== 'pr-danisan-ad') adKutu.classList.add('hidden');
+            if (telKutu && !telKutu.contains(e.target) && e.target.id !== 'pr-danisan-tel') telKutu.classList.add('hidden');
+        });
+
+        function pskRandevuSubeSecenekleriniDoldur() {
+            let db = AsistDB.get();
+            let uz = db.psikologlar.find(p => p.id === AKTIF_UZMAN_ID);
+            const sel = document.getElementById('pr-sube-id');
+            if(!sel || !uz) return;
+            let mevcutDeger = sel.value;
+            sel.innerHTML = '';
+
+            let subeler = db.subeler.filter(s => s.durum === 'aktif' && (uz.subeIds || []).includes(s.id));
+            subeler.forEach(s => {
+                let opt = document.createElement('option');
+                opt.value = s.id;
+                opt.innerText = s.adi;
+                sel.appendChild(opt);
+            });
+            if (mevcutDeger && subeler.some(s => String(s.id) === String(mevcutDeger))) {
+                sel.value = mevcutDeger;
+            }
+        }
+
+        function pskFormSubeDegisti() {
+            pskSecilenOdaId = null;
+            document.getElementById('psk-sonuc-alani').classList.add('hidden');
+        }
+
+        function psikologSekmeDegistir(sekmeAdi) {
+            document.querySelectorAll('.psikolog-sekme').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.psikolog-nav-btn').forEach(btn => {
+                btn.classList.remove('bg-[#256839]', 'text-white', 'shadow-xs');
+                btn.classList.add('text-slate-600', 'hover:bg-slate-50');
+            });
+            document.getElementById('psekm-' + sekmeAdi).classList.remove('hidden');
+            const aktifBtn = document.getElementById('pbtn-' + sekmeAdi);
+            if (aktifBtn) {
+                aktifBtn.classList.remove('text-slate-600', 'hover:bg-slate-50');
+                aktifBtn.classList.add('bg-[#256839]', 'text-white', 'shadow-xs');
+            }
+            if(sekmeAdi === 'gorusmeler') pskSeanslariCiz();
+            if(sekmeAdi === 'randevu-olustur') varsayilanTarihiAyarla();
+            if(sekmeAdi === 'danisanlar') pskRehberiCiz();
+            if(sekmeAdi === 'calisma-saatleri') { subeSecimButonlariniCiz(); calismaSaatleriniCiz(); }
+        }
+
+        function pskSeanslariCiz() {
+            let db = AsistDB.get();
+            const list = document.getElementById('psikolog-seans-listesi');
+            if(!list) return;
+            list.innerHTML = '';
+
+            let banaAitSeanslar = db.seanslar
+                .filter(s => s.uzmanId === AKTIF_UZMAN_ID)
+                .sort((a,b) => a.tarih.localeCompare(b.tarih) || a.saat.localeCompare(b.saat));
+
+            let b = 0, o = 0, i = 0;
+
+            if (banaAitSeanslar.length === 0) {
+                list.innerHTML = `<div class="p-8 text-center bg-slate-50 rounded-2xl border text-xs font-bold text-slate-400">Planlanmış seansınız bulunmuyor.</div>`;
+            } else {
+                banaAitSeanslar.forEach(rawS => {
+                    let s = AsistDB.resolveSeans(rawS, db);
+                    let durumRozet = '';
+                    if (s.durum === 'odendi') {
+                        o++;
+                        durumRozet = `<span class="bg-emerald-100 text-[#256839] text-[10px] font-extrabold px-2 py-0.5 rounded-lg">Tamamlandı</span>`;
+                    } else if (s.durum === 'iptal') {
+                        i++;
+                        durumRozet = `<span class="bg-red-100 text-red-700 text-[10px] font-extrabold px-2 py-0.5 rounded-lg">İptal</span>`;
+                    } else {
+                        b++;
+                        durumRozet = `<span class="bg-amber-100 text-amber-800 text-[10px] font-extrabold px-2 py-0.5 rounded-lg">Bekliyor</span>`;
+                    }
+
+                    list.innerHTML += `
+                        <div class="bg-slate-50/70 p-4 rounded-2xl border border-slate-200 flex items-center justify-between text-xs">
+                            <div class="flex items-center space-x-3.5">
+                                <span class="font-black text-slate-900 w-12">${escapeHtml(s.saat)}</span>
+                                <div>
+                                    <div class="flex items-center space-x-2">
+                                        <h4 class="font-extrabold text-slate-900">${escapeHtml(s.danisanAdi)}</h4>
+                                        ${durumRozet}
+                                    </div>
+                                    <p class="text-slate-500 font-semibold mt-0.5">${escapeHtml(s.subeAdi)} • ${escapeHtml(s.odaAdi)} • ${escapeHtml(s.hizmet || 'Yetişkin')} <span class="text-[10px] text-slate-400">(${escapeHtml(s.tarih)})</span></p>
+                                </div>
+                            </div>
+                            <button onclick="pskDanisanDetayAc(${s.danisanId})" class="bg-emerald-50 text-[#256839] px-3 py-1.5 rounded-xl font-bold border border-emerald-200 cursor-pointer">Detay</button>
+                        </div>
+                    `;
+                });
+            }
+
+            document.getElementById('psk-sayac-bekleyen').innerText = b + " Bekliyor";
+            document.getElementById('psk-sayac-odenen').innerText = o + " Tamamlandı";
+            if(document.getElementById('psk-sayac-iptal')) document.getElementById('psk-sayac-iptal').innerText = i + " İptal";
+            document.getElementById('badge-psk-seans').innerText = banaAitSeanslar.filter(x => x.durum !== 'iptal').length;
+        }
+
+        function pskCanliDanisanAra(kaynak, deger) {
+            let db = AsistDB.get();
+            let uz = db.psikologlar.find(p => p.id === AKTIF_UZMAN_ID);
+            let telGorunur = uz ? uz.telGor !== false : true;
+
+            let val = deger.trim().toLowerCase();
+            const oneriKutusuAd = document.getElementById('psk-oneri-kutusu-ad');
+            const oneriKutusuTel = document.getElementById('psk-oneri-kutusu-tel');
+            let hedefKutu = kaynak === 'ad' ? oneriKutusuAd : oneriKutusuTel;
+
+            document.getElementById('psk-secili-danisan-id').value = '';
+
+            if (val.length < 2) { hedefKutu.classList.add('hidden'); return; }
+            let kendiDanisanIdleri = new Set(db.seanslar.filter(s => s.uzmanId === AKTIF_UZMAN_ID).map(s => s.danisanId));
+            let rakamlar = val.replace(/\D/g, '').replace(/^0+/, '');
+            let eslesenler = db.danisanlar.filter(d => {
+                if (!kendiDanisanIdleri.has(d.id)) return false;
+                return kaynak === 'ad'
+                    ? (d.ad || '').toLowerCase().includes(val)
+                    : (rakamlar.length >= 2 && normalizeTelefon10Hane(d.tel).includes(rakamlar));
+            });
+            if (eslesenler.length === 0) { hedefKutu.classList.add('hidden'); return; }
+
+            hedefKutu.innerHTML = '';
+            eslesenler.slice(0, 5).forEach(d => {
+                let item = document.createElement('div');
+                item.className = "p-2.5 hover:bg-emerald-50 cursor-pointer flex justify-between items-center";
+                item.onclick = function() {
+                    document.getElementById('psk-secili-danisan-id').value = d.id;
+                    document.getElementById('pr-danisan-ad').value = d.ad;
+                    document.getElementById('pr-danisan-tel').value = normalizeTelefon10Hane(d.tel);
+                    oneriKutusuAd.classList.add('hidden');
+                    oneriKutusuTel.classList.add('hidden');
+                };
+                item.innerHTML = `<div><span class="font-bold">${escapeHtml(d.ad)}</span> - <span class="text-slate-400 font-mono">${escapeHtml(formatTelefonGorunum(d.tel, telGorunur))}</span></div>`;
+                hedefKutu.appendChild(item);
+            });
+            hedefKutu.classList.remove('hidden');
+        }
+
+        function pskUygunlukKontrolEt(db, secilenSubeId, tarih, saat, hizmet) {
+            let uz = db.psikologlar.find(p => p.id === AKTIF_UZMAN_ID);
+            let sube = db.subeler.find(s => s.id === secilenSubeId);
+
+            if (!tarihGecerliMi(tarih)) return { uygun: false, mesaj: "Lütfen geçerli bir seans tarihi seçiniz." };
+            let bugunISO = formatTarihISO(new Date());
+            if (tarih < bugunISO) return { uygun: false, mesaj: "Geçmiş bir tarihe randevu oluşturulamaz." };
+
+            if (!uz || !(uz.alanlar || []).includes(hizmet)) {
+                return { uygun: false, mesaj: `"${hizmet}" hizmet alanında yetkiniz bulunmamaktadır.` };
+            }
+
+            if (sube) {
+                let bas = sube.saatBaslangic || "09:00";
+                let bit = sube.saatBitis || "21:00";
+                if (saat < bas || saat >= bit) {
+                    return { uygun: false, mesaj: `Seçilen saat şube çalışma saatleri (${bas} - ${bit}) dışındadır.` };
+                }
+            }
+
+            let seansVarMi = db.seanslar.find(s => s.tarih === tarih && s.saat === saat && s.uzmanId === AKTIF_UZMAN_ID && s.durum !== 'iptal');
+            if (seansVarMi) {
+                return { uygun: false, mesaj: `Saat ${saat}'de başka bir seansınız bulunmaktadır.` };
+            }
+
+            let sorguGunu = tarihGunAdi(tarih);
+            let calismaKey = `${AKTIF_UZMAN_ID}_${secilenSubeId}`;
+            let takvim = db.uzmanCalismaSaatleri && db.uzmanCalismaSaatleri[calismaKey];
+            if (!takvim) {
+                return { uygun: false, mesaj: "Bu şube için çalışma takviminiz tanımlı değil. Önce 'Çalışma Saatlerim' sekmesinden saatlerinizi belirleyiniz." };
+            }
+            let gunAyar = takvim.find(g => g.gun === sorguGunu);
+            if (!gunAyar || gunAyar.tatil || !(gunAyar.seciliSaatler || []).includes(saat)) {
+                return { uygun: false, mesaj: `Bu şube için ${sorguGunu} günü saat ${saat} çalışma slotunuz kapalıdır.` };
+            }
+
+            return { uygun: true, mesaj: "Bu şubede seçtiğiniz tarih ve saatte tamamen müsaitsiniz." };
+        }
+
+        function pskMusaittlikSorgula(e) {
+            e.preventDefault();
+            let db = AsistDB.get();
+            let secilenSubeId = parseInt(document.getElementById('pr-sube-id').value, 10);
+            let tarih = document.getElementById('pr-tarih').value;
+            let saat = document.getElementById('pr-saat').value;
+            let hizmet = document.getElementById('pr-hizmet-turu').value;
+            let tel = normalizeTelefon10Hane(document.getElementById('pr-danisan-tel').value);
+
+            if (tel.length !== 10) {
+                alert("Lütfen telefon numarasını başında 0 olmadan 10 haneli (5XXXXXXXXX) giriniz!");
+                return;
+            }
+
+            pskSecilenOdaId = null;
+            document.getElementById('pr-secim-oda-yazi').innerText = "Seçilmedi";
+            document.getElementById('pr-btn-onayla').disabled = true;
+            document.getElementById('pr-btn-onayla').classList.add('opacity-50', 'cursor-not-allowed');
+
+            const uzmanKutu = document.getElementById('psk-uzman-durum-kutu');
+            let kontrol = pskUygunlukKontrolEt(db, secilenSubeId, tarih, saat, hizmet);
+
+            if (!kontrol.uygun) {
+                uzmanKutu.className = "p-3.5 rounded-2xl border border-red-200 bg-red-50 text-red-700 font-bold";
+                uzmanKutu.innerText = `❌ ${kontrol.mesaj}`;
+            } else {
+                uzmanKutu.className = "p-3.5 rounded-2xl border border-emerald-200 bg-emerald-50 text-emerald-800 font-bold";
+                uzmanKutu.innerText = `✅ ${kontrol.mesaj}`;
+            }
+
+            const grid = document.getElementById('pr-oda-kart-grid');
+            grid.innerHTML = '';
+            let sube = db.subeler.find(s => s.id === secilenSubeId);
+            let odalar = sube ? (sube.odalar || []) : [];
+
+            odalar.forEach(oda => {
+                let dolu = db.seanslar.some(s => s.subeId === secilenSubeId && s.tarih === tarih && s.saat === saat && s.odaId === oda.id && s.durum !== 'iptal');
+                let tipUygun = odaHizmeteUygunMu(oda, hizmet, odalar);
+                let card = document.createElement('div');
+
+                if (!dolu && tipUygun && kontrol.uygun) {
+                    card.className = "p-3 border-2 border-emerald-500 rounded-xl cursor-pointer text-center hover:bg-emerald-50 transition";
+                    card.onclick = function() {
+                        pskSecilenOdaId = oda.id;
+                        document.querySelectorAll('#pr-oda-kart-grid div').forEach(k => k.classList.remove('ring-4', 'ring-[#256839]', 'bg-emerald-200'));
+                        this.classList.add('ring-4', 'ring-[#256839]', 'bg-emerald-200');
+                        document.getElementById('pr-secim-oda-yazi').innerText = oda.adi;
+                        document.getElementById('pr-btn-onayla').disabled = false;
+                        document.getElementById('pr-btn-onayla').classList.remove('opacity-50', 'cursor-not-allowed');
+                    };
+                    card.innerHTML = `<span class="font-extrabold block">${escapeHtml(oda.adi)}</span><span class="text-[10px] text-emerald-800 font-bold">✅ Boş ve Uygun Oda</span>`;
+                } else {
+                    let sebep = dolu ? "Dolu" : (!tipUygun ? `"${hizmet}" İçin Uygun Değil` : "Uzman Müsait Değil");
+                    card.className = "p-3 border border-red-200 rounded-xl opacity-60 text-center bg-red-50 text-red-600 cursor-not-allowed";
+                    card.innerHTML = `<span class="font-bold block">${escapeHtml(oda.adi)}</span><span class="text-[10px] font-bold">❌ ${escapeHtml(sebep)}</span>`;
+                }
+                grid.appendChild(card);
+            });
+
+            document.getElementById('psk-sonuc-alani').classList.remove('hidden');
+        }
+
+        function pskRandevuyuKesinlestir() {
+            if (!pskSecilenOdaId) return;
+            let db = AsistDB.get();
+            let secilenSubeId = parseInt(document.getElementById('pr-sube-id').value, 10);
+            let danisanId = document.getElementById('psk-secili-danisan-id').value;
+            let ad = document.getElementById('pr-danisan-ad').value.trim();
+            let tel = normalizeTelefon10Hane(document.getElementById('pr-danisan-tel').value);
+            let tarih = document.getElementById('pr-tarih').value;
+            let saat = document.getElementById('pr-saat').value;
+            let hizmet = document.getElementById('pr-hizmet-turu').value;
+
+            if (!ad || tel.length !== 10) {
+                alert("Lütfen danışan adını ve 10 haneli telefon numarasını eksiksiz giriniz!");
+                return;
+            }
+
+            let kontrol = pskUygunlukKontrolEt(db, secilenSubeId, tarih, saat, hizmet);
+            if (!kontrol.uygun) {
+                alert("❌ Randevu kaydedilemedi: " + kontrol.mesaj);
+                return;
+            }
+            let odaDoluMu = db.seanslar.some(s => s.subeId === secilenSubeId && s.tarih === tarih && s.saat === saat && s.odaId === pskSecilenOdaId && s.durum !== 'iptal');
+            if (odaDoluMu) {
+                alert("❌ Seçilen oda bu tarih ve saatte başka bir işlemle doldurulmuş. Lütfen tekrar sorgulayınız.");
+                return;
+            }
+            let subeObj = db.subeler.find(s => s.id === secilenSubeId);
+            let odaObj = subeObj ? (subeObj.odalar || []).find(o => o.id === pskSecilenOdaId) : null;
+            if (!odaObj || !odaHizmeteUygunMu(odaObj, hizmet, subeObj.odalar)) {
+                alert("❌ Seçilen oda bu hizmet türü için uygun değil. Lütfen tekrar sorgulayınız.");
+                return;
+            }
+
+            let hedefDanisan = null;
+            if (danisanId) hedefDanisan = db.danisanlar.find(x => x.id === parseInt(danisanId, 10));
+            if (!hedefDanisan) hedefDanisan = db.danisanlar.find(x => normalizeTelefon10Hane(x.tel) === tel);
+
+            if (hedefDanisan && hedefDanisan.firmaId) {
+                alert("❌ Bu danışan kurumsal bir firmaya bağlıdır. Firma seansları ücretlendirme farklı olduğu için randevuyu lütfen asistan paneli üzerinden oluşturunuz.");
+                return;
+            }
+
+            if (hedefDanisan) {
+                if (!danisanId && (hedefDanisan.ad || '').trim().toLowerCase() !== ad.toLowerCase()) {
+                    if (!confirm("Bu telefon numarası sistemde başka bir isimle kayıtlı. Randevu mevcut kayıt için oluşturulsun mu?")) return;
+                }
+                danisanId = hedefDanisan.id;
+            } else {
+                danisanId = (typeof AsistDB.yeniId === 'function') ? AsistDB.yeniId() : Date.now();
+                db.danisanlar.unshift({ id: danisanId, ad: ad, tel: tel, subeId: secilenSubeId, firmaId: null });
+            }
+
+            let uz = db.psikologlar.find(p => p.id === AKTIF_UZMAN_ID);
+            let ofisOrani = (uz && uz.oranKendi !== undefined && uz.oranKendi !== null && !isNaN(uz.oranKendi)) ? Number(uz.oranKendi) : 30;
+
+            db.seanslar.push({
+                id: (typeof AsistDB.yeniId === 'function') ? AsistDB.yeniId() : (Date.now() + 1),
+                subeId: secilenSubeId,
+                tarih: tarih,
+                saat: saat,
+                danisanId: danisanId,
+                uzmanId: AKTIF_UZMAN_ID,
+                odaId: pskSecilenOdaId,
+                basvuruTuru: "kendi",
+                firmaId: null,
+                hizmet: hizmet,
+                ucret: 1500,
+                ofisOranSnapshot: ofisOrani,
+                durum: "bekliyor",
+                odemeTipi: "",
+                iptalSebebi: ""
+            });
+
+            if (!AsistDB.save(db)) return;
+            alert("🎉 Randevu seçtiğiniz şubeye başarıyla kaydedildi!");
+            document.getElementById('psk-sonuc-alani').classList.add('hidden');
+            document.getElementById('psk-randevu-form').reset();
+            document.getElementById('psk-secili-danisan-id').value = '';
+            varsayilanTarihiAyarla();
+            pskSecilenOdaId = null;
+            psikologSekmeDegistir('gorusmeler');
+        }
+
+        function pskRehberiCiz() {
+            let db = AsistDB.get();
+            const tbody = document.getElementById('psk-danisan-body');
+            if(!tbody) return;
+            tbody.innerHTML = '';
+
+            let uz = db.psikologlar.find(p => p.id === AKTIF_UZMAN_ID);
+            let telGorunur = uz ? uz.telGor !== false : true;
+            let aramaMetni = document.getElementById('psk-danisan-arama-input') ? document.getElementById('psk-danisan-arama-input').value.trim().toLowerCase() : '';
+            let aramaRakam = aramaMetni.replace(/\D/g, '').replace(/^0+/, '');
+
+            let uzmaninDanisanIdSet = new Set(
+                db.seanslar.filter(s => s.uzmanId === AKTIF_UZMAN_ID).map(s => s.danisanId)
+            );
+
+            let kendiDanisanlarim = db.danisanlar.filter(d => {
+                if (!uzmaninDanisanIdSet.has(d.id)) return false;
+                if (!aramaMetni) return true;
+                let adUygun = (d.ad || '').toLowerCase().includes(aramaMetni);
+                let telUygun = telGorunur && (
+                    (d.tel || '').includes(aramaMetni) ||
+                    (aramaRakam.length >= 2 && normalizeTelefon10Hane(d.tel).includes(aramaRakam))
+                );
+                return adUygun || telUygun;
+            });
+
+            if (document.getElementById('psk-rehber-sayisi')) {
+                document.getElementById('psk-rehber-sayisi').innerText = kendiDanisanlarim.length;
+            }
+
+            if (kendiDanisanlarim.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-slate-400 italic">Henüz sizinle seans kaydı bulunan danışan yok.</td></tr>`;
+                return;
+            }
+
+            kendiDanisanlarim.forEach(d => {
+                let sSayisi = db.seanslar.filter(s => s.danisanId === d.id && s.uzmanId === AKTIF_UZMAN_ID && s.durum !== 'iptal').length;
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50 transition">
+                        <td class="p-3.5 font-bold text-slate-900">${escapeHtml(d.ad)}</td>
+                        <td class="p-3.5 text-slate-600 font-mono">${escapeHtml(formatTelefonGorunum(d.tel, telGorunur))}</td>
+                        <td class="p-3.5 text-center font-black">${sSayisi} Seans</td>
+                        <td class="p-3.5 text-center"><button onclick="pskDanisanDetayAc(${d.id})" class="bg-emerald-50 text-[#256839] px-2.5 py-1 rounded-lg font-bold border border-emerald-200 cursor-pointer">Detay</button></td>
+                    </tr>
+                `;
+            });
+        }
+
+        function pskDanisanDetayAc(danisanId) {
+            let db = AsistDB.get();
+            let d = db.danisanlar.find(x => x.id === danisanId);
+            if (!d) return;
+            document.getElementById('pd-baslik').innerText = `${d.ad} - Seans Geçmişim`;
+            const container = document.getElementById('pd-seans-listesi');
+            container.innerHTML = '';
+
+            let seanslar = db.seanslar
+                .filter(s => s.danisanId === d.id && s.uzmanId === AKTIF_UZMAN_ID)
+                .sort((a,b) => a.tarih.localeCompare(b.tarih) || a.saat.localeCompare(b.saat));
+
+            seanslar.forEach(rawS => {
+                let s = AsistDB.resolveSeans(rawS, db);
+                container.innerHTML += `
+                    <div class="p-2.5 bg-slate-50 border rounded-xl flex justify-between items-center">
+                        <span>${escapeHtml(s.tarih)} - ${escapeHtml(s.saat)} (${escapeHtml(s.subeAdi)} - ${escapeHtml(s.odaAdi)})</span>
+                        <span class="font-bold text-[#256839]">${escapeHtml(s.durum)}</span>
+                    </div>`;
+            });
+            document.getElementById('psk-danisan-detay-modal').classList.remove('hidden');
+        }
+
+        function pskDetayKapat() { document.getElementById('psk-danisan-detay-modal').classList.add('hidden'); }
+
+        function subeSecimButonlariniCiz() {
+            let db = AsistDB.get();
+            let uz = db.psikologlar.find(p => p.id === AKTIF_UZMAN_ID);
+            const bar = document.getElementById('psk-sube-secim-bar');
+            if(!bar || !uz) return;
+            bar.innerHTML = '';
+
+            let subeler = db.subeler.filter(s => (uz.subeIds || []).includes(s.id));
+            if (subeler.length > 0 && !subeler.some(s => s.id === calismaAyarSubeId)) {
+                calismaAyarSubeId = subeler[0].id;
+            }
+
+            subeler.forEach(sube => {
+                let aktifMi = calismaAyarSubeId === sube.id;
+                let btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = `px-3.5 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${aktifMi ? 'bg-[#256839] text-white shadow-xs' : 'text-slate-600 hover:bg-slate-200'}`;
+                btn.innerText = sube.adi;
+                btn.onclick = function() {
+                    calismaAyarSubeId = sube.id;
+                    subeSecimButonlariniCiz();
+                    calismaSaatleriniCiz();
+                };
+                bar.appendChild(btn);
+            });
+        }
+
+        function calismaSaatleriniCiz() {
+            let db = AsistDB.get();
+            const container = document.getElementById('calisma-saatleri-slot-kapsayici');
+            if(!container) return;
+            container.innerHTML = '';
+
+            let key = `${AKTIF_UZMAN_ID}_${calismaAyarSubeId}`;
+            if (!db.uzmanCalismaSaatleri) db.uzmanCalismaSaatleri = {};
+            if (!db.uzmanCalismaSaatleri[key]) {
+                const gunler = ["Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi", "Pazar"];
+                db.uzmanCalismaSaatleri[key] = gunler.map(g => ({
+                    gun: g,
+                    tatil: g === "Pazar",
+                    seciliSaatler: g === "Pazar" ? [] : VARSAYILAN_ACIK_SAATLER.slice()
+                }));
+                try {
+                    localStorage.setItem(typeof ASIST_DB_KEY !== 'undefined' ? ASIST_DB_KEY : 'ASIST_PSIKOLOG_CENTRAL_DB_V2', JSON.stringify(db));
+                } catch (e) {}
+            }
+
+            let slotlar = db.uzmanCalismaSaatleri[key];
+            let calismaSube = db.subeler.find(s => s.id === calismaAyarSubeId);
+            let sBas = (calismaSube && calismaSube.saatBaslangic) || "00:00";
+            let sBit = (calismaSube && calismaSube.saatBitis) || "24:00";
+            let gosterilecekSaatler = TUM_SAATLER.filter(h => h >= sBas && h < sBit);
+
+            slotlar.forEach((item, gunIdx) => {
+                let kart = document.createElement('div');
+                kart.className = `p-4 rounded-2xl border transition ${item.tatil ? 'bg-slate-50/80 border-slate-200 opacity-60' : 'bg-white border-slate-200 shadow-2xs'}`;
+
+                let ustBar = `
+                    <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                        <div class="flex items-center space-x-3">
+                            <span class="font-extrabold text-slate-900 text-sm w-28">${escapeHtml(item.gun)}</span>
+                            <label class="flex items-center space-x-2 cursor-pointer bg-slate-100 hover:bg-slate-200 px-3 py-1 rounded-xl text-xs">
+                                <input type="checkbox" ${item.tatil ? 'checked' : ''} onchange="gunTatilDegis(${gunIdx}, this.checked)" class="w-4 h-4 rounded text-red-600">
+                                <span class="font-bold ${item.tatil ? 'text-red-700' : 'text-slate-600'}">Bu Şubede Kapalı</span>
+                            </label>
+                        </div>
+                    </div>
+                `;
+
+                let grid = '';
+                if (!item.tatil) {
+                    grid = `
+                        <div class="grid grid-cols-4 sm:grid-cols-8 gap-2 pt-3">
+                            ${gosterilecekSaatler.map(saat => {
+                                let secili = item.seciliSaatler.includes(saat);
+                                let stil = secili ? 'bg-[#256839] text-white font-extrabold shadow-xs' : 'bg-slate-50 text-slate-600 border border-slate-200 font-bold';
+                                return `<button type="button" onclick="saatSecimDegis(${gunIdx}, '${saat}')" class="py-2 px-1 text-center rounded-xl text-xs transition cursor-pointer ${stil}">${saat}</button>`;
+                            }).join('')}
+                        </div>
+                    `;
+                } else {
+                    grid = `<div class="py-2.5 text-center text-xs text-slate-400 italic">Bu gün bu şube için randevuya kapalıdır.</div>`;
+                }
+
+                kart.innerHTML = ustBar + grid;
+                container.appendChild(kart);
+            });
+        }
+
+        function saatSecimDegis(gunIdx, saat) {
+            let db = AsistDB.get();
+            let key = `${AKTIF_UZMAN_ID}_${calismaAyarSubeId}`;
+            let gunObj = db.uzmanCalismaSaatleri[key][gunIdx];
+            if (gunObj.seciliSaatler.includes(saat)) {
+                gunObj.seciliSaatler = gunObj.seciliSaatler.filter(s => s !== saat);
+            } else {
+                gunObj.seciliSaatler.push(saat);
+                gunObj.seciliSaatler.sort();
+            }
+            AsistDB.save(db);
+            calismaSaatleriniCiz();
+        }
+
+        function gunTatilDegis(gunIdx, tatilMi) {
+            let db = AsistDB.get();
+            let key = `${AKTIF_UZMAN_ID}_${calismaAyarSubeId}`;
+            let gunObj = db.uzmanCalismaSaatleri[key][gunIdx];
+            gunObj.tatil = tatilMi;
+            gunObj.seciliSaatler = tatilMi ? [] : VARSAYILAN_ACIK_SAATLER.slice();
+            AsistDB.save(db);
+            calismaSaatleriniCiz();
+        }
+
+        function calismaSaatleriniKaydet() {
+            let db = AsistDB.get();
+            let sube = db.subeler.find(s => s.id === calismaAyarSubeId);
+            alert(`✅ ${sube ? sube.adi : 'Şube'} için çalışma saatleriniz başarıyla kaydedildi!`);
+        }
+    </script>
+</body>
+</html>
