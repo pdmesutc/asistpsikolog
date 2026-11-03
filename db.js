@@ -102,10 +102,10 @@ const DEFAULT_ASIST_DB = {
         { id: 34, ad: "Merve Erkan", tel: "5387268488", subeId: 1, firmaId: null }
     ],
     seanslar: [
-        { id: 1, subeId: 1, tarih: SEED_TARIHI, saat: "10:00", danisanId: 8, basvuruTuru: "ofis", firmaId: null, hizmet: "Yetişkin", uzmanId: 8, odaId: "pnd_oda_1", ucret: 1500, ofisOranSnapshot: 50, durum: "odendi", odemeTipi: "nakit", iptalSebebi: "" },
-        { id: 2, subeId: 1, tarih: SEED_TARIHI, saat: "11:00", danisanId: 11, basvuruTuru: "ofis", firmaId: null, hizmet: "Yetişkin", uzmanId: 8, odaId: "pnd_oda_1", ucret: 1500, ofisOranSnapshot: 50, durum: "bekliyor", odemeTipi: "", iptalSebebi: "" },
-        { id: 3, subeId: 1, tarih: SEED_TARIHI, saat: "14:00", danisanId: 60, basvuruTuru: "firma", firmaId: 1, hizmet: "Çocuk", uzmanId: 1, odaId: "pnd_oda_3", ucret: 0, ofisOranSnapshot: 0, durum: "odendi", odemeTipi: "firma_cari", iptalSebebi: "" },
-        { id: 4, subeId: 1, tarih: SEED_TARIHI, saat: "16:00", danisanId: 34, basvuruTuru: "kendi", firmaId: null, hizmet: "Yetişkin", uzmanId: 2, odaId: "pnd_oda_2", ucret: 1500, ofisOranSnapshot: 30, durum: "iptal", odemeTipi: "", iptalSebebi: "İş yoğunluğu nedeniyle gelemedi" }
+        { id: 1, subeId: 1, tarih: SEED_TARIHI, saat: "10:00", danisanId: 8, basvuruTuru: "ofis", firmaId: null, hizmet: "Yetişkin", uzmanId: 8, odaId: "pnd_oda_1", ucret: 1500, ofisOranSnapshot: 50, durum: "odendi", odemeTipi: "nakit", iptalSebebi: "", ikinciDanisanAd: "", ikinciDanisanTel: "" },
+        { id: 2, subeId: 1, tarih: SEED_TARIHI, saat: "11:00", danisanId: 11, basvuruTuru: "ofis", firmaId: null, hizmet: "Yetişkin", uzmanId: 8, odaId: "pnd_oda_1", ucret: 1500, ofisOranSnapshot: 50, durum: "bekliyor", odemeTipi: "", iptalSebebi: "", ikinciDanisanAd: "", ikinciDanisanTel: "" },
+        { id: 3, subeId: 1, tarih: SEED_TARIHI, saat: "14:00", danisanId: 60, basvuruTuru: "firma", firmaId: 1, hizmet: "Çocuk", uzmanId: 1, odaId: "pnd_oda_3", ucret: 0, ofisOranSnapshot: 0, durum: "odendi", odemeTipi: "firma_cari", iptalSebebi: "", ikinciDanisanAd: "", ikinciDanisanTel: "" },
+        { id: 4, subeId: 1, tarih: SEED_TARIHI, saat: "16:00", danisanId: 34, basvuruTuru: "kendi", firmaId: null, hizmet: "Yetişkin", uzmanId: 2, odaId: "pnd_oda_2", ucret: 1500, ofisOranSnapshot: 30, durum: "iptal", odemeTipi: "", iptalSebebi: "İş yoğunluğu nedeniyle gelemedi", ikinciDanisanAd: "", ikinciDanisanTel: "" }
     ],
     uzmanCalismaSaatleri: {
         "8_1": [
@@ -167,6 +167,11 @@ function asistNormalizeDb(db) {
         if (!Array.isArray(f.subeIds)) { f.subeIds = []; degisti = true; }
         if (!Array.isArray(f.uzmanIds)) { f.uzmanIds = []; degisti = true; }
         if (typeof f.tumUzmanlar !== 'boolean') { f.tumUzmanlar = true; degisti = true; }
+    });
+
+    db.seanslar.forEach(s => {
+        if (s.ikinciDanisanAd === undefined) { s.ikinciDanisanAd = ""; degisti = true; }
+        if (s.ikinciDanisanTel === undefined) { s.ikinciDanisanTel = ""; degisti = true; }
     });
 
     [db.yoneticiler, db.asistanlar, db.psikologlar, db.danisanlar].forEach(liste => {
@@ -257,14 +262,13 @@ const AsistDB = {
             danisanTel: danisan ? danisan.tel : "",
             uzmanAdi: uzman ? uzman.ad : "Silinmiş Uzman",
             odaAdi: oda ? oda.adi : "Silinmiş Oda",
-            firmaAdi: firma ? firma.adi : ""
+            firmaAdi: firma ? firma.adi : "",
+            ikinciDanisanAd: seans.ikinciDanisanAd || "",
+            ikinciDanisanTel: seans.ikinciDanisanTel || ""
         };
     }
 };
 
-// ==========================================
-// ROL BAZLI OTURUM VE YETKİLENDİRME MOTORU
-// ==========================================
 const AsistAuth = {
     getSession: function() {
         try {
