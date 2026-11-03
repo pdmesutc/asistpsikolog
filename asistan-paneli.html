@@ -34,7 +34,7 @@
                 </div>
             </div>
 
-            <!-- Yönetici Gözlem Modu Bildirimi (Sadece Yönetici Girişinde Görünür) -->
+            <!-- Yönetici Gözlem Modu Bildirimi -->
             <div id="yonetici-gozlem-kutusu" class="hidden mx-4 mt-3 p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-[11px] flex items-center justify-between">
                 <span class="font-extrabold text-amber-900"><i class="fa-solid fa-eye mr-1"></i>Yönetici Gözlem</span>
                 <a href="yonetici-paneli.html" class="font-black text-[#256839] hover:underline">Panele Dön →</a>
@@ -141,7 +141,7 @@
             </div>
         </div>
 
-        <!-- 2. RANDEVU OLUŞTUR -->
+        <!-- 2. RANDEVU OLUŞTUR (ÇİFT SEANSI DİNAMİK 2. KİŞİ ALANI VE GEÇMİŞ SAAT ENGELİ) -->
         <div id="asekm-randevu-olustur" class="asistan-sekme hidden space-y-6">
             <div class="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-5">
                 <div class="border-b border-slate-100 pb-3 flex items-center justify-between">
@@ -183,20 +183,32 @@
                         </div>
                     </div>
 
+                    <!-- DİNAMİK ÇİFT SEANSI İKİNCİ DANIŞAN ALANLARI (İsim ve Telefonun tam altında) -->
+                    <div id="asistan-ikinci-danisan-kapsayici" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-4 bg-purple-50/70 p-4 rounded-2xl border border-purple-200">
+                        <div>
+                            <label class="block font-bold text-purple-950 mb-1">İkinci Danışan (Eş) Adı Soyadı <span class="text-[10px] font-normal text-slate-500">(İsteğe Bağlı)</span></label>
+                            <input type="text" id="input-ikinci-danisan-ad" placeholder="Örn: Ayşe Can" class="w-full bg-white p-2.5 rounded-xl border border-purple-200 font-medium text-slate-800">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-purple-950 mb-1">İkinci Danışan (Eş) Telefon <span class="text-[10px] font-normal text-slate-500">(İsteğe Bağlı)</span></label>
+                            <input type="text" id="input-ikinci-danisan-tel" placeholder="5051112233" class="w-full bg-white p-2.5 rounded-xl border border-purple-200 font-medium text-slate-800">
+                        </div>
+                    </div>
+
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-1">
                         <div>
                             <label class="block font-bold text-slate-700 mb-1">4. Hizmet Türü</label>
-                            <select id="input-hizmet-turu" class="w-full bg-slate-50 p-2.5 rounded-xl border border-slate-200 font-bold text-slate-800">
+                            <select id="input-hizmet-turu" onchange="asistanHizmetTuruDegisti(this.value)" class="w-full bg-white p-2.5 rounded-xl border border-slate-200 font-bold text-slate-800">
                                 <option value="Çocuk">Çocuk</option><option value="Ergen">Ergen</option><option value="Yetişkin" selected>Yetişkin</option><option value="Çift">Çift</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block font-bold text-slate-700 mb-1">5. Seans Tarihi</label>
-                            <input type="date" id="input-tarih" required class="w-full bg-slate-50 p-2.5 rounded-xl border border-slate-200 font-medium">
+                            <label class="block font-bold text-slate-700 mb-1">5. Seans Tarihi (Geçmiş Seçilemez)</label>
+                            <input type="date" id="input-tarih" required onchange="tarihVeyaSaatDegisti()" class="w-full bg-slate-50 p-2.5 rounded-xl border border-slate-200 font-medium">
                         </div>
                         <div>
                             <label class="block font-bold text-slate-700 mb-1">6. Seans Saati</label>
-                            <select id="input-saat" class="w-full bg-slate-50 p-2.5 rounded-xl border border-slate-200 font-bold text-slate-800">
+                            <select id="input-saat" onchange="tarihVeyaSaatDegisti()" class="w-full bg-slate-50 p-2.5 rounded-xl border border-slate-200 font-bold text-slate-800">
                                 <option value="09:00">09:00</option><option value="10:00">10:00</option><option value="11:00" selected>11:00</option><option value="12:00">12:00</option><option value="13:00">13:00</option><option value="14:00">14:00</option><option value="15:00">15:00</option><option value="16:00">16:00</option><option value="17:00">17:00</option><option value="18:00">18:00</option><option value="19:00">19:00</option><option value="20:00">20:00</option>
                             </select>
                         </div>
@@ -282,7 +294,7 @@
             </div>
         </div>
 
-        <!-- 5. KASA & ÖDEMELER -->
+        <!-- 5. KASA & ÖDEMELER (REFERANS TASARIM) -->
         <div id="asekm-kasa" class="asistan-sekme hidden space-y-6">
             <div class="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-6">
                 <!-- Üst Başlık -->
@@ -293,7 +305,7 @@
                     </div>
                 </div>
 
-                <!-- Şerit -->
+                <!-- Şerit (Referans Tasarım) -->
                 <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex flex-col lg:flex-row items-center justify-between gap-4 text-xs">
                     <div class="flex flex-wrap items-center gap-1.5 bg-white p-1 rounded-xl border border-slate-200 shadow-2xs">
                         <button onclick="kasaPeriyotDegistir('gun')" id="kflt-gun" class="kasa-periyot-btn px-3 py-1.5 rounded-lg font-bold transition bg-[#256839] text-white shadow-xs cursor-pointer">Gün</button>
@@ -339,32 +351,43 @@
             </div>
         </div>
 
-        <!-- 6. KURUMSAL FİRMA RAPORU -->
+        <!-- 6. KURUMSAL FİRMA RAPORU (KASA İLE BİREBİR AYNI STİL, KONUM VE ŞERİT) -->
         <div id="asekm-firma-rapor" class="asistan-sekme hidden space-y-6">
             <div class="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-6">
-                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+                <!-- Üst Başlık (Kasa ile birebir aynı sol konum) -->
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
                     <div>
                         <h2 class="text-xl font-extrabold text-slate-900">Kurumsal Firma Seans Raporu</h2>
                         <p class="text-xs text-slate-500">Seçilen dönemde kurumsal anlaşmalı danışanların seans adetleri.</p>
                     </div>
+                </div>
 
-                    <div class="flex flex-col sm:flex-row sm:items-center gap-2.5">
-                        <div class="flex items-center space-x-1 bg-slate-100 p-1 rounded-2xl text-xs font-bold shrink-0">
-                            <button onclick="firmaZamanFiltrele('bugun')" id="fflt-bugun" class="firma-flt-btn px-3 py-1.5 rounded-xl transition text-slate-600 hover:bg-slate-200/60 cursor-pointer">Bugün</button>
-                            <button onclick="firmaZamanFiltrele('haftalik')" id="fflt-haftalik" class="firma-flt-btn px-3 py-1.5 rounded-xl transition text-slate-600 hover:bg-slate-200/60 cursor-pointer">Bu Hafta</button>
-                            <button onclick="firmaZamanFiltrele('aylik')" id="fflt-aylik" class="firma-flt-btn px-3 py-1.5 rounded-xl transition bg-[#256839] text-white shadow-xs cursor-pointer">Bu Ay</button>
-                            <button onclick="firmaZamanFiltrele('ozel')" id="fflt-ozel" class="firma-flt-btn px-3 py-1.5 rounded-xl transition text-slate-600 hover:bg-slate-200/60 cursor-pointer flex items-center space-x-1">
-                                <i class="fa-regular fa-calendar-days text-[11px]"></i>
-                                <span>Özel Aralık</span>
-                            </button>
-                        </div>
+                <!-- Kasa ile Birebir Aynı Filtreleme Şeridi (Başlığın hemen altında, tam boy şerit) -->
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex flex-col lg:flex-row items-center justify-between gap-4 text-xs">
+                    <div class="flex flex-wrap items-center gap-1.5 bg-white p-1 rounded-xl border border-slate-200 shadow-2xs">
+                        <button onclick="firmaZamanFiltrele('gun')" id="fflt-gun" class="firma-flt-btn px-3 py-1.5 rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Gün</button>
+                        <button onclick="firmaZamanFiltrele('hafta')" id="fflt-hafta" class="firma-flt-btn px-3 py-1.5 rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Hafta</button>
+                        <button onclick="firmaZamanFiltrele('ay')" id="fflt-ay" class="firma-flt-btn px-3 py-1.5 rounded-lg font-bold transition bg-[#256839] text-white shadow-xs cursor-pointer">Ay</button>
+                        <button onclick="firmaZamanFiltrele('ozel')" id="fflt-ozel" class="firma-flt-btn px-3 py-1.5 rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Özel Aralık</button>
+                    </div>
 
-                        <div id="firma-ozel-tarih-alani" class="hidden flex items-center space-x-1.5 bg-slate-100 p-1 rounded-2xl text-xs font-medium border border-slate-200/80">
-                            <input type="date" id="firma-ozel-baslangic" class="bg-white border border-slate-200 px-2.5 py-1 rounded-xl text-slate-800 font-bold focus:outline-none focus:border-[#256839]">
-                            <span class="text-slate-400 font-bold text-xs">-</span>
-                            <input type="date" id="firma-ozel-bitis" class="bg-white border border-slate-200 px-2.5 py-1 rounded-xl text-slate-800 font-bold focus:outline-none focus:border-[#256839]">
-                            <button onclick="firmaRaporlariniCiz()" class="bg-[#256839] hover:bg-[#12612d] text-white px-3 py-1 rounded-xl font-bold cursor-pointer transition shadow-2xs">Filtrele</button>
-                        </div>
+                    <div id="firma-ozel-tarih-alani" class="hidden flex items-center space-x-2 bg-white p-1.5 rounded-xl border border-slate-200 shadow-2xs">
+                        <input type="date" id="firma-ozel-baslangic" class="bg-slate-50 border border-slate-200 p-1.5 rounded-lg font-bold text-slate-700 text-xs">
+                        <span class="text-slate-400 font-bold">-</span>
+                        <input type="date" id="firma-ozel-bitis" class="bg-slate-50 border border-slate-200 p-1.5 rounded-lg font-bold text-slate-700 text-xs">
+                        <button onclick="firmaRaporlariniCiz()" class="bg-[#256839] hover:bg-[#12612d] text-white px-3 py-1.5 rounded-lg font-bold cursor-pointer transition">Uygula</button>
+                    </div>
+
+                    <div id="firma-standart-nav" class="flex items-center space-x-2">
+                        <button onclick="firmaTarihKaydir(-1)" class="w-8 h-8 rounded-xl bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 flex items-center justify-center font-bold cursor-pointer"><i class="fa-solid fa-chevron-left text-xs"></i></button>
+                        <button onclick="firmaBuguneGit()" class="bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 font-extrabold px-3 py-1.5 rounded-xl cursor-pointer">Bugün</button>
+                        <div class="px-3 py-1.5 bg-white border border-slate-200 rounded-xl font-extrabold text-slate-900 min-w-[200px] text-center" id="firma-aktif-tarih-etiket"></div>
+                        <button onclick="firmaTarihKaydir(1)" class="w-8 h-8 rounded-xl bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 flex items-center justify-center font-bold cursor-pointer"><i class="fa-solid fa-chevron-right text-xs"></i></button>
+                    </div>
+
+                    <div class="flex items-center space-x-2 text-[11px]">
+                        <span class="font-bold text-blue-900 bg-blue-50 px-2.5 py-1 rounded-xl border border-blue-200" id="firma-sayac-seans">0 Seans</span>
+                        <span class="font-bold text-slate-700 bg-white px-2.5 py-1 rounded-xl border border-slate-200" id="firma-sayac-kurum">0 Kurum</span>
                     </div>
                 </div>
 
@@ -484,9 +507,10 @@
         let seciliTarih = new Date();
         let takvimSeciliTarih = new Date();
         let kasaSeciliTarih = new Date();
+        let firmaSeciliTarih = new Date();
         let seansAktifPeriyot = 'gun';
         let kasaAktifPeriyot = 'gun';
-        let aktifFirmaPeriyot = 'aylik';
+        let firmaAktifPeriyot = 'ay';
         let secilenUzmanId = null;
         let secilenOdaId = null;
         let aktifSeciliId = null;
@@ -544,6 +568,63 @@
             return GUN_ADLARI[new Date(p[0], p[1] - 1, p[2]).getDay()];
         }
 
+        function formatTarihISO(d) {
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        }
+
+        function formatTarihTurkce(d) {
+            const aylar = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
+            const gunler = ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"];
+            return `${d.getDate()} ${aylar[d.getMonth()]} ${d.getFullYear()} ${gunler[d.getDay()]}`;
+        }
+
+        function getHaftaAraligi(dateObj) {
+            let d = new Date(dateObj);
+            let day = d.getDay();
+            let diff = d.getDate() - day + (day === 0 ? -6 : 1);
+            let pazartesi = new Date(d.setDate(diff));
+            let pazar = new Date(pazartesi);
+            pazar.setDate(pazartesi.getDate() + 6);
+            return { baslangic: formatTarihISO(pazartesi), bitis: formatTarihISO(pazar) };
+        }
+
+        // GEÇMİŞ TARİH VE GEÇMİŞ SAAT KONTROLÜ
+        function gecmisTarihSaatMi(tarih, saat) {
+            if (!tarih || !saat) return true;
+            let bugun = new Date();
+            let bugunISO = formatTarihISO(bugun);
+            if (tarih < bugunISO) return true;
+            if (tarih === bugunISO) {
+                let suanSaat = String(bugun.getHours()).padStart(2, '0') + ':' + String(bugun.getMinutes()).padStart(2, '0');
+                if (saat <= suanSaat) return true;
+            }
+            return false;
+        }
+
+        function tarihVeyaSaatDegisti() {
+            secilenUzmanId = null;
+            secilenOdaId = null;
+            document.getElementById('secim-uzman-yazi').innerText = "Seçilmedi";
+            document.getElementById('secim-oda-yazi').innerText = "Seçilmedi";
+            document.getElementById('btn-onayla').disabled = true;
+            document.getElementById('btn-onayla').classList.add('opacity-50', 'cursor-not-allowed');
+            document.getElementById('sonuc-alani').classList.add('hidden');
+        }
+
+        // ÇİFT SEÇİLİNCE DİNAMİK 2. KİŞİ BİLGİ ALANLARINI GÖSTER
+        function asistanHizmetTuruDegisti(tur) {
+            tarihVeyaSaatDegisti();
+            const ikinciKapsayici = document.getElementById('asistan-ikinci-danisan-kapsayici');
+            if (!ikinciKapsayici) return;
+            if (tur === 'Çift') {
+                ikinciKapsayici.classList.remove('hidden');
+            } else {
+                ikinciKapsayici.classList.add('hidden');
+                document.getElementById('input-ikinci-danisan-ad').value = '';
+                document.getElementById('input-ikinci-danisan-tel').value = '';
+            }
+        }
+
         function odaHizmeteUygunMu(oda, hizmet, tumOdalar) {
             if (!oda || !oda.tip) return true;
             let arananTip = hizmet === 'Çocuk' ? 'cocuk' : 'yetiskin';
@@ -592,7 +673,9 @@
             if (mod === 'tasima' && p.tarih < formatTarihISO(new Date())) {
                 return slotCakismaKontrol(db, p.subeId, p.tarih, p.saat, p.uzmanId, p.odaId, haricSeansId);
             }
-            if (mod === 'yeni' && p.tarih < formatTarihISO(new Date())) return "Geçmiş bir tarihe randevu oluşturulamaz.";
+            if (mod === 'yeni' && gecmisTarihSaatMi(p.tarih, p.saat)) {
+                return "Geçmiş bir tarih veya geçmiş bir saate randevu oluşturulamaz.";
+            }
             if (mod === 'yeni' && sube.durum !== 'aktif') return "Bu şube şu anda pasif durumdadır, randevu oluşturulamaz.";
 
             let saatHata = subeSaatKontrol(sube, p.saat);
@@ -620,25 +703,6 @@
             if (takvimHata) return takvimHata;
 
             return slotCakismaKontrol(db, p.subeId, p.tarih, p.saat, p.uzmanId, p.odaId, haricSeansId);
-        }
-
-        function formatTarihISO(d) {
-            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-        }
-        function formatTarihTurkce(d) {
-            const aylar = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
-            const gunler = ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"];
-            return `${d.getDate()} ${aylar[d.getMonth()]} ${d.getFullYear()} ${gunler[d.getDay()]}`;
-        }
-
-        function getHaftaAraligi(dateObj) {
-            let d = new Date(dateObj);
-            let day = d.getDay();
-            let diff = d.getDate() - day + (day === 0 ? -6 : 1);
-            let pazartesi = new Date(d.setDate(diff));
-            let pazar = new Date(pazartesi);
-            pazar.setDate(pazartesi.getDate() + 6);
-            return { baslangic: formatTarihISO(pazartesi), bitis: formatTarihISO(pazar) };
         }
 
         function tumGorunumleriYenile() {
@@ -842,6 +906,8 @@
                         `;
                     }
 
+                    let ikinciKisiBilgi = s.ikinciDanisanAd ? `<span class="text-[11px] text-purple-800 font-semibold block">Çift / Eş: ${escapeHTML(s.ikinciDanisanAd)} (${escapeHTML(s.ikinciDanisanTel || 'Tel Yok')})</span>` : '';
+
                     list.innerHTML += `
                         <div class="bg-slate-50/70 p-4 rounded-2xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
                             <div class="flex items-center space-x-3.5">
@@ -852,6 +918,7 @@
                                         ${basvuruRozet}
                                         ${rozet}
                                     </div>
+                                    ${ikinciKisiBilgi}
                                     <p class="text-slate-500 font-semibold mt-0.5">${escapeHTML(s.uzmanAdi)} • ${escapeHTML(s.odaAdi)} <span class="text-[10px] text-slate-400">(${escapeHTML(s.tarih)})</span></p>
                                 </div>
                             </div>
@@ -985,6 +1052,124 @@
                     `;
                 });
             }
+        }
+
+        // ==========================================
+        // 6. KURUMSAL FİRMA RAPORU (KASA İLE BİREBİR AYNI STİL ŞERİT MANTIĞI)
+        // ==========================================
+        function firmaZamanFiltrele(periyot) {
+            firmaAktifPeriyot = periyot;
+            document.querySelectorAll('.firma-flt-btn').forEach(b => {
+                b.classList.remove('bg-[#256839]', 'text-white', 'shadow-xs');
+                b.classList.add('text-slate-600');
+            });
+            const aktifBtn = document.getElementById('fflt-' + periyot);
+            if(aktifBtn) {
+                aktifBtn.classList.add('bg-[#256839]', 'text-white', 'shadow-xs');
+                aktifBtn.classList.remove('text-slate-600');
+            }
+
+            const ozelAlan = document.getElementById('firma-ozel-tarih-alani');
+            const standartNav = document.getElementById('firma-standart-nav');
+
+            if (periyot === 'ozel') {
+                ozelAlan.classList.remove('hidden');
+                standartNav.classList.add('hidden');
+            } else {
+                ozelAlan.classList.add('hidden');
+                standartNav.classList.remove('hidden');
+            }
+
+            firmaRaporlariniCiz();
+        }
+
+        function firmaTarihKaydir(y) {
+            if (firmaAktifPeriyot === 'ay') {
+                firmaSeciliTarih.setMonth(firmaSeciliTarih.getMonth() + y);
+            } else if (firmaAktifPeriyot === 'hafta') {
+                firmaSeciliTarih.setDate(firmaSeciliTarih.getDate() + (y * 7));
+            } else {
+                firmaSeciliTarih.setDate(firmaSeciliTarih.getDate() + y);
+            }
+            firmaRaporlariniCiz();
+        }
+
+        function firmaBuguneGit() {
+            firmaSeciliTarih = new Date();
+            firmaRaporlariniCiz();
+        }
+
+        function firmaRaporlariniCiz() {
+            let db = AsistDB.get();
+            const labelEl = document.getElementById('firma-aktif-tarih-etiket');
+            if (labelEl) {
+                labelEl.innerText = formatTarihTurkce(firmaSeciliTarih);
+            }
+
+            const grid = document.getElementById('firma-rapor-grid');
+            if(!grid) return;
+            grid.innerHTML = '';
+
+            let kurumsalSeanslar = db.seanslar.filter(s => s.subeId === AKTIF_SUBE_ID && s.basvuruTuru === 'firma');
+
+            if (firmaAktifPeriyot === 'gun') {
+                let seciliISO = formatTarihISO(firmaSeciliTarih);
+                kurumsalSeanslar = kurumsalSeanslar.filter(k => k.tarih === seciliISO);
+            } else if (firmaAktifPeriyot === 'hafta') {
+                let aralik = getHaftaAraligi(firmaSeciliTarih);
+                kurumsalSeanslar = kurumsalSeanslar.filter(k => k.tarih >= aralik.baslangic && k.tarih <= aralik.bitis);
+            } else if (firmaAktifPeriyot === 'ay') {
+                let ayPrefix = `${firmaSeciliTarih.getFullYear()}-${String(firmaSeciliTarih.getMonth() + 1).padStart(2, '0')}`;
+                kurumsalSeanslar = kurumsalSeanslar.filter(k => k.tarih.startsWith(ayPrefix));
+            } else if (firmaAktifPeriyot === 'ozel') {
+                let bas = document.getElementById('firma-ozel-baslangic').value;
+                let bit = document.getElementById('firma-ozel-bitis').value;
+                if(bas && bit) {
+                    kurumsalSeanslar = kurumsalSeanslar.filter(k => k.tarih >= bas && k.tarih <= bit);
+                }
+            }
+
+            let subeFirmalari = (db.firmalar || []).filter(f => f.subeIds && f.subeIds.includes(AKTIF_SUBE_ID));
+            if (document.getElementById('firma-sayac-seans')) document.getElementById('firma-sayac-seans').innerText = `${kurumsalSeanslar.length} Seans`;
+            if (document.getElementById('firma-sayac-kurum')) document.getElementById('firma-sayac-kurum').innerText = `${subeFirmalari.length} Kurum`;
+
+            subeFirmalari.forEach(f => {
+                let fSeanslar = kurumsalSeanslar.filter(s => s.firmaId === f.id);
+                let tamamlananAdet = fSeanslar.filter(s => s.durum === 'odendi').length;
+                let bekleyenAdet = fSeanslar.filter(s => s.durum === 'bekliyor').length;
+                let iptalAdet = fSeanslar.filter(s => s.durum === 'iptal').length;
+
+                let kart = document.createElement('div');
+                kart.className = "bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3";
+                kart.innerHTML = `
+                    <div class="flex items-center justify-between pb-2 border-b border-slate-200">
+                        <h4 class="font-extrabold text-slate-900 text-sm">${escapeHTML(f.adi)}</h4>
+                        <span class="bg-blue-100 text-blue-900 px-2.5 py-1 rounded-xl text-xs font-black">Bu Dönem: ${fSeanslar.length} Seans</span>
+                    </div>
+                    <div class="flex items-center space-x-2 text-xs font-bold pt-1">
+                        <span class="bg-emerald-50 text-[#256839] border border-emerald-200 px-2.5 py-1 rounded-xl">${tamamlananAdet} Tamamlandı</span>
+                        <span class="bg-amber-50 text-amber-800 border border-amber-200 px-2.5 py-1 rounded-xl">${bekleyenAdet} Bekliyor</span>
+                        <span class="bg-red-50 text-red-700 border border-red-200 px-2.5 py-1 rounded-xl">${iptalAdet} İptal</span>
+                    </div>
+                    <div class="space-y-1.5 pt-1 text-xs">
+                        ${fSeanslar.length > 0 ? fSeanslar.map(rawS => {
+                            let s = AsistDB.resolveSeans(rawS, db);
+                            let durumYazi = s.durum === 'odendi' ? 'Tamamlandı' : (s.durum === 'iptal' ? 'İptal' : 'Bekliyor');
+                            let durumRenk = s.durum === 'odendi' ? 'text-emerald-700' : (s.durum === 'iptal' ? 'text-red-600' : 'text-amber-700');
+                            return `
+                                <div class="flex justify-between items-center bg-white p-2.5 rounded-xl border border-slate-200">
+                                    <div>
+                                        <span class="font-bold text-slate-900">${escapeHTML(s.danisanAdi)}</span>
+                                        <span class="text-slate-400 text-[10px] block">${escapeHTML(s.tarih)} - ${escapeHTML(s.saat)} (${escapeHTML(s.uzmanAdi)})</span>
+                                    </div>
+                                    <span class="text-[10px] font-extrabold ${durumRenk}">${durumYazi}</span>
+                                </div>
+                            `;
+                        }).join('') : '<p class="text-[11px] text-slate-400 italic">Seçilen dönemde kayıtlı seans bulunmuyor.</p>'}
+                    </div>
+                `;
+                grid.appendChild(kart);
+            });
         }
 
         function hizliTahsilat(id) {
@@ -1152,7 +1337,7 @@
             let saat = document.getElementById('input-saat').value;
 
             if (!tarihGecerliMi(tarih)) { alert("Lütfen geçerli bir randevu tarihi seçiniz."); return; }
-            if (tarih < formatTarihISO(new Date())) { alert("Geçmiş bir tarihe randevu oluşturulamaz."); return; }
+            if (gecmisTarihSaatMi(tarih, saat)) { alert("Geçmiş bir tarih veya geçmiş bir saate randevu oluşturulamaz."); return; }
             if (basvuruTuru === 'firma' && !firmaId) { alert("Lütfen kurumsal firmayı seçiniz."); return; }
 
             let aktifSubeObj = db.subeler.find(s => s.id === AKTIF_SUBE_ID);
@@ -1258,6 +1443,9 @@
             let basvuruTuru = document.getElementById('input-basvuru-turu').value;
             let firmaId = basvuruTuru === 'firma' ? parseInt(document.getElementById('input-kurumsal-firma-id').value, 10) : null;
 
+            let ikinciDanisanAd = document.getElementById('input-ikinci-danisan-ad').value.trim();
+            let ikinciDanisanTel = normalizeTelefon10Hane(document.getElementById('input-ikinci-danisan-tel').value);
+
             if (!ad) { alert("Lütfen danışan adını giriniz."); return; }
             if (tel.length !== 10) { alert("Lütfen telefon numarasını 10 haneli (5XXXXXXXXX) giriniz."); return; }
             if (basvuruTuru === 'firma' && !firmaId) { alert("Lütfen kurumsal firmayı seçiniz."); return; }
@@ -1308,7 +1496,9 @@
                 ofisOranSnapshot: varsayilanOfisOrani,
                 durum: "bekliyor",
                 odemeTipi: basvuruTuru === 'firma' ? "firma_cari" : "",
-                iptalSebebi: ""
+                iptalSebebi: "",
+                ikinciDanisanAd: hizmetTuru === 'Çift' ? ikinciDanisanAd : "",
+                ikinciDanisanTel: hizmetTuru === 'Çift' ? ikinciDanisanTel : ""
             });
 
             if (!AsistDB.save(db)) return;
@@ -1318,6 +1508,7 @@
             document.getElementById('secili-danisan-id').value = '';
             document.getElementById('input-tarih').value = formatTarihISO(new Date());
             basvuruTuruDegisti('ofis');
+            asistanHizmetTuruDegisti('Yetişkin');
             secilenUzmanId = null;
             secilenOdaId = null;
             asistanSekmeDegistir('bugun');
@@ -1363,93 +1554,6 @@
 
         function basvuruTuruDegisti(tur) { 
             document.getElementById('alan-kurumsal-firma').classList.toggle('hidden', tur !== 'firma'); 
-        }
-
-        function firmaZamanFiltrele(periyot) {
-            aktifFirmaPeriyot = periyot;
-            document.querySelectorAll('.firma-flt-btn').forEach(b => {
-                b.classList.remove('bg-[#256839]', 'text-white', 'shadow-xs');
-                b.classList.add('text-slate-600');
-            });
-            const aktifBtn = document.getElementById('fflt-' + periyot);
-            if(aktifBtn) {
-                aktifBtn.classList.add('bg-[#256839]', 'text-white', 'shadow-xs');
-                aktifBtn.classList.remove('text-slate-600');
-            }
-
-            const ozelAlan = document.getElementById('firma-ozel-tarih-alani');
-            if (periyot === 'ozel') {
-                ozelAlan.classList.remove('hidden');
-            } else {
-                ozelAlan.classList.add('hidden');
-            }
-
-            firmaRaporlariniCiz();
-        }
-
-        function firmaRaporlariniCiz() {
-            let db = AsistDB.get();
-            const grid = document.getElementById('firma-rapor-grid');
-            if(!grid) return;
-            grid.innerHTML = '';
-
-            let kurumsalSeanslar = db.seanslar.filter(s => s.subeId === AKTIF_SUBE_ID && s.basvuruTuru === 'firma');
-            let bugunObj = new Date();
-
-            if (aktifFirmaPeriyot === 'bugun') {
-                let bugunISO = formatTarihISO(bugunObj);
-                kurumsalSeanslar = kurumsalSeanslar.filter(k => k.tarih === bugunISO);
-            } else if (aktifFirmaPeriyot === 'haftalik') {
-                let aralik = getHaftaAraligi(bugunObj);
-                kurumsalSeanslar = kurumsalSeanslar.filter(k => k.tarih >= aralik.baslangic && k.tarih <= aralik.bitis);
-            } else if (aktifFirmaPeriyot === 'aylik') {
-                let ayPrefix = `${bugunObj.getFullYear()}-${String(bugunObj.getMonth() + 1).padStart(2, '0')}`;
-                kurumsalSeanslar = kurumsalSeanslar.filter(k => k.tarih.startsWith(ayPrefix));
-            } else if (aktifFirmaPeriyot === 'ozel') {
-                let bas = document.getElementById('firma-ozel-baslangic').value;
-                let bit = document.getElementById('firma-ozel-bitis').value;
-                if(bas && bit) {
-                    kurumsalSeanslar = kurumsalSeanslar.filter(k => k.tarih >= bas && k.tarih <= bit);
-                }
-            }
-
-            (db.firmalar || []).forEach(f => {
-                let fSeanslar = kurumsalSeanslar.filter(s => s.firmaId === f.id);
-                let tamamlananAdet = fSeanslar.filter(s => s.durum === 'odendi').length;
-                let bekleyenAdet = fSeanslar.filter(s => s.durum === 'bekliyor').length;
-                let iptalAdet = fSeanslar.filter(s => s.durum === 'iptal').length;
-
-                let kart = document.createElement('div');
-                kart.className = "bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3";
-                kart.innerHTML = `
-                    <div class="flex items-center justify-between pb-2 border-b border-slate-200">
-                        <h4 class="font-extrabold text-slate-900 text-sm">${escapeHTML(f.adi)}</h4>
-                        <span class="bg-blue-100 text-blue-900 px-2.5 py-1 rounded-xl text-xs font-black">Bu Dönem: ${fSeanslar.length} Seans</span>
-                    </div>
-                    <div class="flex items-center space-x-2 text-xs font-bold pt-1">
-                        <span class="bg-emerald-50 text-[#256839] border border-emerald-200 px-2.5 py-1 rounded-xl">${tamamlananAdet} Tamamlandı</span>
-                        <span class="bg-amber-50 text-amber-800 border border-amber-200 px-2.5 py-1 rounded-xl">${bekleyenAdet} Bekliyor</span>
-                        <span class="bg-red-50 text-red-700 border border-red-200 px-2.5 py-1 rounded-xl">${iptalAdet} İptal</span>
-                    </div>
-                    <div class="space-y-1.5 pt-1 text-xs">
-                        ${fSeanslar.length > 0 ? fSeanslar.map(rawS => {
-                            let s = AsistDB.resolveSeans(rawS, db);
-                            let durumYazi = s.durum === 'odendi' ? 'Tamamlandı' : (s.durum === 'iptal' ? 'İptal' : 'Bekliyor');
-                            let durumRenk = s.durum === 'odendi' ? 'text-emerald-700' : (s.durum === 'iptal' ? 'text-red-600' : 'text-amber-700');
-                            return `
-                                <div class="flex justify-between items-center bg-white p-2.5 rounded-xl border border-slate-200">
-                                    <div>
-                                        <span class="font-bold text-slate-900">${escapeHTML(s.danisanAdi)}</span>
-                                        <span class="text-slate-400 text-[10px] block">${escapeHTML(s.tarih)} - ${escapeHTML(s.saat)} (${escapeHTML(s.uzmanAdi)})</span>
-                                    </div>
-                                    <span class="text-[10px] font-extrabold ${durumRenk}">${durumYazi}</span>
-                                </div>
-                            `;
-                        }).join('') : '<p class="text-[11px] text-slate-400 italic">Seçilen dönemde kayıtlı seans bulunmuyor.</p>'}
-                    </div>
-                `;
-                grid.appendChild(kart);
-            });
         }
 
         function danisanRehberiniCiz() {
