@@ -1,6 +1,6 @@
 /**
  * AsistPsikolog - Merkezi Veritabanı, Yetkilendirme ve Senkronizasyon Motoru (db.js)
- * Şube, Oda, Uzman, Firma, KDV Motoru, Rol Bazlı Oturum (AsistAuth) ve İlişkisel Mimari
+ * Şube, Oda, Uzman, Firma, KDV Motoru, Eşleştirilmiş Çift/Bireysel Danışan Mimarisi ve AsistAuth
  */
 
 const ASIST_DB_KEY = 'ASIST_PSIKOLOG_CENTRAL_DB_V2';
@@ -77,6 +77,53 @@ function asistHesaplaFinans(ucret, ofisOranYuzde, kdvDahil = false, kdvOrani = 2
     };
 }
 
+/**
+ * Çift Seanslarında İkinci Danışanı (Eşi) Rehbere Kaydedip Karşılıklı Eşleştirme Motoru
+ * İlk seans çift alındıktan sonra eşlerin ayrı ayrı bireysel seansa gelebilmesini sağlar.
+ */
+function asistCiftDanisanSenkronizeEt(db, anaDanisanId, ikinciAd, ikinciTelRaw, subeId, firmaId = null) {
+    let adTemiz = String(ikinciAd || '').trim();
+    let tel10 = asistTel10(ikinciTelRaw);
+    if (!adTemiz) return null;
+
+    let anaDanisan = db.danisanlar.find(d => d.id === anaDanisanId);
+    let esDanisan = null;
+
+    // 1. Önce telefonla eşleşen kayıt var mı bak
+    if (tel10.length === 10) {
+        esDanisan = db.danisanlar.find(d => d.id !== anaDanisanId && asistTel10(d.tel) === tel10);
+    }
+    // 2. Yoksa ana danışanın mevcut eşi aynı isimde mi bak
+    if (!esDanisan && anaDanisan && anaDanisan.esDanisanId) {
+        let mevcutEs = db.danisanlar.find(d => d.id === anaDanisan.esDanisanId);
+        if (mevcutEs && (mevcutEs.ad || '').trim().toLowerCase() === adTemiz.toLowerCase()) {
+            esDanisan = mevcutEs;
+            if (tel10.length === 10 && !esDanisan.tel) esDanisan.tel = tel10;
+        }
+    }
+    // 3. Hiçbiri yoksa rehbere yeni bağımsız danışan olarak ekle
+    if (!esDanisan) {
+        let yeniId = Date.now() * 1000 + Math.floor(Math.random() * 1000);
+        esDanisan = {
+            id: yeniId,
+            ad: adTemiz,
+            tel: tel10.length === 10 ? tel10 : '',
+            subeId: subeId || (anaDanisan ? anaDanisan.subeId : 1),
+            firmaId: firmaId || (anaDanisan ? anaDanisan.firmaId : null),
+            esDanisanId: anaDanisanId
+        };
+        db.danisanlar.unshift(esDanisan);
+    } else {
+        esDanisan.esDanisanId = anaDanisanId;
+    }
+
+    if (anaDanisan) {
+        anaDanisan.esDanisanId = esDanisan.id;
+    }
+
+    return esDanisan;
+}
+
 const SEED_TARIHI = asistSeedTarihi();
 
 const DEFAULT_ASIST_DB = {
@@ -124,24 +171,24 @@ const DEFAULT_ASIST_DB = {
         { id: 6, ad: "Psk. Beyzanur KARATAŞ", tel: "5321110006", telGorunum: "0(532) 111 00 06", mail: "beyzanur@herapsikoloji.com", sifre: "123456", subeIds: [2], alanlar: ["Çocuk", "Ergen"], oranKendi: 30, oranYonlendirme: 50, durum: "aktif", sms: true, telGor: false },
         { id: 7, ad: "Uzm. Psk. Betül MATUR", tel: "5321110007", telGorunum: "0(532) 111 00 07", mail: "betul@herapsikoloji.com", sifre: "123456", subeIds: [2], alanlar: ["Ergen", "Yetişkin"], oranKendi: 30, oranYonlendirme: 50, durum: "aktif", sms: true, telGor: true },
         { id: 8, ad: "Klinik Psk. İshak BÜYÜKYILDIRIM", tel: "5321110008", telGorunum: "0(532) 111 00 08", mail: "ishak@herapsikoloji.com", sifre: "123456", subeIds: [1, 2], alanlar: ["Çocuk", "Ergen", "Yetişkin", "Çift"], oranKendi: 30, oranYonlendirme: 50, durum: "aktif", sms: true, telGor: true },
-        { id: 9, ad: "Klinik Psk. Mesut ÇAKIR", tel: "5321110009", telGorunum: "0(532) 111 00 09", mail: "mesut@herapsikoloji.com", sifre: "123456", subeIds: [2], alanlar: ["Ergen", "Yetişkin"], oranKendi: 30, oranYonlendirme: 50, durum: "aktif", sms: true, telGor: true }
+        { id: 9, ad: "Klinik Psk. Mesut ÇAKIR", tel: "5321110009", telGorunum: "0(532) 111 00 09", mail: "mesut@herapsikoloji.com", sifre: "123456", subeIds: [2], alanlar: ["Ergen", "Yetişkin", "Çift"], oranKendi: 30, oranYonlendirme: 50, durum: "aktif", sms: true, telGor: true }
     ],
     firmalar: [
         { id: 1, adi: "Goodyear Sakarya Fabrikası", subeIds: [1, 2], uzmanIds: [8, 1], tumUzmanlar: false, durum: "aktif" },
         { id: 2, adi: "Pendik Belediyesi İştirak", subeIds: [1], uzmanIds: [], tumUzmanlar: true, durum: "aktif" }
     ],
     danisanlar: [
-        { id: 8, ad: "Tuğba UYSAL", tel: "5377851727", subeId: 1, firmaId: null },
-        { id: 9, ad: "Emir", tel: "5348858666", subeId: 1, firmaId: null },
-        { id: 11, ad: "Ali Tayyar ÖZKUL", tel: "5530022612", subeId: 1, firmaId: null },
-        { id: 60, ad: "Kayra Umut Aslan", tel: "5058336492", subeId: 1, firmaId: 1 },
-        { id: 34, ad: "Merve Erkan", tel: "5387268488", subeId: 1, firmaId: null }
+        { id: 8, ad: "Tuğba UYSAL", tel: "5377851727", subeId: 1, firmaId: null, esDanisanId: null },
+        { id: 9, ad: "Emir", tel: "5348858666", subeId: 1, firmaId: null, esDanisanId: null },
+        { id: 11, ad: "Ali Tayyar ÖZKUL", tel: "5530022612", subeId: 1, firmaId: null, esDanisanId: null },
+        { id: 60, ad: "Kayra Umut Aslan", tel: "5058336492", subeId: 1, firmaId: 1, esDanisanId: null },
+        { id: 34, ad: "Merve Erkan", tel: "5387268488", subeId: 1, firmaId: null, esDanisanId: null }
     ],
     seanslar: [
-        { id: 1, subeId: 1, tarih: SEED_TARIHI, saat: "10:00", danisanId: 8, basvuruTuru: "ofis", firmaId: null, hizmet: "Yetişkin", uzmanId: 8, odaId: "pnd_oda_1", ucret: 1500, ofisOranSnapshot: 50, kdvDahil: false, kdvOrani: 20, kdvTutari: 0, matrahTutar: 1500, durum: "odendi", odemeTipi: "nakit", iptalSebebi: "", ikinciDanisanAd: "", ikinciDanisanTel: "" },
-        { id: 2, subeId: 1, tarih: SEED_TARIHI, saat: "11:00", danisanId: 11, basvuruTuru: "ofis", firmaId: null, hizmet: "Yetişkin", uzmanId: 8, odaId: "pnd_oda_1", ucret: 1500, ofisOranSnapshot: 50, kdvDahil: false, kdvOrani: 20, kdvTutari: 0, matrahTutar: 1500, durum: "bekliyor", odemeTipi: "", iptalSebebi: "", ikinciDanisanAd: "", ikinciDanisanTel: "" },
-        { id: 3, subeId: 1, tarih: SEED_TARIHI, saat: "14:00", danisanId: 60, basvuruTuru: "firma", firmaId: 1, hizmet: "Çocuk", uzmanId: 1, odaId: "pnd_oda_3", ucret: 0, ofisOranSnapshot: 0, kdvDahil: false, kdvOrani: 0, kdvTutari: 0, matrahTutar: 0, durum: "odendi", odemeTipi: "firma_cari", iptalSebebi: "", ikinciDanisanAd: "", ikinciDanisanTel: "" },
-        { id: 4, subeId: 1, tarih: SEED_TARIHI, saat: "16:00", danisanId: 34, basvuruTuru: "kendi", firmaId: null, hizmet: "Yetişkin", uzmanId: 2, odaId: "pnd_oda_2", ucret: 1500, ofisOranSnapshot: 30, kdvDahil: false, kdvOrani: 20, kdvTutari: 0, matrahTutar: 1500, durum: "iptal", odemeTipi: "", iptalSebebi: "İş yoğunluğu nedeniyle gelemedi", ikinciDanisanAd: "", ikinciDanisanTel: "" }
+        { id: 1, subeId: 1, tarih: SEED_TARIHI, saat: "10:00", danisanId: 8, ikinciDanisanId: null, basvuruTuru: "ofis", firmaId: null, hizmet: "Yetişkin", uzmanId: 8, odaId: "pnd_oda_1", ucret: 1500, ofisOranSnapshot: 50, kdvDahil: false, kdvOrani: 20, kdvTutari: 0, matrahTutar: 1500, durum: "odendi", odemeTipi: "nakit", iptalSebebi: "", ikinciDanisanAd: "", ikinciDanisanTel: "" },
+        { id: 2, subeId: 1, tarih: SEED_TARIHI, saat: "11:00", danisanId: 11, ikinciDanisanId: null, basvuruTuru: "ofis", firmaId: null, hizmet: "Yetişkin", uzmanId: 8, odaId: "pnd_oda_1", ucret: 1500, ofisOranSnapshot: 50, kdvDahil: false, kdvOrani: 20, kdvTutari: 0, matrahTutar: 1500, durum: "bekliyor", odemeTipi: "", iptalSebebi: "", ikinciDanisanAd: "", ikinciDanisanTel: "" },
+        { id: 3, subeId: 1, tarih: SEED_TARIHI, saat: "14:00", danisanId: 60, ikinciDanisanId: null, basvuruTuru: "firma", firmaId: 1, hizmet: "Çocuk", uzmanId: 1, odaId: "pnd_oda_3", ucret: 0, ofisOranSnapshot: 0, kdvDahil: false, kdvOrani: 0, kdvTutari: 0, matrahTutar: 0, durum: "odendi", odemeTipi: "firma_cari", iptalSebebi: "", ikinciDanisanAd: "", ikinciDanisanTel: "" },
+        { id: 4, subeId: 1, tarih: SEED_TARIHI, saat: "16:00", danisanId: 34, ikinciDanisanId: null, basvuruTuru: "kendi", firmaId: null, hizmet: "Yetişkin", uzmanId: 2, odaId: "pnd_oda_2", ucret: 1500, ofisOranSnapshot: 30, kdvDahil: false, kdvOrani: 20, kdvTutari: 0, matrahTutar: 1500, durum: "iptal", odemeTipi: "", iptalSebebi: "İş yoğunluğu nedeniyle gelemedi", ikinciDanisanAd: "", ikinciDanisanTel: "" }
     ],
     uzmanCalismaSaatleri: {
         "8_1": [
@@ -205,7 +252,12 @@ function asistNormalizeDb(db) {
         if (typeof f.tumUzmanlar !== 'boolean') { f.tumUzmanlar = true; degisti = true; }
     });
 
+    db.danisanlar.forEach(d => {
+        if (d.esDanisanId === undefined) { d.esDanisanId = null; degisti = true; }
+    });
+
     db.seanslar.forEach(s => {
+        if (s.ikinciDanisanId === undefined) { s.ikinciDanisanId = null; degisti = true; }
         if (s.ikinciDanisanAd === undefined) { s.ikinciDanisanAd = ""; degisti = true; }
         if (s.ikinciDanisanTel === undefined) { s.ikinciDanisanTel = ""; degisti = true; }
         if (typeof s.kdvDahil !== 'boolean') { s.kdvDahil = false; degisti = true; }
@@ -251,6 +303,7 @@ const AsistDB = {
 
     normalizeTel: asistTel10,
     hesaplaFinans: asistHesaplaFinans,
+    ciftDanisanSenkronizeEt: asistCiftDanisanSenkronizeEt,
 
     get: function() {
         const raw = localStorage.getItem(ASIST_DB_KEY);
@@ -293,6 +346,7 @@ const AsistDB = {
         let db = dbInstance || this.get();
         let sube = db.subeler.find(s => s.id === seans.subeId);
         let danisan = db.danisanlar.find(d => d.id === seans.danisanId);
+        let ikinciDanisan = seans.ikinciDanisanId ? db.danisanlar.find(d => d.id === seans.ikinciDanisanId) : null;
         let uzman = db.psikologlar.find(p => p.id === seans.uzmanId);
         let oda = sube ? sube.odalar.find(o => o.id === seans.odaId) : null;
         let firma = seans.firmaId ? db.firmalar.find(f => f.id === seans.firmaId) : null;
@@ -305,8 +359,8 @@ const AsistDB = {
             uzmanAdi: uzman ? uzman.ad : "Silinmiş Uzman",
             odaAdi: oda ? oda.adi : "Silinmiş Oda",
             firmaAdi: firma ? firma.adi : "",
-            ikinciDanisanAd: seans.ikinciDanisanAd || "",
-            ikinciDanisanTel: seans.ikinciDanisanTel || ""
+            ikinciDanisanAd: ikinciDanisan ? ikinciDanisan.ad : (seans.ikinciDanisanAd || ""),
+            ikinciDanisanTel: ikinciDanisan ? ikinciDanisan.tel : (seans.ikinciDanisanTel || "")
         };
     }
 };

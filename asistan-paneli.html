@@ -151,7 +151,7 @@
                 <div class="border-b border-slate-100 pb-3 flex items-center justify-between">
                     <div>
                         <h2 class="text-xl font-extrabold text-slate-900">Randevu Bilgileri</h2>
-                        <p class="text-xs text-slate-500">Mükerrer kaydı önlemek için danışan adı veya telefon yazılırken rehberden kontrol edilir.</p>
+                        <p class="text-xs text-slate-500">Çift seanslarında girilen ikinci kişi rehbere otomatik kaydedilir; sonraki haftalarda ayrı ayrı bireysel randevu verilebilir.</p>
                     </div>
                 </div>
 
@@ -187,14 +187,14 @@
                         </div>
                     </div>
 
-                    <!-- DİNAMİK ÇİFT SEANSI İKİNCİ DANIŞAN ALANLARI -->
+                    <!-- DİNAMİK ÇİFT SEANSI İKİNCİ DANIŞAN ALANLARI (Ad Soyad ve Tel'in tam altında) -->
                     <div id="asistan-ikinci-danisan-kapsayici" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-4 bg-purple-50/70 p-4 rounded-2xl border border-purple-200">
                         <div>
-                            <label class="block font-bold text-purple-950 mb-1">İkinci Danışan (Eş) Adı Soyadı <span class="text-[10px] font-normal text-slate-500">(İsteğe Bağlı)</span></label>
+                            <label class="block font-bold text-purple-950 mb-1">İkinci Danışan (Eş) Adı Soyadı <span class="text-[10px] font-normal text-purple-700">(Rehbere Eş Olarak Kaydedilir)</span></label>
                             <input type="text" id="input-ikinci-danisan-ad" placeholder="Örn: Ayşe Can" class="w-full bg-white p-2.5 rounded-xl border border-purple-200 font-medium text-slate-800">
                         </div>
                         <div>
-                            <label class="block font-bold text-purple-950 mb-1">İkinci Danışan (Eş) Telefon <span class="text-[10px] font-normal text-slate-500">(İsteğe Bağlı)</span></label>
+                            <label class="block font-bold text-purple-950 mb-1">İkinci Danışan (Eş) Telefon <span class="text-[10px] font-normal text-purple-700">(İsteğe Bağlı)</span></label>
                             <input type="text" id="input-ikinci-danisan-tel" placeholder="5051112233" class="w-full bg-white p-2.5 rounded-xl border border-purple-200 font-medium text-slate-800">
                         </div>
                     </div>
@@ -277,7 +277,7 @@
                 <div class="flex items-center justify-between pb-4 border-b border-slate-100">
                     <div>
                         <h2 class="text-xl font-extrabold text-slate-900">Danışan Rehberi (<span id="txt-rehber-sayisi">0</span>)</h2>
-                        <p class="text-xs text-slate-500">Kayıtlı danışanların güncel seans geçmişi.</p>
+                        <p class="text-xs text-slate-500">Kayıtlı danışanların güncel seans geçmişi ve eşleşmiş çift bağlantıları.</p>
                     </div>
                     <input type="text" id="danisan-arama-input" onkeyup="danisanlariFiltrele(this.value)" placeholder="Danışan veya Tel Ara..." class="p-2 bg-slate-50 border rounded-xl text-xs w-64">
                 </div>
@@ -298,10 +298,9 @@
             </div>
         </div>
 
-        <!-- 5. KASA & ÖDEMELER (KDV AYRIŞTIRMALI 5'Lİ KART SİSTEMİ) -->
+        <!-- 5. KASA & ÖDEMELER (5'Lİ KDV AYRIŞTIRMALI METRİK KARTLARI) -->
         <div id="asekm-kasa" class="asistan-sekme hidden space-y-6">
             <div class="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-6">
-                <!-- Üst Başlık -->
                 <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
                     <div>
                         <h2 class="text-xl font-extrabold text-slate-900">Kasa & Ödemeler</h2>
@@ -309,7 +308,6 @@
                     </div>
                 </div>
 
-                <!-- Şerit -->
                 <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex flex-col lg:flex-row items-center justify-between gap-4 text-xs">
                     <div class="flex flex-wrap items-center gap-1.5 bg-white p-1 rounded-xl border border-slate-200 shadow-2xs">
                         <button onclick="kasaPeriyotDegistir('gun')" id="kflt-gun" class="kasa-periyot-btn px-3 py-1.5 rounded-lg font-bold transition bg-[#256839] text-white shadow-xs cursor-pointer">Gün</button>
@@ -338,7 +336,7 @@
                     </div>
                 </div>
 
-                <!-- 5 Temel Kasa Metriği (KDV Ayrıştırmalı) -->
+                <!-- 5 Temel Kasa Metriği -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                     <div class="bg-slate-50 p-5 rounded-2xl border">
                         <span class="text-[10px] font-bold text-slate-400 block uppercase">Fiziki Kasa Girişi (Brüt)</span>
@@ -377,7 +375,7 @@
             </div>
         </div>
 
-        <!-- 6. KURUMSAL FİRMA RAPORU -->
+        <!-- 6. KURUMSAL FİRMA RAPORU (KASA İLE BİREBİR AYNI ŞERİT YAPISI) -->
         <div id="asekm-firma-rapor" class="asistan-sekme hidden space-y-6">
             <div class="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-6">
                 <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
@@ -428,6 +426,7 @@
                 <h3 id="detay-modal-baslik" class="font-extrabold text-slate-900 text-sm"></h3>
                 <button onclick="danisanDetayModalKapat()" class="text-slate-400 font-bold cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
             </div>
+            <div id="detay-es-bilgi-kutusu" class="hidden bg-purple-50 border border-purple-200 p-3 rounded-2xl flex items-center justify-between"></div>
             <div id="detay-seans-listesi" class="space-y-2 max-h-60 overflow-y-auto pr-1"></div>
         </div>
     </div>
@@ -448,7 +447,7 @@
         </div>
     </div>
 
-    <!-- DÜZENLE & ÖDEME AL MODALI (KDV TİKİ VE CANLI AYRIŞTIRMA EKLENDİ) -->
+    <!-- DÜZENLE & ÖDEME AL MODALI -->
     <div id="islem-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center z-50 p-4">
         <div class="bg-white max-w-md w-full p-6 rounded-3xl shadow-xl space-y-4 text-xs">
             <div class="flex items-center justify-between pb-2 border-b">
@@ -488,7 +487,6 @@
                     <label class="block font-bold text-slate-700">Danışandan Alınan Toplam Ücret (₺)</label>
                     <input type="number" id="modal-ucret" min="0" oninput="modalUcretVeOranHesapla()" class="w-full bg-slate-50 p-2.5 rounded-xl border font-black text-slate-900 text-sm">
 
-                    <!-- KDV TİKİ VE ORAN SEÇENEĞİ -->
                     <div class="flex items-center justify-between bg-amber-50/90 border border-amber-200 p-2.5 rounded-xl">
                         <label class="flex items-center space-x-2 cursor-pointer font-extrabold text-amber-950">
                             <input type="checkbox" id="modal-kdv-dahil" onchange="modalUcretVeOranHesapla()" class="w-4 h-4 rounded text-[#256839] cursor-pointer">
@@ -501,7 +499,6 @@
                     </div>
                 </div>
 
-                <!-- CANLI HAK EDİŞ VE KDV DÖKÜM KUTUSU -->
                 <div id="modal-oran-kapsayici" class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 space-y-2.5">
                     <div class="flex items-center justify-between">
                         <label class="font-extrabold text-slate-800 text-[11px]">Ofis Payı Oranı (%)</label>
@@ -665,12 +662,25 @@
             document.getElementById('sonuc-alani').classList.add('hidden');
         }
 
+        // ÇİFT SEÇİLİNCE DİNAMİK ALANLARI GÖSTER VE EŞLEŞMİŞ EŞ VARSA OTOMATİK DOLDUR
         function asistanHizmetTuruDegisti(tur) {
             tarihVeyaSaatDegisti();
             const ikinciKapsayici = document.getElementById('asistan-ikinci-danisan-kapsayici');
             if (!ikinciKapsayici) return;
             if (tur === 'Çift') {
                 ikinciKapsayici.classList.remove('hidden');
+                let seciliId = parseInt(document.getElementById('secili-danisan-id').value, 10);
+                if (seciliId) {
+                    let db = AsistDB.get();
+                    let d = db.danisanlar.find(x => x.id === seciliId);
+                    if (d && d.esDanisanId) {
+                        let es = db.danisanlar.find(x => x.id === d.esDanisanId);
+                        if (es) {
+                            document.getElementById('input-ikinci-danisan-ad').value = es.ad || '';
+                            document.getElementById('input-ikinci-danisan-tel').value = normalizeTelefon10Hane(es.tel);
+                        }
+                    }
+                }
             } else {
                 ikinciKapsayici.classList.add('hidden');
                 document.getElementById('input-ikinci-danisan-ad').value = '';
@@ -965,7 +975,9 @@
                         `;
                     }
 
-                    let ikinciKisiBilgi = s.ikinciDanisanAd ? `<span class="text-[11px] text-purple-800 font-semibold block">Çift / Eş: ${escapeHTML(s.ikinciDanisanAd)} (${escapeHTML(s.ikinciDanisanTel || 'Tel Yok')})</span>` : '';
+                    let ikinciKisiBilgi = s.ikinciDanisanAd
+                        ? `<span class="text-[11px] text-purple-800 font-semibold block">💍 Çift / Eş: ${escapeHTML(s.ikinciDanisanAd)} (${escapeHTML(formatTelefonGorunum(s.ikinciDanisanTel))})</span>`
+                        : '';
 
                     list.innerHTML += `
                         <div class="bg-slate-50/70 p-4 rounded-2xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
@@ -979,7 +991,7 @@
                                         ${kdvEtiket}
                                     </div>
                                     ${ikinciKisiBilgi}
-                                    <p class="text-slate-500 font-semibold mt-0.5">${escapeHTML(s.uzmanAdi)} • ${escapeHTML(s.odaAdi)} <span class="text-[10px] text-slate-400">(${escapeHTML(s.tarih)})</span></p>
+                                    <p class="text-slate-500 font-semibold mt-0.5">${escapeHTML(s.uzmanAdi)} • ${escapeHTML(s.odaAdi)} • ${escapeHTML(s.hizmet || 'Yetişkin')} <span class="text-[10px] text-slate-400">(${escapeHTML(s.tarih)})</span></p>
                                 </div>
                             </div>
                             <div class="flex items-center space-x-2 justify-end">${butonlar}</div>
@@ -1132,7 +1144,7 @@
         }
 
         // ==========================================
-        // 6. KURUMSAL FİRMA RAPORU
+        // 6. KURUMSAL FİRMA RAPORU (KASA İLE BİREBİR AYNI ŞERİT)
         // ==========================================
         function firmaZamanFiltrele(periyot) {
             firmaAktifPeriyot = periyot;
@@ -1338,7 +1350,7 @@
             document.getElementById('modal-kdv-oran-kutu').classList.toggle('hidden', !kdvDahil);
             document.getElementById('modal-kdv-satir').classList.toggle('hidden', !kdvDahil);
 
-            let f = AsistDB.hesaplaFinans(ucret, ofisOran, kdvDahil, kdvOrani);
+            let f = seansFinansHesapla({ ucret, ofisOranSnapshot: ofisOran, kdvDahil, kdvOrani });
 
             document.getElementById('modal-hesap-kdv').innerText = `₺${f.kdvTutari.toLocaleString('tr-TR')}`;
             document.getElementById('modal-hesap-matrah').innerText = `₺${f.matrah.toLocaleString('tr-TR')}`;
@@ -1398,7 +1410,7 @@
                     let kdvDahil = document.getElementById('modal-kdv-dahil').checked;
                     let kdvOrani = numOrDefault(document.getElementById('modal-kdv-orani').value, 20);
 
-                    let f = AsistDB.hesaplaFinans(girilenUcret, girilenOran, kdvDahil, kdvOrani);
+                    let f = seansFinansHesapla({ ucret: girilenUcret, ofisOranSnapshot: girilenOran, kdvDahil, kdvOrani });
 
                     s.ucret = f.brut;
                     s.ofisOranSnapshot = girilenOran;
@@ -1574,7 +1586,16 @@
                 if (basvuruTuru === 'firma' && !mevcut.firmaId) mevcut.firmaId = firmaId;
             } else {
                 danisanId = (typeof AsistDB.yeniId === 'function') ? AsistDB.yeniId() : Date.now();
-                db.danisanlar.unshift({ id: danisanId, ad: ad, tel: tel, subeId: AKTIF_SUBE_ID, firmaId: firmaId });
+                db.danisanlar.unshift({ id: danisanId, ad: ad, tel: tel, subeId: AKTIF_SUBE_ID, firmaId: firmaId, esDanisanId: null });
+            }
+
+            // ÇİFT SEANSIYSA İKİNCİ KİŞİYİ REHBERE BAĞIMSIZ DANIŞAN OLARAK KAYDET VE KARŞILIKLI EŞLEŞTİR
+            let ikinciDanisanId = null;
+            if (hizmetTuru === 'Çift' && ikinciDanisanAd) {
+                if (typeof AsistDB.ciftDanisanSenkronizeEt === 'function') {
+                    let esObj = AsistDB.ciftDanisanSenkronizeEt(db, danisanId, ikinciDanisanAd, ikinciDanisanTel, AKTIF_SUBE_ID, firmaId);
+                    if (esObj) ikinciDanisanId = esObj.id;
+                }
             }
 
             let uz = db.psikologlar.find(p => p.id === secilenUzmanId);
@@ -1589,6 +1610,7 @@
                 tarih: tarih,
                 saat: saat,
                 danisanId: danisanId,
+                ikinciDanisanId: ikinciDanisanId,
                 uzmanId: secilenUzmanId,
                 odaId: secilenOdaId,
                 basvuruTuru: basvuruTuru,
@@ -1638,6 +1660,9 @@
 
             hedefKutu.innerHTML = '';
             eslesenler.slice(0, 5).forEach(d => {
+                let es = d.esDanisanId ? db.danisanlar.find(x => x.id === d.esDanisanId) : null;
+                let esEtiket = es ? `<span class="text-[10px] bg-purple-50 text-purple-800 border border-purple-200 px-1.5 py-0.5 rounded font-bold ml-1.5">💍 Eş: ${escapeHTML(es.ad)}</span>` : '';
+
                 let item = document.createElement('div');
                 item.className = "p-2.5 hover:bg-emerald-50 cursor-pointer flex justify-between items-center";
                 item.onclick = function() {
@@ -1649,10 +1674,15 @@
                         basvuruTuruDegisti('firma');
                         document.getElementById('input-kurumsal-firma-id').value = d.firmaId;
                     }
+                    // Eğer Hizmet Türü Çift seçiliyse ve eş kaydı varsa 2. kişiyi otomatik doldur
+                    if (document.getElementById('input-hizmet-turu').value === 'Çift' && es) {
+                        document.getElementById('input-ikinci-danisan-ad').value = es.ad || '';
+                        document.getElementById('input-ikinci-danisan-tel').value = normalizeTelefon10Hane(es.tel);
+                    }
                     oneriKutusuAd.classList.add('hidden');
                     oneriKutusuTel.classList.add('hidden');
                 };
-                item.innerHTML = `<div><span class="font-bold">${escapeHTML(d.ad)}</span> - <span class="text-slate-400 font-mono">${escapeHTML(formatTelefonGorunum(d.tel))}</span></div>`;
+                item.innerHTML = `<div><span class="font-bold">${escapeHTML(d.ad)}</span> - <span class="text-slate-400 font-mono">${escapeHTML(formatTelefonGorunum(d.tel))}</span>${esEtiket}</div>`;
                 hedefKutu.appendChild(item);
             });
             hedefKutu.classList.remove('hidden');
@@ -1681,20 +1711,46 @@
             document.getElementById('txt-rehber-sayisi').innerText = filtrelenmisDanisanlar.length;
 
             filtrelenmisDanisanlar.forEach(d => {
-                let seanslar = db.seanslar.filter(s => s.danisanId === d.id && s.durum !== 'iptal');
+                // Hem kendi ana danışan olduğu seanslar hem de çift seanslarında 2. kişi olduğu seanslar
+                let seanslar = db.seanslar.filter(s => (s.danisanId === d.id || s.ikinciDanisanId === d.id) && s.durum !== 'iptal');
+                let es = d.esDanisanId ? db.danisanlar.find(x => x.id === d.esDanisanId) : null;
+                let esRozet = es ? `<span class="bg-purple-50 text-purple-900 border border-purple-200 px-2 py-0.5 rounded font-bold text-[10px] ml-1.5">💍 Eş: ${escapeHTML(es.ad)}</span>` : '';
+
                 let kategori = d.firmaId ? '<span class="bg-blue-50 text-blue-900 border border-blue-200 px-2 py-0.5 rounded font-extrabold text-[10px]">Kurumsal Firma</span>' : '<span class="text-slate-500 font-semibold text-[11px]">Bireysel Danışan</span>';
                 let telStr = formatTelefonGorunum(d.tel);
 
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50 transition">
-                        <td class="p-3.5 font-bold text-slate-900">${escapeHTML(d.ad)}</td>
+                        <td class="p-3.5 font-bold text-slate-900">${escapeHTML(d.ad)} ${esRozet}</td>
                         <td class="p-3.5 text-slate-600 font-mono">${escapeHTML(telStr)}</td>
                         <td class="p-3.5">${kategori}</td>
                         <td class="p-3.5 text-center font-black">${seanslar.length} Seans</td>
-                        <td class="p-3.5 text-center"><button onclick="danisanDetayAc(${d.id})" class="bg-emerald-50 text-[#256839] px-2.5 py-1 rounded-lg font-bold border border-emerald-200 cursor-pointer">Detay</button></td>
+                        <td class="p-3.5 text-center space-x-1">
+                            <button onclick="danisanHizliBireyselRandevu(${d.id})" class="bg-slate-100 hover:bg-emerald-50 text-slate-700 hover:text-[#256839] px-2.5 py-1 rounded-lg font-bold border border-slate-200 cursor-pointer" title="Bu Kişiye Bireysel Randevu Aç">+ Randevu</button>
+                            <button onclick="danisanDetayAc(${d.id})" class="bg-emerald-50 text-[#256839] px-2.5 py-1 rounded-lg font-bold border border-emerald-200 cursor-pointer">Detay</button>
+                        </td>
                     </tr>
                 `;
             });
+        }
+
+        // ÇİFT SEANSINDAN SONRA TEK TIKLA BİREYSEL RANDEVUYA GEÇİŞ KISAYOLU
+        function danisanHizliBireyselRandevu(danisanId) {
+            let db = AsistDB.get();
+            let d = db.danisanlar.find(x => x.id === danisanId);
+            if (!d) return;
+            danisanDetayModalKapat();
+            asistanSekmeDegistir('randevu-olustur');
+            document.getElementById('secili-danisan-id').value = d.id;
+            document.getElementById('input-danisan-ad').value = d.ad;
+            document.getElementById('input-danisan-tel').value = normalizeTelefon10Hane(d.tel);
+            document.getElementById('input-hizmet-turu').value = 'Yetişkin';
+            asistanHizmetTuruDegisti('Yetişkin');
+            if (d.firmaId) {
+                document.getElementById('input-basvuru-turu').value = 'firma';
+                basvuruTuruDegisti('firma');
+                document.getElementById('input-kurumsal-firma-id').value = d.firmaId;
+            }
         }
 
         function danisanDetayAc(id) {
@@ -1703,10 +1759,29 @@
             if (!d) return;
 
             document.getElementById('detay-modal-baslik').innerText = `${d.ad} - Seans Geçmişi`;
+
+            const esKutu = document.getElementById('detay-es-bilgi-kutusu');
+            let es = d.esDanisanId ? db.danisanlar.find(x => x.id === d.esDanisanId) : null;
+            if (es && esKutu) {
+                esKutu.classList.remove('hidden');
+                esKutu.innerHTML = `
+                    <div>
+                        <span class="font-extrabold text-purple-950 block">💍 Eşleşmiş Çift Kaydı: ${escapeHTML(es.ad)}</span>
+                        <span class="text-[10px] text-purple-700">${escapeHTML(formatTelefonGorunum(es.tel))}</span>
+                    </div>
+                    <div class="flex space-x-1.5">
+                        <button onclick="danisanDetayAc(${es.id})" class="bg-white text-purple-900 border border-purple-200 px-2.5 py-1 rounded-xl font-bold cursor-pointer">Eşin Geçmişi</button>
+                        <button onclick="danisanHizliBireyselRandevu(${es.id})" class="bg-[#256839] text-white px-2.5 py-1 rounded-xl font-bold cursor-pointer">Eşe Bireysel Randevu</button>
+                    </div>
+                `;
+            } else if (esKutu) {
+                esKutu.classList.add('hidden');
+            }
+
             const container = document.getElementById('detay-seans-listesi');
             container.innerHTML = '';
 
-            let seanslar = db.seanslar.filter(s => s.danisanId === d.id).sort((a,b) => a.tarih.localeCompare(b.tarih) || a.saat.localeCompare(b.saat));
+            let seanslar = db.seanslar.filter(s => s.danisanId === d.id || s.ikinciDanisanId === d.id).sort((a,b) => a.tarih.localeCompare(b.tarih) || a.saat.localeCompare(b.saat));
 
             if (seanslar.length === 0) {
                 container.innerHTML = `<div class="p-3 text-center text-slate-400 italic">Kayıtlı seans bulunmuyor.</div>`;
@@ -1715,13 +1790,14 @@
                     let s = AsistDB.resolveSeans(rawS, db);
                     let f = seansFinansHesapla(s);
                     let kdvBilgi = (f.kdvDahil && f.kdvTutari > 0) ? ` [KDV: ₺${f.kdvTutari}]` : '';
+                    let turEtiket = s.hizmet === 'Çift' ? '<span class="text-[10px] font-extrabold text-purple-800 bg-purple-100 px-1.5 py-0.5 rounded mr-1">Çift Seansı</span>' : '<span class="text-[10px] font-bold text-slate-600 bg-slate-200 px-1.5 py-0.5 rounded mr-1">Bireysel</span>';
                     let rozet = (s.odemeTipi === 'firma_cari' || s.basvuruTuru === 'firma')
                         ? '<span class="text-[10px] font-bold text-blue-800 bg-blue-50 px-2 py-0.5 rounded">Firma Carisi</span>'
                         : `<span class="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded">${escapeHTML(s.durum)} (₺${f.brut}${kdvBilgi})</span>`;
                     container.innerHTML += `
                         <div class="p-2.5 bg-slate-50 border rounded-xl flex justify-between items-center text-xs">
                             <div>
-                                <span class="font-bold block">${escapeHTML(s.tarih)} - ${escapeHTML(s.saat)}</span>
+                                <span class="font-bold block">${turEtiket}${escapeHTML(s.tarih)} - ${escapeHTML(s.saat)}</span>
                                 <span class="text-[11px] text-slate-500">${escapeHTML(s.uzmanAdi)} (${escapeHTML(s.odaAdi)})</span>
                             </div>
                             ${rozet}
