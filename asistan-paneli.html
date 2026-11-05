@@ -29,7 +29,6 @@
                     </div>
                 </div>
 
-                <!-- Mobilde Üst Hızlı Menü Butonu -->
                 <button type="button" onclick="mobilDahaFazlaAc()" class="md:hidden w-9 h-9 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 flex items-center justify-center cursor-pointer hover:bg-slate-100 transition" title="Tüm Menü">
                     <i class="fa-solid fa-bars text-sm"></i>
                 </button>
@@ -41,7 +40,6 @@
                 <a href="yonetici-paneli.html" class="font-black text-[#256839] hover:underline">Panele Dön →</a>
             </div>
 
-            <!-- Masaüstü Navigasyon Butonları -->
             <nav class="p-4 space-y-1.5 hidden md:block text-xs font-bold">
                 <button onclick="asistanSekmeDegistir('bugun')" id="abtn-bugun" class="asistan-nav-btn w-full py-3 px-4 rounded-xl transition flex items-center space-x-3 bg-[#256839] text-white shadow-xs cursor-pointer">
                     <i class="fa-solid fa-calendar-day w-5 text-center"></i>
@@ -75,7 +73,6 @@
             </nav>
         </div>
 
-        <!-- Oturum ve Çıkış Alanı -->
         <div class="p-4 border-t border-slate-100 bg-slate-50/50 hidden md:block">
             <div class="flex items-center justify-between gap-2">
                 <div class="truncate">
@@ -90,7 +87,7 @@
         </div>
     </aside>
 
-    <!-- MOBİL ALT MENÜ BARI (Aktif Sekme Renkleri Anlık Değişir) -->
+    <!-- MOBİL ALT MENÜ BARI -->
     <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 z-40 flex items-center justify-around py-2 px-1 text-[10px] font-extrabold shadow-lg">
         <button onclick="asistanSekmeDegistir('bugun')" id="mbtn-bugun" class="mobile-nav-btn flex flex-col items-center py-1 px-2.5 rounded-xl transition text-[#256839] font-black cursor-pointer">
             <i class="fa-solid fa-calendar-day text-base mb-0.5"></i><span>Görüşme</span>
@@ -109,9 +106,9 @@
         </button>
     </nav>
 
-    <!-- MOBİL "DİĞER MODÜLLER" BOTTOM SHEET PENCERESİ -->
+    <!-- MOBİL "DİĞER MODÜLLER" BOTTOM SHEET -->
     <div id="mobil-daha-fazla-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-end justify-center md:hidden">
-        <div class="bg-white w-full rounded-t-3xl p-5 space-y-3.5 shadow-2xl animate-in slide-in-from-bottom duration-200">
+        <div class="bg-white w-full rounded-t-3xl p-5 space-y-3.5 shadow-2xl">
             <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-1"></div>
             <div class="flex items-center justify-between pb-2 border-b border-slate-100">
                 <span class="font-extrabold text-slate-900 text-sm">Tüm Modüller & İşlemler</span>
@@ -146,8 +143,6 @@
         <!-- 1. GÖRÜŞMELER -->
         <div id="asekm-bugun" class="asistan-sekme space-y-4 sm:space-y-6">
             <div class="bg-white p-4 sm:p-7 rounded-3xl border border-slate-200 shadow-xs space-y-4">
-                
-                <!-- Başlık -->
                 <div class="flex items-center justify-between pb-3 border-b border-slate-100">
                     <div>
                         <h2 class="text-lg sm:text-xl font-extrabold text-slate-900">Görüşmeler</h2>
@@ -155,9 +150,8 @@
                     </div>
                 </div>
 
-                <!-- Yenilenmiş, Dengeli ve Sıkışmayan Tarih Filtresi (Bugün Butonu Kaldırıldı) -->
+                <!-- Dengeli Tarih Filtresi -->
                 <div class="bg-slate-50 p-3 sm:p-4 rounded-2xl border border-slate-200 space-y-2.5 text-xs">
-                    <!-- Segmented Periyot Butonları -->
                     <div class="grid grid-cols-4 gap-1 bg-white p-1 rounded-xl border border-slate-200 shadow-2xs">
                         <button onclick="seansPeriyotDegistir('gun')" id="sflt-gun" class="seans-periyot-btn py-2 text-center rounded-lg font-bold transition bg-[#256839] text-white shadow-xs cursor-pointer">Gün</button>
                         <button onclick="seansPeriyotDegistir('hafta')" id="sflt-hafta" class="seans-periyot-btn py-2 text-center rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Hafta</button>
@@ -165,7 +159,6 @@
                         <button onclick="seansPeriyotDegistir('ozel')" id="sflt-ozel" class="seans-periyot-btn py-2 text-center rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Özel</button>
                     </div>
 
-                    <!-- Dengeli Tarih Gezgini (Sadece Oklar ve Ortalanmış Tarih) -->
                     <div id="seans-standart-nav" class="flex items-center justify-between bg-white p-1 rounded-xl border border-slate-200 shadow-2xs">
                         <button onclick="seansTarihKaydir(-1)" class="w-10 h-9 rounded-lg hover:bg-slate-100 text-slate-700 flex items-center justify-center font-bold cursor-pointer transition">
                             <i class="fa-solid fa-chevron-left text-xs"></i>
@@ -176,7 +169,6 @@
                         </button>
                     </div>
 
-                    <!-- Özel Aralık Alanı -->
                     <div id="seans-ozel-tarih-alani" class="hidden flex items-center space-x-2 bg-white p-1.5 rounded-xl border border-slate-200 shadow-2xs">
                         <input type="date" id="seans-ozel-baslangic" class="w-1/2 bg-slate-50 border border-slate-200 p-2 rounded-lg font-bold text-slate-700 text-xs">
                         <span class="text-slate-400 font-bold">-</span>
@@ -184,7 +176,6 @@
                         <button onclick="seanslarTablosunuYenile()" class="bg-[#256839] hover:bg-[#12612d] text-white px-3 py-2 rounded-lg font-bold cursor-pointer transition">Uygula</button>
                     </div>
 
-                    <!-- Sayaç Rozetleri -->
                     <div class="grid grid-cols-3 gap-1.5 text-center text-[11px]">
                         <span class="font-bold text-amber-700 bg-amber-50/90 py-1.5 px-1 rounded-xl border border-amber-200 truncate" id="sayac-bekleyen">0 Bekliyor</span>
                         <span class="font-bold text-emerald-700 bg-emerald-50/90 py-1.5 px-1 rounded-xl border border-emerald-200 truncate" id="sayac-odenen">0 Tahsil Edildi</span>
@@ -192,17 +183,17 @@
                     </div>
                 </div>
 
-                <!-- Seans Listesi (Ferah Kartlar) -->
+                <!-- Seans Listesi -->
                 <div id="bugunun-seans-listesi" class="space-y-3"></div>
 
-                <!-- ALT KISIM: DİNAMİK SMS GÖNDERME TETİKLEYİCİSİ -->
+                <!-- SMS Seçim Modu Butonu -->
                 <div class="pt-2">
                     <button type="button" id="btn-sms-modu-ac" onclick="smsModuAc()" class="w-full py-3 bg-emerald-50 hover:bg-emerald-100 text-[#256839] border border-emerald-200 rounded-2xl font-extrabold text-xs flex items-center justify-center space-x-2 shadow-2xs transition cursor-pointer">
                         <i class="fa-solid fa-paper-plane"></i><span>Hatırlatma SMS'i Gönder (Seçim Yap)</span>
                     </button>
                 </div>
 
-                <!-- DİNAMİK SMS SEÇİM VE EYLEM ÇUBUĞU (Yalnızca SMS Modunda Görünür) -->
+                <!-- SMS Eylem Çubuğu -->
                 <div id="sms-eylem-bari" class="hidden sticky bottom-16 md:bottom-4 z-30 bg-slate-900 text-white p-3 rounded-2xl shadow-xl flex items-center justify-between gap-2 text-xs">
                     <div class="flex items-center space-x-2">
                         <button type="button" onclick="tumSeanslariSecToggle()" class="bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-xl font-bold cursor-pointer">Tümünü Seç</button>
@@ -213,7 +204,6 @@
                         <button type="button" onclick="secilenlereSmsModalAc()" class="bg-[#256839] hover:bg-emerald-600 text-white px-4 py-1.5 rounded-xl font-extrabold shadow-sm cursor-pointer">Gönder</button>
                     </div>
                 </div>
-
             </div>
         </div>
 
@@ -222,7 +212,7 @@
             <div class="bg-white p-5 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-5">
                 <div class="border-b border-slate-100 pb-3">
                     <h2 class="text-xl font-extrabold text-slate-900">Randevu Bilgileri</h2>
-                    <p class="text-xs text-slate-500">Hizmet türüne göre ilgili ebeveyn/eş alanları dinamik açılır; SMS gönderilecek numaralar seçilebilir.</p>
+                    <p class="text-xs text-slate-500">Hizmet türüne göre ilgili ebeveyn/eş alanları dinamik açılır; boş olan her oda seçilebilir.</p>
                 </div>
 
                 <form id="randevu-on-form" onsubmit="musaittlikSorgula(event)" class="space-y-4 text-xs">
@@ -284,7 +274,7 @@
                         </div>
                     </div>
 
-                    <!-- Çift Seansı İkinci Danışan Alanları -->
+                    <!-- Çift Seansı İkinci Danışan -->
                     <div id="asistan-ikinci-danisan-kapsayici" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-4 bg-purple-50/70 p-4 rounded-2xl border border-purple-200">
                         <div>
                             <label class="block font-bold text-purple-950 mb-1">İkinci Danışan (Eş) Adı Soyadı</label>
@@ -302,7 +292,7 @@
                         </div>
                     </div>
 
-                    <!-- Çocuk ve Ergen Ebeveyn Alanları -->
+                    <!-- Çocuk ve Ergen Ebeveyn -->
                     <div id="asistan-ebeveyn-kapsayici" class="hidden space-y-3 bg-amber-50/70 p-4 rounded-2xl border border-amber-200">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-amber-200">
                             <span class="font-extrabold text-amber-950 text-xs"><i class="fa-solid fa-people-roof mr-1.5 text-[#256839]"></i>Anne & Baba İletişim Bilgileri</span>
@@ -348,12 +338,12 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
                         <div>
                             <label class="block font-bold text-slate-700 mb-1">5. Seans Tarihi (Geçmiş Seçilemez)</label>
-                            <input type="date" id="input-tarih" required onchange="tarihVeyaSaatDegisti()" class="w-full bg-slate-50 p-2.5 rounded-xl border border-slate-200 font-medium">
+                            <input type="date" id="input-tarih" required onchange="akilliVarsayilanSaatAyarla(); tarihVeyaSaatDegisti();" class="w-full bg-slate-50 p-2.5 rounded-xl border border-slate-200 font-medium">
                         </div>
                         <div>
                             <label class="block font-bold text-slate-700 mb-1">6. Seans Saati</label>
                             <select id="input-saat" onchange="tarihVeyaSaatDegisti()" class="w-full bg-slate-50 p-2.5 rounded-xl border border-slate-200 font-bold text-slate-800">
-                                <option value="09:00">09:00</option><option value="10:00">10:00</option><option value="11:00" selected>11:00</option><option value="12:00">12:00</option><option value="13:00">13:00</option><option value="14:00">14:00</option><option value="15:00">15:00</option><option value="16:00">16:00</option><option value="17:00">17:00</option><option value="18:00">18:00</option><option value="19:00">19:00</option><option value="20:00">20:00</option>
+                                <option value="09:00">09:00</option><option value="10:00">10:00</option><option value="11:00">11:00</option><option value="12:00">12:00</option><option value="13:00">13:00</option><option value="14:00">14:00</option><option value="15:00">15:00</option><option value="16:00">16:00</option><option value="17:00">17:00</option><option value="18:00">18:00</option><option value="19:00">19:00</option><option value="20:00">20:00</option>
                             </select>
                         </div>
                     </div>
@@ -376,7 +366,7 @@
                 <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-xs space-y-3">
                     <div class="flex items-center justify-between">
                         <h3 class="text-xs font-extrabold text-slate-900">Oda Müsaitliği (<span id="txt-aktif-sube-odalar"></span>)</h3>
-                        <span class="text-[10px] text-slate-400 font-semibold">Boş olan her oda seçilebilir</span>
+                        <span class="text-[10px] text-slate-400 font-semibold">Tüm hizmetler için boş olan her oda seçilebilir</span>
                     </div>
                     <div id="oda-kart-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-3"></div>
                 </div>
@@ -385,12 +375,14 @@
                         <p class="font-bold">Uzman: <span id="secim-uzman-yazi" class="text-slate-400 italic">Seçilmedi</span></p>
                         <p class="font-bold">Oda: <span id="secim-oda-yazi" class="text-slate-400 italic">Seçilmedi</span></p>
                     </div>
-                    <button onclick="randevuyuTamamla()" id="btn-onayla" disabled class="opacity-50 cursor-not-allowed bg-[#256839] text-white px-8 py-3 rounded-xl font-extrabold text-xs w-full sm:w-auto shadow-sm">Randevuyu Kesinleştir</button>
+                    <button onclick="randevuyuTamamla()" id="btn-onayla" disabled class="opacity-50 cursor-not-allowed bg-[#256839] text-white px-8 py-3 rounded-xl font-extrabold text-xs w-full sm:w-auto shadow-sm transition">
+                        Randevuyu Kesinleştir (Uzman ve Oda Seçiniz)
+                    </button>
                 </div>
             </div>
         </div>
 
-        <!-- 3. TAKVİM (Masaüstü ve Menüden Açılabilir) -->
+        <!-- 3. TAKVİM -->
         <div id="asekm-takvim" class="asistan-sekme hidden space-y-6">
             <div class="bg-white p-5 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-5">
                 <div class="flex items-center justify-between pb-3 border-b border-slate-100">
@@ -411,7 +403,7 @@
             </div>
         </div>
 
-        <!-- 4. DANIŞAN REHBERİ (DÜZENLE / SİL MODALLI) -->
+        <!-- 4. DANIŞAN REHBERİ -->
         <div id="asekm-danisanlar" class="asistan-sekme hidden space-y-4 sm:space-y-6">
             <div class="bg-white p-5 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-4">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-3">
@@ -438,11 +430,10 @@
             </div>
         </div>
 
-        <!-- 5. KASA & ÖDEMELER (GÜNCELLENMİŞ 5'Lİ METRİK SIRALAMASI VE UYARI) -->
+        <!-- 5. KASA & ÖDEMELER -->
         <div id="asekm-kasa" class="asistan-sekme hidden space-y-4 sm:space-y-6">
             <div class="bg-white p-5 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-5">
                 
-                <!-- Ödeme Alınmamış Bekleyen Seanslar Uyarısı -->
                 <div id="kasa-bekleyen-uyari-kutusu" class="hidden bg-amber-50 border border-amber-200 p-3.5 sm:p-4 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
                     <div class="flex items-center space-x-2 text-xs font-bold text-amber-900">
                         <i class="fa-solid fa-triangle-exclamation text-amber-600 text-base shrink-0"></i>
@@ -458,7 +449,6 @@
                     </div>
                 </div>
 
-                <!-- Tarih Şeridi (Bugün Butonu Kaldırılmış, Dengeli Navigasyon) -->
                 <div class="bg-slate-50 p-3 sm:p-4 rounded-2xl border border-slate-200 space-y-2.5 text-xs">
                     <div class="grid grid-cols-4 gap-1 bg-white p-1 rounded-xl border border-slate-200 shadow-2xs">
                         <button onclick="kasaPeriyotDegistir('gun')" id="kflt-gun" class="kasa-periyot-btn py-2 text-center rounded-lg font-bold transition bg-[#256839] text-white shadow-xs cursor-pointer">Gün</button>
@@ -486,7 +476,7 @@
                     </div>
                 </div>
 
-                <!-- 5 KASA METRİĞİ (YENİ SIRALAMA) -->
+                <!-- 5 KASA METRİĞİ -->
                 <div class="grid grid-cols-2 lg:grid-cols-5 gap-3">
                     <div class="bg-emerald-50/70 p-4 rounded-2xl border border-emerald-200 col-span-2 sm:col-span-1">
                         <span class="text-[10px] font-bold text-emerald-800 block uppercase">1. Ofis Net Payı</span>
@@ -515,7 +505,6 @@
                     </div>
                 </div>
 
-                <!-- Uzman Dağıtım Listesi -->
                 <div class="border border-slate-200 rounded-2xl overflow-hidden shadow-2xs">
                     <div class="bg-slate-50 px-4 py-3 border-b border-slate-200 font-extrabold text-xs text-slate-800 flex items-center justify-between">
                         <span>Uzmanlara Dağıtılacak Hak Ediş Listesi</span>
@@ -526,7 +515,7 @@
             </div>
         </div>
 
-        <!-- 6. OFİS MASRAFLARI (ASİSTANIN GİREBİLDİĞİ MODÜL) -->
+        <!-- 6. OFİS MASRAFLARI -->
         <div id="asekm-masraflar" class="asistan-sekme hidden space-y-4 sm:space-y-6">
             <div class="bg-white p-5 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-5">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
@@ -539,7 +528,6 @@
                     </button>
                 </div>
 
-                <!-- Masraf Ekleme Formu -->
                 <div id="masraf-form-card" class="hidden bg-amber-50/60 p-4 sm:p-6 rounded-2xl border border-amber-200">
                     <form onsubmit="masrafKaydet(event)" class="space-y-3.5 text-xs">
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -563,7 +551,6 @@
                     </form>
                 </div>
 
-                <!-- Masraf Listesi -->
                 <div class="overflow-x-auto border border-slate-200 rounded-2xl">
                     <table class="w-full text-left border-collapse text-xs">
                         <thead class="bg-slate-50 border-b font-extrabold">
@@ -580,7 +567,7 @@
             </div>
         </div>
 
-        <!-- 7. KURUMSAL FİRMA RAPORU (EXCEL İNDİR BUTONLU) -->
+        <!-- 7. KURUMSAL FİRMA RAPORU -->
         <div id="asekm-firma-rapor" class="asistan-sekme hidden space-y-4 sm:space-y-6">
             <div class="bg-white p-5 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-5">
                 <div class="flex items-center justify-between pb-3 border-b border-slate-100">
@@ -590,7 +577,6 @@
                     </div>
                 </div>
 
-                <!-- Tarih Şeridi -->
                 <div class="bg-slate-50 p-3 sm:p-4 rounded-2xl border border-slate-200 space-y-2.5 text-xs">
                     <div class="grid grid-cols-4 gap-1 bg-white p-1 rounded-xl border border-slate-200 shadow-2xs">
                         <button onclick="firmaZamanFiltrele('gun')" id="fflt-gun" class="firma-flt-btn py-2 text-center rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Gün</button>
@@ -624,7 +610,7 @@
 
     </main>
 
-    <!-- DETAY PENCERESİ MODAL (İPTALSİZ KRONOLOJİK SEANS SAYISI VE SADECE FİRMA ROZETİ) -->
+    <!-- DETAY PENCERESİ MODAL -->
     <div id="danisan-detay-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
         <div class="bg-white max-w-lg w-full p-5 sm:p-6 rounded-3xl shadow-2xl space-y-4 text-xs max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between pb-3 border-b">
@@ -637,7 +623,7 @@
         </div>
     </div>
 
-    <!-- DANIŞAN BİLGİLERİ DÜZENLEME MODAL (REHBER GÜNCELLE / SİL) -->
+    <!-- DANIŞAN BİLGİLERİ DÜZENLEME MODAL -->
     <div id="danisan-duzenle-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
         <div class="bg-white max-w-md w-full p-5 sm:p-6 rounded-3xl shadow-2xl space-y-4 text-xs">
             <div class="flex items-center justify-between pb-2 border-b">
@@ -905,6 +891,44 @@
             return false;
         }
 
+        function akilliVarsayilanSaatAyarla() {
+            const saatSelect = document.getElementById('input-saat');
+            const tarihInput = document.getElementById('input-tarih');
+            if (!saatSelect || !tarihInput) return;
+
+            let bugunISO = formatTarihISO(new Date());
+            if (tarihInput.value === bugunISO) {
+                let simdiSaat = new Date().getHours() + 1;
+                let uygunSaat = String(Math.max(9, Math.min(20, simdiSaat))).padStart(2, '0') + ':00';
+                if ([...saatSelect.options].some(o => o.value === uygunSaat)) {
+                    saatSelect.value = uygunSaat;
+                }
+            }
+        }
+
+        function kontrolOnayButon() {
+            const btn = document.getElementById('btn-onayla');
+            const secimUzmanYazi = document.getElementById('secim-uzman-yazi');
+            const secimOdaYazi = document.getElementById('secim-oda-yazi');
+            if (!btn) return;
+
+            if (secilenUzmanId && secilenOdaId) {
+                btn.disabled = false;
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                btn.classList.add('hover:bg-[#12612d]', 'cursor-pointer', 'shadow-md', 'active:scale-95');
+                btn.innerHTML = `<i class="fa-solid fa-check mr-1.5"></i>Randevuyu Kesinleştir`;
+            } else {
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+                btn.classList.remove('hover:bg-[#12612d]', 'cursor-pointer', 'shadow-md', 'active:scale-95');
+                
+                let eksik = [];
+                if (!secilenUzmanId) eksik.push("Uzman");
+                if (!secilenOdaId) eksik.push("Oda");
+                btn.innerHTML = `Randevuyu Kesinleştir (${eksik.join(' ve ')} Seçiniz)`;
+            }
+        }
+
         function seansFinansHesapla(s) {
             let db = AsistDB.get();
             let varsayilanFiyat = 1500;
@@ -952,15 +976,13 @@
             secilenUzmanId = null;
             secilenOdaId = null;
             document.getElementById('secim-uzman-yazi').innerText = "Seçilmedi";
+            document.getElementById('secim-uzman-yazi').className = "text-slate-400 italic";
             document.getElementById('secim-oda-yazi').innerText = "Seçilmedi";
-            document.getElementById('btn-onayla').disabled = true;
-            document.getElementById('btn-onayla').classList.add('opacity-50', 'cursor-not-allowed');
+            document.getElementById('secim-oda-yazi').className = "text-slate-400 italic";
+            kontrolOnayButon();
             document.getElementById('sonuc-alani').classList.add('hidden');
         }
 
-        // ==========================================
-        // DİNAMİK SMS SEÇİM MODU (AÇ / KAPA)
-        // ==========================================
         function smsModuAc() {
             smsSecimModuAktif = true;
             document.getElementById('btn-sms-modu-ac').classList.add('hidden');
@@ -1022,9 +1044,6 @@
             alert(`✅ Seçilen ${seciliIds.length} danışana hatırlatma SMS'i başarıyla gönderildi!`);
         }
 
-        // ==========================================
-        // MOBİL MENÜ DRAWER / BOTTOM SHEET YÖNETİMİ
-        // ==========================================
         function mobilDahaFazlaAc() {
             document.getElementById('mobil-daha-fazla-modal').classList.remove('hidden');
         }
@@ -1038,11 +1057,7 @@
             asistanSekmeDegistir(sekmeAdi);
         }
 
-        // ==========================================
-        // SEKME VE AKTİF BUTON DEĞİŞİMİ (MOBİL RENKLER DÜZELTİLDİ)
-        // ==========================================
         function asistanSekmeDegistir(sekmeAdi) {
-            // Masaüstü sekmelerini yönet
             document.querySelectorAll('.asistan-sekme').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.asistan-nav-btn').forEach(btn => {
                 btn.classList.remove('bg-[#256839]', 'text-white', 'shadow-xs');
@@ -1055,17 +1070,16 @@
                 aktifBtn.classList.add('bg-[#256839]', 'text-white', 'shadow-xs');
             }
 
-            // Mobil Alt Menü Aktif Renk Güncellemesi
             document.querySelectorAll('.mobile-nav-btn').forEach(mbtn => {
                 mbtn.classList.remove('text-[#256839]', 'font-black');
                 mbtn.classList.add('text-slate-400', 'font-bold');
             });
 
             if (['takvim', 'masraflar', 'firma-rapor'].includes(sekmeAdi)) {
-                const mDiğer = document.getElementById('mbtn-daha-fazla');
-                if (mDiğer) {
-                    mDiğer.classList.remove('text-slate-400', 'font-bold');
-                    mDiğer.classList.add('text-[#256839]', 'font-black');
+                const mDiger = document.getElementById('mbtn-daha-fazla');
+                if (mDiger) {
+                    mDiger.classList.remove('text-slate-400', 'font-bold');
+                    mDiger.classList.add('text-[#256839]', 'font-black');
                 }
             } else {
                 const mAktif = document.getElementById('mbtn-' + sekmeAdi);
@@ -1075,8 +1089,8 @@
                 }
             }
 
-            // Sayfa tetiklemeleri
             if(sekmeAdi === 'bugun') { smsModuKapat(); seanslarTablosunuYenile(); }
+            if(sekmeAdi === 'randevu-olustur') { akilliVarsayilanSaatAyarla(); }
             if(sekmeAdi === 'takvim') takvimMatrisiniCiz();
             if(sekmeAdi === 'danisanlar') danisanRehberiniCiz();
             if(sekmeAdi === 'kasa') kasaHesapla();
@@ -1084,9 +1098,6 @@
             if(sekmeAdi === 'firma-rapor') firmaRaporlariniCiz();
         }
 
-        // ==========================================
-        // GÖRÜŞMELER LİSTESİ (FERAH KARTLAR)
-        // ==========================================
         function seansPeriyotDegistir(p) {
             seansAktifPeriyot = p;
             document.querySelectorAll('.seans-periyot-btn').forEach(b => {
@@ -1114,8 +1125,7 @@
             let filtrelenmis = [];
 
             if (seansAktifPeriyot === 'gun') {
-                let iso = formatTarihISO(seciliTarih);
-                filtrelenmis = subeSeanslari.filter(s => s.tarih === iso);
+                filtrelenmis = subeSeanslari.filter(s => s.tarih === formatTarihISO(seciliTarih));
             } else if (seansAktifPeriyot === 'hafta') {
                 let aralik = getHaftaAraligi(seciliTarih);
                 filtrelenmis = subeSeanslari.filter(s => s.tarih >= aralik.baslangic && s.tarih <= aralik.bitis);
@@ -1159,7 +1169,6 @@
                         rozet = `<span class="bg-amber-100 text-amber-800 text-[10px] font-extrabold px-2.5 py-1 rounded-lg">Bekliyor</span>`;
                     }
 
-                    // Checkbox sadece SMS Modu açıkken gösterilir
                     let checkWrapClass = smsSecimModuAktif ? '' : 'hidden';
 
                     list.innerHTML += `
@@ -1197,9 +1206,6 @@
 
         function seansTarihKaydir(y) { seciliTarih.setDate(seciliTarih.getDate() + y); seanslarTablosunuYenile(); }
 
-        // ==========================================
-        // KASA & ÖDEMELER
-        // ==========================================
         function kasaPeriyotDegistir(p) {
             kasaAktifPeriyot = p;
             document.querySelectorAll('.kasa-periyot-btn').forEach(b => {
@@ -1307,9 +1313,6 @@
             }
         }
 
-        // ==========================================
-        // DANIŞAN REHBERİ
-        // ==========================================
         function danisanRehberiniCiz() {
             let db = AsistDB.get();
             const tbody = document.getElementById('danisan-rehber-body');
@@ -1398,9 +1401,6 @@
             danisanRehberiniCiz();
         }
 
-        // ==========================================
-        // DANIŞAN DETAY PENCERESİ (İPTALSİZ VE SONDAN BAŞLAYAN NUMARALANDIRMA)
-        // ==========================================
         function danisanDetayAc(id) {
             let db = AsistDB.get();
             let d = db.danisanlar.find(x => x.id === id);
@@ -1457,9 +1457,6 @@
 
         function danisanDetayModalKapat() { document.getElementById('danisan-detay-modal').classList.add('hidden'); }
 
-        // ==========================================
-        // OFİS MASRAFLARI
-        // ==========================================
         function masrafFormunuAc() { document.getElementById('masraf-form-card').classList.remove('hidden'); }
 
         function masrafKaydet(e) {
@@ -1514,9 +1511,6 @@
             masraflariListele();
         }
 
-        // ==========================================
-        // KURUMSAL FİRMA EXCEL İNDİRME
-        // ==========================================
         function firmaZamanFiltrele(p) {
             firmaAktifPeriyot = p;
             document.querySelectorAll('.firma-flt-btn').forEach(b => {
@@ -1646,67 +1640,6 @@
             document.body.removeChild(link);
         }
 
-        // ==========================================
-        // DİĞER MODALLAR VE RANDEVU YÖNETİMİ
-        // ==========================================
-        function asistanHizmetTuruDegisti(tur) {
-            tarihVeyaSaatDegisti();
-            const lblAd = document.getElementById('lbl-danisan-ad');
-            const lblTel = document.getElementById('lbl-danisan-tel');
-            const inpTel = document.getElementById('input-danisan-tel');
-            const ikinciKapsayici = document.getElementById('asistan-ikinci-danisan-kapsayici');
-            const ebeveynKapsayici = document.getElementById('asistan-ebeveyn-kapsayici');
-
-            let seciliId = parseInt(document.getElementById('secili-danisan-id').value, 10);
-            let db = seciliId ? AsistDB.get() : null;
-            let d = (db && seciliId) ? db.danisanlar.find(x => x.id === seciliId) : null;
-
-            if (tur === 'Çocuk') {
-                lblAd.innerText = "3. Danışan Adı Soyadı (Çocuk Adı Soyadı)";
-                lblTel.innerHTML = `4. Telefon Numarası <span class="text-[10px] font-normal text-slate-400">(İsteğe Bağlı)</span>`;
-                inpTel.required = false;
-                ikinciKapsayici.classList.add('hidden');
-                ebeveynKapsayici.classList.remove('hidden');
-                if (d) {
-                    document.getElementById('input-anne-ad').value = d.anneAd || '';
-                    document.getElementById('input-anne-tel').value = normalizeTelefon10Hane(d.anneTel);
-                    document.getElementById('input-baba-ad').value = d.babaAd || '';
-                    document.getElementById('input-baba-tel').value = normalizeTelefon10Hane(d.babaTel);
-                }
-            } else if (tur === 'Ergen') {
-                lblAd.innerText = "3. Danışan Adı Soyadı (Ergen Adı Soyadı)";
-                lblTel.innerHTML = `4. Telefon Numarası <span class="text-[10px] font-normal text-slate-400">(İsteğe Bağlı)</span>`;
-                inpTel.required = false;
-                ikinciKapsayici.classList.add('hidden');
-                ebeveynKapsayici.classList.remove('hidden');
-                if (d) {
-                    document.getElementById('input-anne-ad').value = d.anneAd || '';
-                    document.getElementById('input-anne-tel').value = normalizeTelefon10Hane(d.anneTel);
-                    document.getElementById('input-baba-ad').value = d.babaAd || '';
-                    document.getElementById('input-baba-tel').value = normalizeTelefon10Hane(d.babaTel);
-                }
-            } else if (tur === 'Çift') {
-                lblAd.innerText = "3. Danışan Adı Soyadı (1. Danışan)";
-                lblTel.innerText = "4. Telefon Numarası (10 Hane)";
-                inpTel.required = true;
-                ebeveynKapsayici.classList.add('hidden');
-                ikinciKapsayici.classList.remove('hidden');
-                if (d && d.esDanisanId) {
-                    let es = db.danisanlar.find(x => x.id === d.esDanisanId);
-                    if (es) {
-                        document.getElementById('input-ikinci-danisan-ad').value = es.ad || '';
-                        document.getElementById('input-ikinci-danisan-tel').value = normalizeTelefon10Hane(es.tel);
-                    }
-                }
-            } else {
-                lblAd.innerText = "3. Danışan Adı Soyadı";
-                lblTel.innerText = "4. Telefon Numarası (10 Hane)";
-                inpTel.required = true;
-                ikinciKapsayici.classList.add('hidden');
-                ebeveynKapsayici.classList.add('hidden');
-            }
-        }
-
         function musaittlikSorgula(e) {
             e.preventDefault();
             let db = AsistDB.get();
@@ -1716,10 +1649,13 @@
             let tarih = document.getElementById('input-tarih').value;
             let saat = document.getElementById('input-saat').value;
 
-            secilenUzmanId = null; secilenOdaId = null;
+            secilenUzmanId = null; 
+            secilenOdaId = null;
             document.getElementById('secim-uzman-yazi').innerText = "Seçilmedi";
+            document.getElementById('secim-uzman-yazi').className = "text-slate-400 italic";
             document.getElementById('secim-oda-yazi').innerText = "Seçilmedi";
-            document.getElementById('btn-onayla').disabled = true;
+            document.getElementById('secim-oda-yazi').className = "text-slate-400 italic";
+            kontrolOnayButon();
 
             document.getElementById('ozet-tarih-saat').innerText = `${tarih} • ${saat}`;
 
@@ -1743,13 +1679,14 @@
 
                 let card = document.createElement('div');
                 if (uygun) {
-                    card.className = `uzman-kart border-2 ${takipEden ? 'border-amber-500 bg-amber-50/70' : 'border-emerald-500 bg-emerald-50/60'} p-3 rounded-2xl cursor-pointer hover:bg-emerald-100/70`;
+                    card.className = `uzman-kart border-2 ${takipEden ? 'border-amber-500 bg-amber-50/70' : 'border-emerald-500 bg-emerald-50/60'} p-3 rounded-2xl cursor-pointer hover:bg-emerald-100/70 transition`;
                     card.onclick = function() {
                         secilenUzmanId = u.id;
-                        document.querySelectorAll('.uzman-kart').forEach(k => k.classList.remove('ring-4', 'ring-[#256839]'));
-                        this.classList.add('ring-4', 'ring-[#256839]');
+                        document.querySelectorAll('.uzman-kart').forEach(k => k.classList.remove('ring-4', 'ring-[#256839]', 'bg-emerald-200'));
+                        this.classList.add('ring-4', 'ring-[#256839]', 'bg-emerald-200');
                         document.getElementById('secim-uzman-yazi').innerText = u.ad;
-                        if (secilenOdaId) document.getElementById('btn-onayla').disabled = false;
+                        document.getElementById('secim-uzman-yazi').className = "text-[#256839] font-black";
+                        kontrolOnayButon();
                     };
                     card.innerHTML = `${rozet}<span class="font-extrabold text-slate-900 block">${escapeHTML(u.ad)}</span><span class="text-[10px] text-emerald-800 font-bold">✅ Müsait</span>`;
                 } else {
@@ -1766,13 +1703,14 @@
                 let dolu = db.seanslar.some(s => s.subeId === AKTIF_SUBE_ID && s.tarih === tarih && s.saat === saat && s.odaId === oda.id && s.durum !== 'iptal');
                 let card = document.createElement('div');
                 if (!dolu) {
-                    card.className = "oda-kart border-2 border-emerald-500 bg-emerald-50/60 p-4 rounded-2xl text-center cursor-pointer hover:bg-emerald-100/70";
+                    card.className = "oda-kart border-2 border-emerald-500 bg-emerald-50/60 p-4 rounded-2xl text-center cursor-pointer hover:bg-emerald-100/70 transition";
                     card.onclick = function() {
                         secilenOdaId = oda.id;
-                        document.querySelectorAll('.oda-kart').forEach(k => k.classList.remove('ring-4', 'ring-[#256839]'));
-                        this.classList.add('ring-4', 'ring-[#256839]');
+                        document.querySelectorAll('.oda-kart').forEach(k => k.classList.remove('ring-4', 'ring-[#256839]', 'bg-emerald-200'));
+                        this.classList.add('ring-4', 'ring-[#256839]', 'bg-emerald-200');
                         document.getElementById('secim-oda-yazi').innerText = oda.adi;
-                        if (secilenUzmanId) document.getElementById('btn-onayla').disabled = false;
+                        document.getElementById('secim-oda-yazi').className = "text-[#256839] font-black";
+                        kontrolOnayButon();
                     };
                     card.innerHTML = `<h4 class="font-extrabold text-slate-900 text-xs">${escapeHTML(oda.adi)}</h4><span class="text-[10px] text-emerald-800 font-bold">✅ Boş Oda</span>`;
                 } else {
@@ -2121,6 +2059,72 @@
             AsistDB.save(db);
             tarihSaatModalKapat();
             tumGorunumleriYenile();
+        }
+
+        window.onload = function() {
+            let db = AsistDB.get();
+            let urlParams = new URLSearchParams(window.location.search);
+
+            if (AKTIF_OTURUM && AKTIF_OTURUM.rol === 'asistan') {
+                AKTIF_SUBE_ID = AKTIF_OTURUM.subeId || 1;
+            } else if (urlParams.get('subeId')) {
+                AKTIF_SUBE_ID = parseInt(urlParams.get('subeId'), 10);
+            }
+
+            let aktifSube = db.subeler.find(s => s.id === AKTIF_SUBE_ID) || db.subeler[0];
+            AKTIF_SUBE_ID = aktifSube.id;
+
+            document.getElementById('aktif-asistan-subesi').innerText = aktifSube.adi;
+            document.getElementById('txt-aktif-sube-gorusmeler').innerText = aktifSube.adi;
+            document.getElementById('txt-aktif-sube-odalar').innerText = aktifSube.adi;
+            document.getElementById('txt-aktif-sube-takvim').innerText = aktifSube.adi;
+
+            if (AKTIF_OTURUM) {
+                document.getElementById('aktif-asistan-ad').innerText = AKTIF_OTURUM.ad;
+                if (AKTIF_OTURUM.rol === 'yonetici') {
+                    document.getElementById('aktif-asistan-rol').innerText = "Yönetici Gözlem Modu";
+                    document.getElementById('yonetici-gozlem-kutusu').classList.remove('hidden');
+                } else {
+                    document.getElementById('aktif-asistan-rol').innerText = `${aktifSube.adi} Asistanı`;
+                }
+            }
+
+            let bugunISO = formatTarihISO(seciliTarih);
+            let ayBasiISO = `${seciliTarih.getFullYear()}-${String(seciliTarih.getMonth() + 1).padStart(2, '0')}-01`;
+
+            if(document.getElementById('input-tarih')) document.getElementById('input-tarih').value = bugunISO;
+            if(document.getElementById('input-masraf-tarih')) document.getElementById('input-masraf-tarih').value = bugunISO;
+            if(document.getElementById('seans-ozel-baslangic')) document.getElementById('seans-ozel-baslangic').value = ayBasiISO;
+            if(document.getElementById('seans-ozel-bitis')) document.getElementById('seans-ozel-bitis').value = bugunISO;
+            if(document.getElementById('kasa-ozel-baslangic')) document.getElementById('kasa-ozel-baslangic').value = ayBasiISO;
+            if(document.getElementById('kasa-ozel-bitis')) document.getElementById('kasa-ozel-bitis').value = bugunISO;
+            if(document.getElementById('firma-ozel-baslangic')) document.getElementById('firma-ozel-baslangic').value = ayBasiISO;
+            if(document.getElementById('firma-ozel-bitis')) document.getElementById('firma-ozel-bitis').value = bugunISO;
+
+            akilliVarsayilanSaatAyarla();
+            kontrolOnayButon();
+            tumGorunumleriYenile();
+        };
+
+        window.addEventListener('asist-db-updated', function() { tumGorunumleriYenile(); });
+        window.addEventListener('storage', function(e) { if (!e.key || e.key.startsWith('ASIST_PSIKOLOG_CENTRAL_DB')) tumGorunumleriYenile(); });
+
+        document.addEventListener('click', function(e) {
+            const adKutu = document.getElementById('oneri-kutusu-ad');
+            const telKutu = document.getElementById('oneri-kutusu-tel');
+            if (adKutu && !adKutu.contains(e.target) && e.target.id !== 'input-danisan-ad') adKutu.classList.add('hidden');
+            if (telKutu && !telKutu.contains(e.target) && e.target.id !== 'input-danisan-tel') telKutu.classList.add('hidden');
+        });
+
+        function firmaSecenekleriniDoldur() {
+            let db = AsistDB.get();
+            const sel1 = document.getElementById('input-kurumsal-firma-id');
+            const sel2 = document.getElementById('modal-firma-id');
+            if(!sel1 || !sel2) return;
+            let subeFirmalari = (db.firmalar || []).filter(f => f.durum === 'aktif' && f.subeIds.includes(AKTIF_SUBE_ID));
+            let html = subeFirmalari.map(f => `<option value="${f.id}">${escapeHTML(f.adi)}</option>`).join('');
+            sel1.innerHTML = html;
+            sel2.innerHTML = html;
         }
     </script>
 </body>
