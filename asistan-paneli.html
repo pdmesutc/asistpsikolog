@@ -106,9 +106,9 @@
         </button>
     </nav>
 
-    <!-- MOBİL "MENÜ / DİĞER MODÜLLER" BOTTOM SHEET (Kasa, Masraflar, Kurumsal Rapor) -->
+    <!-- MOBİL "MENÜ / DİĞER MODÜLLER" BOTTOM SHEET -->
     <div id="mobil-daha-fazla-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-end justify-center md:hidden">
-        <div class="bg-white w-full rounded-t-3xl p-5 space-y-3.5 shadow-2xl">
+        <div class="bg-white w-full rounded-t-3xl p-5 space-y-3.5 shadow-2xl animate-in slide-in-from-bottom duration-200">
             <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-1"></div>
             <div class="flex items-center justify-between pb-2 border-b border-slate-100">
                 <span class="font-extrabold text-slate-900 text-sm">Diğer Modüller & İşlemler</span>
@@ -379,18 +379,24 @@
             </div>
         </div>
 
-        <!-- 3. TAKVİM (Masaüstü ve Alt Bardaki Oda/Saat Sekmesinden Açılır) -->
-        <div id="asekm-takvim" class="asistan-sekme hidden space-y-6">
-            <div class="bg-white p-5 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-5">
+        <!-- 3. TAKVİM (Masaüstü ve Alt Bardaki Oda/Saat Butonundan Açılır) -->
+        <div id="asekm-takvim" class="asistan-sekme hidden space-y-4 sm:space-y-6">
+            <div class="bg-white p-4 sm:p-7 rounded-3xl border border-slate-200 shadow-xs space-y-4">
                 <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-                    <h2 class="text-xl font-extrabold text-slate-900">Oda & Saat Randevu Takvimi</h2>
-                    <span id="txt-aktif-sube-takvim" class="text-xs text-slate-500 font-bold"></span>
+                    <div>
+                        <h2 class="text-lg sm:text-xl font-extrabold text-slate-900">Oda & Saat Randevu Takvimi</h2>
+                        <span id="txt-aktif-sube-takvim" class="text-xs text-slate-500 font-bold"></span>
+                    </div>
                 </div>
-                <div class="bg-slate-50 p-2.5 sm:p-3 rounded-2xl border border-slate-200 flex items-center justify-between text-xs">
-                    <button onclick="takvimTarihKaydir(-1)" class="w-9 h-9 rounded-xl bg-white border cursor-pointer hover:bg-slate-100 flex items-center justify-center"><i class="fa-solid fa-chevron-left text-xs"></i></button>
+
+                <!-- Tarih Gezgini -->
+                <div class="bg-slate-50 p-2 rounded-2xl border border-slate-200 flex items-center justify-between text-xs">
+                    <button onclick="takvimTarihKaydir(-1)" class="w-10 h-9 rounded-xl bg-white border border-slate-200 text-slate-700 flex items-center justify-center cursor-pointer hover:bg-slate-100 transition"><i class="fa-solid fa-chevron-left text-xs"></i></button>
                     <div class="px-2 font-extrabold text-slate-900 text-xs text-center truncate flex-1" id="takvim-aktif-tarih-etiket"></div>
-                    <button onclick="takvimTarihKaydir(1)" class="w-9 h-9 rounded-xl bg-white border cursor-pointer hover:bg-slate-100 flex items-center justify-center"><i class="fa-solid fa-chevron-right text-xs"></i></button>
+                    <button onclick="takvimTarihKaydir(1)" class="w-10 h-9 rounded-xl bg-white border border-slate-200 text-slate-700 flex items-center justify-center cursor-pointer hover:bg-slate-100 transition"><i class="fa-solid fa-chevron-right text-xs"></i></button>
                 </div>
+
+                <!-- MATRİS TABLOSU: SAAT SÜTUNU DARALTILDI, TAŞMA ENGELLENDİ -->
                 <div class="overflow-x-auto border border-slate-200 rounded-2xl shadow-2xs">
                     <table class="w-full table-fixed text-left border-collapse text-xs">
                         <thead><tr id="takvim-tablo-basliklari" class="bg-slate-50 border-b font-extrabold"></tr></thead>
@@ -427,7 +433,7 @@
             </div>
         </div>
 
-        <!-- 5. KASA & ÖDEMELER (MOBİLDE 1-2 YANYANA, 3-4 YANYANA, 5 ALTA) -->
+        <!-- 5. KASA & ÖDEMELER (MASRAF ENTEGRASYONLU VE DENGELİ MOBİL KARTLI) -->
         <div id="asekm-kasa" class="asistan-sekme hidden space-y-4 sm:space-y-6">
             <div class="bg-white p-5 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-5">
                 
@@ -442,10 +448,11 @@
                 <div class="flex items-center justify-between pb-3 border-b border-slate-100">
                     <div>
                         <h2 class="text-xl font-extrabold text-slate-900">Kasa & Ödemeler</h2>
-                        <p class="text-xs text-slate-500">Ofis net payı, KDV tutarı ve tahsilat dağılımı.</p>
+                        <p class="text-xs text-slate-500">Ofis net payı, KDV tutarı, masraf düşümü ve tahsilat dağılımı.</p>
                     </div>
                 </div>
 
+                <!-- Tarih Şeridi -->
                 <div class="bg-slate-50 p-3 sm:p-4 rounded-2xl border border-slate-200 space-y-2.5 text-xs">
                     <div class="grid grid-cols-4 gap-1 bg-white p-1 rounded-xl border border-slate-200 shadow-2xs">
                         <button onclick="kasaPeriyotDegistir('gun')" id="kflt-gun" class="kasa-periyot-btn py-2 text-center rounded-lg font-bold transition bg-[#256839] text-white shadow-xs cursor-pointer">Gün</button>
@@ -475,31 +482,26 @@
 
                 <!-- 5 KASA METRİĞİ (DENGELİ MOBİL YERLEŞİM: 1-2 Yan Yana, 3-4 Yan Yana, 5 Alta) -->
                 <div class="grid grid-cols-2 lg:grid-cols-5 gap-3">
-                    <!-- KUTU 1 -->
                     <div class="bg-emerald-50/70 p-4 rounded-2xl border border-emerald-200 flex flex-col justify-between">
-                        <span class="text-[10px] font-bold text-emerald-800 block uppercase truncate">1. Ofis Net Payı</span>
+                        <span class="text-[10px] font-bold text-emerald-800 block uppercase truncate">1. Ofis Net Saf Kâr</span>
                         <h4 id="kasa-ofis-payi" class="text-xl sm:text-2xl font-black text-[#256839] my-1">₺0</h4>
-                        <span class="text-[10px] text-emerald-700 block truncate">KDV Hariç Net</span>
+                        <span class="text-[10px] text-emerald-700 block truncate" id="kasa-ofis-masraf-detay">Masraf Düşülmüş Net</span>
                     </div>
-                    <!-- KUTU 2 -->
                     <div class="bg-amber-50/80 p-4 rounded-2xl border border-amber-200 flex flex-col justify-between">
                         <span class="text-[10px] font-bold text-amber-800 block uppercase truncate">2. Ayrılan KDV</span>
                         <h4 id="kasa-kdv-toplam" class="text-xl sm:text-2xl font-black text-amber-900 my-1">₺0</h4>
                         <span class="text-[10px] text-amber-700 block truncate">Vergi Emaneti</span>
                     </div>
-                    <!-- KUTU 3 -->
                     <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex flex-col justify-between">
                         <span class="text-[10px] font-bold text-slate-500 block uppercase truncate">3. Uzman Payı</span>
                         <h4 id="kasa-uzman-odemesi" class="text-xl sm:text-2xl font-black text-slate-800 my-1">₺0</h4>
                         <span class="text-[10px] text-slate-400 block truncate">Hak Edişler</span>
                     </div>
-                    <!-- KUTU 4 -->
                     <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex flex-col justify-between">
                         <span class="text-[10px] font-bold text-slate-500 block uppercase truncate">4. Nakit / Havale</span>
                         <p class="text-xs sm:text-sm font-black my-1 text-slate-800 truncate" id="kasa-nakit-havale-ozet">₺0 / ₺0</p>
                         <span class="text-[10px] text-slate-400 block truncate">Kanal Dağılımı</span>
                     </div>
-                    <!-- KUTU 5 (Mobilde 2 sütun genişliğinde tam satır, Desktopta 1 kolon) -->
                     <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 col-span-2 lg:col-span-1 flex flex-col justify-between">
                         <span class="text-[10px] font-bold text-slate-500 block uppercase truncate">5. Fiziki Kasa (Brüt)</span>
                         <h4 id="kasa-toplam-tahsilat" class="text-2xl font-black text-slate-900 my-1">₺0</h4>
@@ -507,6 +509,21 @@
                     </div>
                 </div>
 
+                <!-- BU DÖNEME AİT OFİS MASRAFLARI ÖZETİ (KASAYA ANINDA YANSIYAN GİDERLER) -->
+                <div class="border border-amber-200 bg-amber-50/40 rounded-2xl overflow-hidden shadow-2xs">
+                    <div class="px-4 py-2.5 bg-amber-100/70 border-b border-amber-200 flex items-center justify-between text-xs">
+                        <span class="font-extrabold text-amber-950 flex items-center">
+                            <i class="fa-solid fa-receipt mr-1.5 text-amber-700"></i>Bu Döneme Ait Masraflar (Giderler)
+                        </span>
+                        <div class="flex items-center space-x-2">
+                            <strong id="kasa-donem-masraf-toplam" class="text-amber-950 font-black text-sm">₺0</strong>
+                            <button onclick="asistanSekmeDegistir('masraflar')" class="text-[10px] font-extrabold text-amber-800 bg-white px-2 py-0.5 rounded-lg border border-amber-200 hover:bg-amber-50 cursor-pointer">+ Ekle</button>
+                        </div>
+                    </div>
+                    <div id="kasa-masraf-ozet-listesi" class="divide-y divide-amber-100 text-xs"></div>
+                </div>
+
+                <!-- Uzman Dağıtım Listesi -->
                 <div class="border border-slate-200 rounded-2xl overflow-hidden shadow-2xs">
                     <div class="bg-slate-50 px-4 py-3 border-b border-slate-200 font-extrabold text-xs text-slate-800 flex items-center justify-between">
                         <span>Uzmanlara Dağıtılacak Hak Ediş Listesi</span>
@@ -1073,7 +1090,7 @@
                 aktifBtn.classList.add('bg-[#256839]', 'text-white', 'shadow-xs');
             }
 
-            // Mobil Alt Menü Aktif Renk Güncellemesi: Görüşme, Randevu, Takvim (Oda/Saat), Danışanlar (Rehber), Menü
+            // Alt Bar Butonları: Görüşme, Randevu, Takvim (Oda/Saat), Danışanlar (Rehber), Menü
             document.querySelectorAll('.mobile-nav-btn').forEach(mbtn => {
                 mbtn.classList.remove('text-[#256839]', 'font-black');
                 mbtn.classList.add('text-slate-400', 'font-bold');
@@ -1210,6 +1227,9 @@
 
         function seansTarihKaydir(y) { seciliTarih.setDate(seciliTarih.getDate() + y); seanslarTablosunuYenile(); }
 
+        // ==========================================
+        // KASA & ÖDEMELER (MASRAF DÜŞÜMLÜ VE GİDER DÖKÜMLÜ HESAPLAMA)
+        // ==========================================
         function kasaPeriyotDegistir(p) {
             kasaAktifPeriyot = p;
             document.querySelectorAll('.kasa-periyot-btn').forEach(b => {
@@ -1245,22 +1265,31 @@
             }
 
             let filtrelenmis = subeSeanslari.filter(s => s.durum === 'odendi' && s.basvuruTuru !== 'firma');
+            let subeMasraflari = (db.masraflar || []).filter(m => m.subeId === AKTIF_SUBE_ID);
+            let filtrelenmisMasraflar = [];
 
             if (kasaAktifPeriyot === 'gun') {
-                filtrelenmis = filtrelenmis.filter(s => s.tarih === formatTarihISO(kasaSeciliTarih));
+                let seciliISO = formatTarihISO(kasaSeciliTarih);
+                filtrelenmis = filtrelenmis.filter(s => s.tarih === seciliISO);
+                filtrelenmisMasraflar = subeMasraflari.filter(m => m.tarih === seciliISO);
             } else if (kasaAktifPeriyot === 'hafta') {
                 let aralik = getHaftaAraligi(kasaSeciliTarih);
                 filtrelenmis = filtrelenmis.filter(s => s.tarih >= aralik.baslangic && s.tarih <= aralik.bitis);
+                filtrelenmisMasraflar = subeMasraflari.filter(m => m.tarih >= aralik.baslangic && m.tarih <= aralik.bitis);
             } else if (kasaAktifPeriyot === 'ay') {
                 let ayPrefix = `${kasaSeciliTarih.getFullYear()}-${String(kasaSeciliTarih.getMonth() + 1).padStart(2, '0')}`;
                 filtrelenmis = filtrelenmis.filter(s => s.tarih.startsWith(ayPrefix));
+                filtrelenmisMasraflar = subeMasraflari.filter(m => m.tarih && m.tarih.startsWith(ayPrefix));
             } else if (kasaAktifPeriyot === 'ozel') {
                 let bas = document.getElementById('kasa-ozel-baslangic').value;
                 let bit = document.getElementById('kasa-ozel-bitis').value;
-                if(bas && bit) filtrelenmis = filtrelenmis.filter(s => s.tarih >= bas && s.tarih <= bit);
+                if(bas && bit) {
+                    filtrelenmis = filtrelenmis.filter(s => s.tarih >= bas && s.tarih <= bit);
+                    filtrelenmisMasraflar = subeMasraflari.filter(m => m.tarih >= bas && m.tarih <= bit);
+                }
             }
 
-            let toplamCiro = 0, nakit = 0, havale = 0, toplamKdv = 0, ofisNet = 0, uzmanPayiToplam = 0;
+            let toplamCiro = 0, nakit = 0, havale = 0, toplamKdv = 0, ofisNetBrut = 0, uzmanPayiToplam = 0;
             let map = {};
 
             filtrelenmis.forEach(s => {
@@ -1268,7 +1297,7 @@
                 toplamCiro += f.brut;
                 if (s.odemeTipi === 'nakit') nakit += f.brut; else havale += f.brut;
                 toplamKdv += f.kdvTutari;
-                ofisNet += f.ofisPay;
+                ofisNetBrut += f.ofisPay;
                 uzmanPayiToplam += f.uzmanPay;
 
                 let uzKey = `uz_${s.uzmanId}`;
@@ -1283,15 +1312,51 @@
                 map[uzKey].ofis += f.ofisPay;
             });
 
-            document.getElementById('kasa-ofis-payi').innerText = '₺' + ofisNet.toLocaleString('tr-TR');
+            // MASRAFLARI DÜŞ VE SAF NET KÂRI HESAPLA
+            let donemMasrafToplam = filtrelenmisMasraflar.reduce((acc, m) => acc + numOrDefault(m.tutar, 0), 0);
+            let ofisNetSafKar = ofisNetBrut - donemMasrafToplam;
+
+            // 1. Ofis Net Saf Kâr
+            document.getElementById('kasa-ofis-payi').innerText = '₺' + ofisNetSafKar.toLocaleString('tr-TR');
+            document.getElementById('kasa-ofis-masraf-detay').innerText = donemMasrafToplam > 0
+                ? `Brüt: ₺${ofisNetBrut.toLocaleString('tr-TR')} • Gider: -₺${donemMasrafToplam.toLocaleString('tr-TR')}`
+                : 'Gider Yok • Net Kâr';
+
+            // 2. KDV
             document.getElementById('kasa-kdv-toplam').innerText = '₺' + toplamKdv.toLocaleString('tr-TR');
+            // 3. Uzman Payı
             document.getElementById('kasa-uzman-odemesi').innerText = '₺' + uzmanPayiToplam.toLocaleString('tr-TR');
+            // 4. Nakit / Havale
             document.getElementById('kasa-nakit-havale-ozet').innerText = `₺${nakit.toLocaleString('tr-TR')} / ₺${havale.toLocaleString('tr-TR')}`;
+            // 5. Fiziki Kasa
             document.getElementById('kasa-toplam-tahsilat').innerText = '₺' + toplamCiro.toLocaleString('tr-TR');
 
             document.getElementById('kasa-sayac-seans').innerText = `${filtrelenmis.length} Tahsil Edildi`;
             document.getElementById('kasa-sayac-uzman').innerText = `${Object.keys(map).length} Uzman`;
 
+            // Bu Dönemki Masraflar Kutusu
+            document.getElementById('kasa-donem-masraf-toplam').innerText = '₺' + donemMasrafToplam.toLocaleString('tr-TR');
+            const masrafOzetList = document.getElementById('kasa-masraf-ozet-listesi');
+            if (masrafOzetList) {
+                masrafOzetList.innerHTML = '';
+                if (filtrelenmisMasraflar.length === 0) {
+                    masrafOzetList.innerHTML = `<div class="p-3 text-center text-slate-400 italic">Bu döneme ait girilmiş masraf kaydı bulunmuyor.</div>`;
+                } else {
+                    filtrelenmisMasraflar.forEach(m => {
+                        masrafOzetList.innerHTML += `
+                            <div class="flex justify-between items-center p-2.5 bg-white text-xs">
+                                <div>
+                                    <span class="font-extrabold text-slate-800">${escapeHTML(m.ad)}</span>
+                                    <span class="text-slate-400 text-[10px] block">${escapeHTML(m.tarih)}</span>
+                                </div>
+                                <strong class="text-amber-900 font-extrabold">-₺${numOrDefault(m.tutar, 0).toLocaleString('tr-TR')}</strong>
+                            </div>
+                        `;
+                    });
+                }
+            }
+
+            // Uzman Dağıtım Listesi
             const container = document.getElementById('kasa-uzman-dagitim-listesi');
             if(!container) return;
             container.innerHTML = '';
@@ -1305,7 +1370,7 @@
                         <div class="flex justify-between items-center p-3.5 bg-white text-xs">
                             <div>
                                 <span class="font-extrabold text-slate-900">${escapeHTML(it.ad)} <span class="text-slate-400">(${it.adet} Seans)</span></span>
-                                <span class="text-slate-500 block text-[10px]">Brüt: ₺${it.brut.toLocaleString('tr-TR')} • KDV: ₺${it.kdv.toLocaleString('tr-TR')} • Ofis Net: ₺${it.ofis.toLocaleString('tr-TR')}</span>
+                                <span class="text-slate-500 block text-[10px]">Brüt: ₺${it.brut.toLocaleString('tr-TR')} • KDV: ₺${it.kdv.toLocaleString('tr-TR')} • Ofis Payı: ₺${it.ofis.toLocaleString('tr-TR')}</span>
                             </div>
                             <div class="text-right">
                                 <span class="text-[10px] text-slate-400 block">Uzman Hak Ediş</span>
@@ -1317,6 +1382,9 @@
             }
         }
 
+        // ==========================================
+        // DANIŞAN REHBERİ
+        // ==========================================
         function danisanRehberiniCiz() {
             let db = AsistDB.get();
             const tbody = document.getElementById('danisan-rehber-body');
@@ -1478,6 +1546,7 @@
             document.getElementById('input-masraf-ad').value = '';
             document.getElementById('input-masraf-tutar').value = '';
             masraflariListele();
+            kasaHesapla();
             alert("✅ Masraf kaydedildi!");
         }
 
@@ -1513,6 +1582,7 @@
             db.masraflar = (db.masraflar || []).filter(m => m.id !== id);
             AsistDB.save(db);
             masraflariListele();
+            kasaHesapla();
         }
 
         function firmaZamanFiltrele(p) {
@@ -1642,6 +1712,125 @@
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+        }
+
+        // ==========================================
+        // DÜZELTİLMİŞ ODA VE SAAT TAKVİM MATRİSİ (DARALTILMIŞ SAAT, TAŞMAYAN HÜCRELER)
+        // ==========================================
+        function takvimTarihKaydir(yon) { takvimSeciliTarih.setDate(takvimSeciliTarih.getDate() + yon); takvimMatrisiniCiz(); }
+
+        function takvimMatrisiniCiz() {
+            let db = AsistDB.get();
+            const theadTr = document.getElementById('takvim-tablo-basliklari');
+            const tbody = document.getElementById('takvim-matris-body');
+            if(!theadTr || !tbody) return;
+            document.getElementById('takvim-aktif-tarih-etiket').innerText = formatTarihTurkce(takvimSeciliTarih);
+            
+            // Saat sütununu w-14 (56px) olarak daraltıyoruz
+            theadTr.innerHTML = '<th class="p-2 w-14 text-center border-r font-extrabold text-slate-700 text-[11px]">Saat</th>';
+            tbody.innerHTML = '';
+
+            let aktifSube = db.subeler.find(s => s.id === AKTIF_SUBE_ID);
+            let odalar = aktifSube ? (aktifSube.odalar || []) : [];
+            odalar.forEach(oda => {
+                let th = document.createElement('th');
+                th.className = "p-2 text-center font-extrabold text-slate-800 border-r last:border-r-0 text-[11px] truncate";
+                th.innerText = oda.adi;
+                theadTr.appendChild(th);
+            });
+
+            const saatler = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00"];
+            let seciliISO = formatTarihISO(takvimSeciliTarih);
+
+            saatler.forEach(saat => {
+                let tr = document.createElement('tr');
+                let html = `<td class="p-2 text-center font-bold bg-slate-50 border-r border-slate-200 text-[11px] text-slate-700 w-14">${saat}</td>`;
+                
+                odalar.forEach(oda => {
+                    let seans = db.seanslar.find(s => s.subeId === AKTIF_SUBE_ID && s.saat === saat && s.odaId === oda.id && s.durum !== 'iptal' && s.tarih === seciliISO);
+                    if (seans) {
+                        let res = AsistDB.resolveSeans(seans, db);
+                        // overflow-hidden ve truncate ile hücre dışına taşma engellenmiştir
+                        html += `
+                            <td class="p-1 sm:p-1.5 border-r border-slate-200 align-top overflow-hidden">
+                                <div class="bg-emerald-50 border border-emerald-200 p-1 sm:p-1.5 rounded-xl text-center overflow-hidden">
+                                    <span class="font-extrabold text-slate-900 block text-[10px] sm:text-xs truncate" title="${escapeHTML(res.danisanAdi)}">${escapeHTML(res.danisanAdi)}</span>
+                                    <span class="text-[9px] sm:text-[10px] text-[#256839] font-bold block truncate" title="${escapeHTML(res.uzmanAdi)}">${escapeHTML(res.uzmanAdi)}</span>
+                                </div>
+                            </td>
+                        `;
+                    } else {
+                        html += `
+                            <td class="p-1 sm:p-1.5 border-r border-slate-200 align-top overflow-hidden">
+                                <div class="border border-dashed border-slate-200 p-1 sm:p-1.5 rounded-xl text-center text-slate-300 text-[10px]">Boş</div>
+                            </td>
+                        `;
+                    }
+                });
+                tr.innerHTML = html;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // ==========================================
+        // DİĞER MODALLAR VE RANDEVU YÖNETİMİ
+        // ==========================================
+        function asistanHizmetTuruDegisti(tur) {
+            tarihVeyaSaatDegisti();
+            const lblAd = document.getElementById('lbl-danisan-ad');
+            const lblTel = document.getElementById('lbl-danisan-tel');
+            const inpTel = document.getElementById('input-danisan-tel');
+            const ikinciKapsayici = document.getElementById('asistan-ikinci-danisan-kapsayici');
+            const ebeveynKapsayici = document.getElementById('asistan-ebeveyn-kapsayici');
+
+            let seciliId = parseInt(document.getElementById('secili-danisan-id').value, 10);
+            let db = seciliId ? AsistDB.get() : null;
+            let d = (db && seciliId) ? db.danisanlar.find(x => x.id === seciliId) : null;
+
+            if (tur === 'Çocuk') {
+                lblAd.innerText = "3. Danışan Adı Soyadı (Çocuk Adı Soyadı)";
+                lblTel.innerHTML = `4. Telefon Numarası <span class="text-[10px] font-normal text-slate-400">(İsteğe Bağlı)</span>`;
+                inpTel.required = false;
+                ikinciKapsayici.classList.add('hidden');
+                ebeveynKapsayici.classList.remove('hidden');
+                if (d) {
+                    document.getElementById('input-anne-ad').value = d.anneAd || '';
+                    document.getElementById('input-anne-tel').value = normalizeTelefon10Hane(d.anneTel);
+                    document.getElementById('input-baba-ad').value = d.babaAd || '';
+                    document.getElementById('input-baba-tel').value = normalizeTelefon10Hane(d.babaTel);
+                }
+            } else if (tur === 'Ergen') {
+                lblAd.innerText = "3. Danışan Adı Soyadı (Ergen Adı Soyadı)";
+                lblTel.innerHTML = `4. Telefon Numarası <span class="text-[10px] font-normal text-slate-400">(İsteğe Bağlı)</span>`;
+                inpTel.required = false;
+                ikinciKapsayici.classList.add('hidden');
+                ebeveynKapsayici.classList.remove('hidden');
+                if (d) {
+                    document.getElementById('input-anne-ad').value = d.anneAd || '';
+                    document.getElementById('input-anne-tel').value = normalizeTelefon10Hane(d.anneTel);
+                    document.getElementById('input-baba-ad').value = d.babaAd || '';
+                    document.getElementById('input-baba-tel').value = normalizeTelefon10Hane(d.babaTel);
+                }
+            } else if (tur === 'Çift') {
+                lblAd.innerText = "3. Danışan Adı Soyadı (1. Danışan)";
+                lblTel.innerText = "4. Telefon Numarası (10 Hane)";
+                inpTel.required = true;
+                ebeveynKapsayici.classList.add('hidden');
+                ikinciKapsayici.classList.remove('hidden');
+                if (d && d.esDanisanId) {
+                    let es = db.danisanlar.find(x => x.id === d.esDanisanId);
+                    if (es) {
+                        document.getElementById('input-ikinci-danisan-ad').value = es.ad || '';
+                        document.getElementById('input-ikinci-danisan-tel').value = normalizeTelefon10Hane(es.tel);
+                    }
+                }
+            } else {
+                lblAd.innerText = "3. Danışan Adı Soyadı";
+                lblTel.innerText = "4. Telefon Numarası (10 Hane)";
+                inpTel.required = true;
+                ikinciKapsayici.classList.add('hidden');
+                ebeveynKapsayici.classList.add('hidden');
+            }
         }
 
         function musaittlikSorgula(e) {
@@ -1878,46 +2067,6 @@
 
         function basvuruTuruDegisti(tur) { 
             document.getElementById('alan-kurumsal-firma').classList.toggle('hidden', tur !== 'firma'); 
-        }
-
-        function takvimTarihKaydir(yon) { takvimSeciliTarih.setDate(takvimSeciliTarih.getDate() + yon); takvimMatrisiniCiz(); }
-
-        function takvimMatrisiniCiz() {
-            let db = AsistDB.get();
-            const theadTr = document.getElementById('takvim-tablo-basliklari');
-            const tbody = document.getElementById('takvim-matris-body');
-            if(!theadTr || !tbody) return;
-            document.getElementById('takvim-aktif-tarih-etiket').innerText = formatTarihTurkce(takvimSeciliTarih);
-            theadTr.innerHTML = '<th class="p-3.5 w-24 text-center border-r font-extrabold text-slate-700">Saat</th>';
-            tbody.innerHTML = '';
-
-            let aktifSube = db.subeler.find(s => s.id === AKTIF_SUBE_ID);
-            let odalar = aktifSube ? (aktifSube.odalar || []) : [];
-            odalar.forEach(oda => {
-                let th = document.createElement('th');
-                th.className = "p-3.5 text-center font-extrabold text-slate-800 border-r last:border-r-0";
-                th.innerText = oda.adi;
-                theadTr.appendChild(th);
-            });
-
-            const saatler = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00"];
-            let seciliISO = formatTarihISO(takvimSeciliTarih);
-
-            saatler.forEach(saat => {
-                let tr = document.createElement('tr');
-                let html = `<td class="p-3 text-center font-bold bg-slate-50 border-r border-slate-200">${saat}</td>`;
-                odalar.forEach(oda => {
-                    let seans = db.seanslar.find(s => s.subeId === AKTIF_SUBE_ID && s.saat === saat && s.odaId === oda.id && s.durum !== 'iptal' && s.tarih === seciliISO);
-                    if (seans) {
-                        let res = AsistDB.resolveSeans(seans, db);
-                        html += `<td class="p-2 border-r"><div class="bg-emerald-50 border p-2 rounded-xl text-center"><span class="font-bold block">${escapeHTML(res.danisanAdi)}</span><span class="text-[10px] text-[#256839]">${escapeHTML(res.uzmanAdi)}</span></div></td>`;
-                    } else {
-                        html += `<td class="p-2 border-r"><div class="border border-dashed p-2 rounded-xl text-center text-slate-400 text-[11px]">Boş</div></td>`;
-                    }
-                });
-                tr.innerHTML = html;
-                tbody.appendChild(tr);
-            });
         }
 
         function hizliTahsilat(id) {
