@@ -87,45 +87,42 @@
         </div>
     </aside>
 
-    <!-- MOBİL ALT MENÜ BARI -->
+    <!-- MOBİL ALT MENÜ BARI: Görüşme -> Randevu -> Oda/Saat -> Rehber -> Menü -->
     <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 z-40 flex items-center justify-around py-2 px-1 text-[10px] font-extrabold shadow-lg">
-        <button onclick="asistanSekmeDegistir('bugun')" id="mbtn-bugun" class="mobile-nav-btn flex flex-col items-center py-1 px-2.5 rounded-xl transition text-[#256839] font-black cursor-pointer">
+        <button onclick="asistanSekmeDegistir('bugun')" id="mbtn-bugun" class="mobile-nav-btn flex flex-col items-center py-1 px-1.5 rounded-xl transition text-[#256839] font-black cursor-pointer">
             <i class="fa-solid fa-calendar-day text-base mb-0.5"></i><span>Görüşme</span>
         </button>
-        <button onclick="asistanSekmeDegistir('randevu-olustur')" id="mbtn-randevu-olustur" class="mobile-nav-btn flex flex-col items-center py-1 px-2.5 rounded-xl transition text-slate-400 font-bold cursor-pointer">
+        <button onclick="asistanSekmeDegistir('randevu-olustur')" id="mbtn-randevu-olustur" class="mobile-nav-btn flex flex-col items-center py-1 px-1.5 rounded-xl transition text-slate-400 font-bold cursor-pointer">
             <i class="fa-solid fa-calendar-plus text-base mb-0.5"></i><span>Randevu</span>
         </button>
-        <button onclick="asistanSekmeDegistir('danisanlar')" id="mbtn-danisanlar" class="mobile-nav-btn flex flex-col items-center py-1 px-2.5 rounded-xl transition text-slate-400 font-bold cursor-pointer">
+        <button onclick="asistanSekmeDegistir('takvim')" id="mbtn-takvim" class="mobile-nav-btn flex flex-col items-center py-1 px-1.5 rounded-xl transition text-slate-400 font-bold cursor-pointer">
+            <i class="fa-solid fa-table-cells text-base mb-0.5"></i><span>Oda/Saat</span>
+        </button>
+        <button onclick="asistanSekmeDegistir('danisanlar')" id="mbtn-danisanlar" class="mobile-nav-btn flex flex-col items-center py-1 px-1.5 rounded-xl transition text-slate-400 font-bold cursor-pointer">
             <i class="fa-solid fa-address-book text-base mb-0.5"></i><span>Rehber</span>
         </button>
-        <button onclick="asistanSekmeDegistir('kasa')" id="mbtn-kasa" class="mobile-nav-btn flex flex-col items-center py-1 px-2.5 rounded-xl transition text-slate-400 font-bold cursor-pointer">
-            <i class="fa-solid fa-cash-register text-base mb-0.5"></i><span>Kasa</span>
-        </button>
-        <button onclick="mobilDahaFazlaAc()" id="mbtn-daha-fazla" class="mobile-nav-btn flex flex-col items-center py-1 px-2.5 rounded-xl transition text-slate-400 font-bold cursor-pointer">
-            <i class="fa-solid fa-grid-2 text-base mb-0.5"></i><span>Menü</span>
+        <button onclick="mobilDahaFazlaAc()" id="mbtn-daha-fazla" class="mobile-nav-btn flex flex-col items-center py-1 px-1.5 rounded-xl transition text-slate-400 font-bold cursor-pointer">
+            <i class="fa-solid fa-bars text-base mb-0.5"></i><span>Menü</span>
         </button>
     </nav>
 
-    <!-- MOBİL "DİĞER MODÜLLER" BOTTOM SHEET -->
+    <!-- MOBİL "MENÜ / DİĞER MODÜLLER" BOTTOM SHEET (Kasa, Masraflar, Kurumsal Rapor) -->
     <div id="mobil-daha-fazla-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-end justify-center md:hidden">
         <div class="bg-white w-full rounded-t-3xl p-5 space-y-3.5 shadow-2xl">
             <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-1"></div>
             <div class="flex items-center justify-between pb-2 border-b border-slate-100">
-                <span class="font-extrabold text-slate-900 text-sm">Tüm Modüller & İşlemler</span>
+                <span class="font-extrabold text-slate-900 text-sm">Diğer Modüller & İşlemler</span>
                 <button onclick="mobilDahaFazlaKapat()" class="text-slate-400 p-1 font-bold cursor-pointer"><i class="fa-solid fa-xmark text-base"></i></button>
             </div>
             <div class="grid grid-cols-2 gap-2 text-xs font-bold">
-                <button onclick="mobilModulSec('takvim')" class="p-3 bg-slate-50 hover:bg-emerald-50 rounded-2xl border border-slate-200 flex items-center space-x-2.5 text-slate-800">
-                    <i class="fa-solid fa-table-cells text-[#256839] text-base"></i><span>Oda / Saat Takvimi</span>
+                <button onclick="mobilModulSec('kasa')" class="p-3.5 bg-slate-50 hover:bg-emerald-50 rounded-2xl border border-slate-200 flex items-center space-x-2.5 text-slate-800">
+                    <i class="fa-solid fa-cash-register text-emerald-800 text-base"></i><span>Kasa & Ödemeler</span>
                 </button>
-                <button onclick="mobilModulSec('masraflar')" class="p-3 bg-slate-50 hover:bg-emerald-50 rounded-2xl border border-slate-200 flex items-center space-x-2.5 text-slate-800">
+                <button onclick="mobilModulSec('masraflar')" class="p-3.5 bg-slate-50 hover:bg-emerald-50 rounded-2xl border border-slate-200 flex items-center space-x-2.5 text-slate-800">
                     <i class="fa-solid fa-receipt text-amber-700 text-base"></i><span>Ofis Masrafları</span>
                 </button>
-                <button onclick="mobilModulSec('firma-rapor')" class="p-3 bg-slate-50 hover:bg-emerald-50 rounded-2xl border border-slate-200 flex items-center space-x-2.5 text-slate-800">
-                    <i class="fa-solid fa-building-user text-blue-700 text-base"></i><span>Kurumsal Rapor</span>
-                </button>
-                <button onclick="mobilModulSec('kasa')" class="p-3 bg-slate-50 hover:bg-emerald-50 rounded-2xl border border-slate-200 flex items-center space-x-2.5 text-slate-800">
-                    <i class="fa-solid fa-cash-register text-emerald-800 text-base"></i><span>Kasa & Ödemeler</span>
+                <button onclick="mobilModulSec('firma-rapor')" class="p-3.5 bg-slate-50 hover:bg-emerald-50 rounded-2xl border border-slate-200 flex items-center space-x-2.5 text-slate-800 col-span-2">
+                    <i class="fa-solid fa-building-user text-blue-700 text-base"></i><span>Kurumsal Firma Raporu</span>
                 </button>
             </div>
             <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
@@ -382,7 +379,7 @@
             </div>
         </div>
 
-        <!-- 3. TAKVİM -->
+        <!-- 3. TAKVİM (Masaüstü ve Alt Bardaki Oda/Saat Sekmesinden Açılır) -->
         <div id="asekm-takvim" class="asistan-sekme hidden space-y-6">
             <div class="bg-white p-5 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-5">
                 <div class="flex items-center justify-between pb-3 border-b border-slate-100">
@@ -430,7 +427,7 @@
             </div>
         </div>
 
-        <!-- 5. KASA & ÖDEMELER -->
+        <!-- 5. KASA & ÖDEMELER (MOBİLDE 1-2 YANYANA, 3-4 YANYANA, 5 ALTA) -->
         <div id="asekm-kasa" class="asistan-sekme hidden space-y-4 sm:space-y-6">
             <div class="bg-white p-5 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-5">
                 
@@ -476,32 +473,37 @@
                     </div>
                 </div>
 
-                <!-- 5 KASA METRİĞİ -->
+                <!-- 5 KASA METRİĞİ (DENGELİ MOBİL YERLEŞİM: 1-2 Yan Yana, 3-4 Yan Yana, 5 Alta) -->
                 <div class="grid grid-cols-2 lg:grid-cols-5 gap-3">
-                    <div class="bg-emerald-50/70 p-4 rounded-2xl border border-emerald-200 col-span-2 sm:col-span-1">
-                        <span class="text-[10px] font-bold text-emerald-800 block uppercase">1. Ofis Net Payı</span>
-                        <h4 id="kasa-ofis-payi" class="text-2xl font-black text-[#256839] mt-1">₺0</h4>
-                        <span class="text-[10px] text-emerald-700 block mt-0.5">KDV Hariç Net Kâr</span>
+                    <!-- KUTU 1 -->
+                    <div class="bg-emerald-50/70 p-4 rounded-2xl border border-emerald-200 flex flex-col justify-between">
+                        <span class="text-[10px] font-bold text-emerald-800 block uppercase truncate">1. Ofis Net Payı</span>
+                        <h4 id="kasa-ofis-payi" class="text-xl sm:text-2xl font-black text-[#256839] my-1">₺0</h4>
+                        <span class="text-[10px] text-emerald-700 block truncate">KDV Hariç Net</span>
                     </div>
-                    <div class="bg-amber-50/80 p-4 rounded-2xl border border-amber-200">
-                        <span class="text-[10px] font-bold text-amber-800 block uppercase">2. Ayrılan KDV</span>
-                        <h4 id="kasa-kdv-toplam" class="text-xl sm:text-2xl font-black text-amber-900 mt-1">₺0</h4>
-                        <span class="text-[10px] text-amber-700 block mt-0.5">Vergi Emaneti</span>
+                    <!-- KUTU 2 -->
+                    <div class="bg-amber-50/80 p-4 rounded-2xl border border-amber-200 flex flex-col justify-between">
+                        <span class="text-[10px] font-bold text-amber-800 block uppercase truncate">2. Ayrılan KDV</span>
+                        <h4 id="kasa-kdv-toplam" class="text-xl sm:text-2xl font-black text-amber-900 my-1">₺0</h4>
+                        <span class="text-[10px] text-amber-700 block truncate">Vergi Emaneti</span>
                     </div>
-                    <div class="bg-slate-50 p-4 rounded-2xl border">
-                        <span class="text-[10px] font-bold text-slate-500 block uppercase">3. Uzman Payı</span>
-                        <h4 id="kasa-uzman-odemesi" class="text-xl sm:text-2xl font-black text-slate-800 mt-1">₺0</h4>
-                        <span class="text-[10px] text-slate-400 block mt-0.5">Hak Edişler</span>
+                    <!-- KUTU 3 -->
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex flex-col justify-between">
+                        <span class="text-[10px] font-bold text-slate-500 block uppercase truncate">3. Uzman Payı</span>
+                        <h4 id="kasa-uzman-odemesi" class="text-xl sm:text-2xl font-black text-slate-800 my-1">₺0</h4>
+                        <span class="text-[10px] text-slate-400 block truncate">Hak Edişler</span>
                     </div>
-                    <div class="bg-slate-50 p-4 rounded-2xl border">
-                        <span class="text-[10px] font-bold text-slate-500 block uppercase">4. Nakit / Havale</span>
-                        <p class="text-xs sm:text-sm font-black mt-2 text-slate-800" id="kasa-nakit-havale-ozet">₺0 / ₺0</p>
-                        <span class="text-[10px] text-slate-400 block mt-0.5">Kanal Dağılımı</span>
+                    <!-- KUTU 4 -->
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex flex-col justify-between">
+                        <span class="text-[10px] font-bold text-slate-500 block uppercase truncate">4. Nakit / Havale</span>
+                        <p class="text-xs sm:text-sm font-black my-1 text-slate-800 truncate" id="kasa-nakit-havale-ozet">₺0 / ₺0</p>
+                        <span class="text-[10px] text-slate-400 block truncate">Kanal Dağılımı</span>
                     </div>
-                    <div class="bg-slate-50 p-4 rounded-2xl border col-span-2 sm:col-span-1">
-                        <span class="text-[10px] font-bold text-slate-500 block uppercase">5. Fiziki Kasa (Brüt)</span>
-                        <h4 id="kasa-toplam-tahsilat" class="text-2xl font-black text-slate-900 mt-1">₺0</h4>
-                        <span class="text-[10px] text-slate-400 block mt-0.5">Giren Toplam</span>
+                    <!-- KUTU 5 (Mobilde 2 sütun genişliğinde tam satır, Desktopta 1 kolon) -->
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 col-span-2 lg:col-span-1 flex flex-col justify-between">
+                        <span class="text-[10px] font-bold text-slate-500 block uppercase truncate">5. Fiziki Kasa (Brüt)</span>
+                        <h4 id="kasa-toplam-tahsilat" class="text-2xl font-black text-slate-900 my-1">₺0</h4>
+                        <span class="text-[10px] text-slate-400 block truncate">Kasaya Giren Toplam</span>
                     </div>
                 </div>
 
@@ -908,8 +910,6 @@
 
         function kontrolOnayButon() {
             const btn = document.getElementById('btn-onayla');
-            const secimUzmanYazi = document.getElementById('secim-uzman-yazi');
-            const secimOdaYazi = document.getElementById('secim-oda-yazi');
             if (!btn) return;
 
             if (secilenUzmanId && secilenOdaId) {
@@ -1057,6 +1057,9 @@
             asistanSekmeDegistir(sekmeAdi);
         }
 
+        // ==========================================
+        // DÜZELTİLMİŞ SEKME VE ALT MENÜ BUTON YÖNETİMİ
+        // ==========================================
         function asistanSekmeDegistir(sekmeAdi) {
             document.querySelectorAll('.asistan-sekme').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.asistan-nav-btn').forEach(btn => {
@@ -1070,12 +1073,13 @@
                 aktifBtn.classList.add('bg-[#256839]', 'text-white', 'shadow-xs');
             }
 
+            // Mobil Alt Menü Aktif Renk Güncellemesi: Görüşme, Randevu, Takvim (Oda/Saat), Danışanlar (Rehber), Menü
             document.querySelectorAll('.mobile-nav-btn').forEach(mbtn => {
                 mbtn.classList.remove('text-[#256839]', 'font-black');
                 mbtn.classList.add('text-slate-400', 'font-bold');
             });
 
-            if (['takvim', 'masraflar', 'firma-rapor'].includes(sekmeAdi)) {
+            if (['kasa', 'masraflar', 'firma-rapor'].includes(sekmeAdi)) {
                 const mDiger = document.getElementById('mbtn-daha-fazla');
                 if (mDiger) {
                     mDiger.classList.remove('text-slate-400', 'font-bold');
