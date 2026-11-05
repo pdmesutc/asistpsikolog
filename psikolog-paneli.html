@@ -100,39 +100,64 @@
             </div>
         </div>
 
-        <!-- 2. RANDEVU OLUŞTUR (ÇİFT SEANSINDA DİNAMİK İKİNCİ DANIŞAN VE GEÇMİŞ SAAT ENGELİ) -->
+        <!-- 2. RANDEVU OLUŞTUR (YENİ UX SIRALAMASI, EBEVEYN/ÇİFT ALANLARI VE ODA ESNEKLİĞİ) -->
         <div id="psekm-randevu-olustur" class="psikolog-sekme hidden space-y-6">
             <div class="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-5">
                 <div class="border-b pb-3">
                     <h2 class="text-xl font-extrabold text-slate-900">Randevu Oluştur (Kendi Danışanım)</h2>
-                    <p class="text-xs text-slate-500">Çift seanslarında girilen ikinci kişi rehbere otomatik kaydedilir; sonraki haftalarda ayrı ayrı bireysel randevu verilebilir.</p>
+                    <p class="text-xs text-slate-500">Hizmet türüne göre çocuk/ergen ebeveyn veya çift bilgileri dinamik açılır; boş olan tüm odalar seçilebilir.</p>
                 </div>
 
                 <form id="psk-randevu-form" onsubmit="pskMusaittlikSorgula(event)" class="space-y-4 text-xs">
                     <input type="hidden" id="psk-secili-danisan-id" value="">
                     
-                    <div class="bg-emerald-50/70 p-4 rounded-2xl border border-emerald-200">
-                        <label class="block font-bold text-emerald-950 mb-1.5">1. Randevu Açılacak Şubeyi Seçin</label>
-                        <select id="pr-sube-id" required onchange="pskFormSubeDegisti()" class="w-full bg-white p-2.5 rounded-xl border border-emerald-300 font-extrabold text-[#256839] focus:outline-none"></select>
+                    <!-- ADIM 1 & 2: ŞUBE SEÇİMİ VE HİZMET TÜRÜ -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-emerald-50/70 p-4 rounded-2xl border border-emerald-200">
+                        <div>
+                            <label class="block font-bold text-emerald-950 mb-1">1. Randevu Açılacak Şubeyi Seçin</label>
+                            <select id="pr-sube-id" required onchange="pskFormSubeDegisti()" class="w-full bg-white p-2.5 rounded-xl border border-emerald-300 font-extrabold text-[#256839] focus:outline-none"></select>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-emerald-950 mb-1">2. Hizmet Türü</label>
+                            <select id="pr-hizmet-turu" onchange="pskHizmetTuruDegisti(this.value); pskFormSubeDegisti();" class="w-full bg-white p-2.5 rounded-xl border border-emerald-300 font-extrabold text-slate-900 focus:outline-none">
+                                <option value="Yetişkin" selected>Yetişkin</option>
+                                <option value="Çocuk">Çocuk</option>
+                                <option value="Ergen">Ergen</option>
+                                <option value="Çift">Çift</option>
+                            </select>
+                        </div>
                     </div>
 
+                    <!-- TAKİP EDEN UZMAN BİLGİ / TAVSİYE KUTUSU -->
+                    <div id="psk-takip-eden-uzman-kutu" class="hidden bg-emerald-50/90 border border-emerald-300 p-3.5 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div class="flex items-start space-x-2.5">
+                            <i class="fa-solid fa-user-check text-[#256839] text-base mt-0.5"></i>
+                            <div>
+                                <span class="font-extrabold text-emerald-950 block">Takip Eden Uzman Bilgisi</span>
+                                <p class="text-[11px] text-emerald-800 font-medium" id="psk-takip-eden-uzman-aciklama"></p>
+                            </div>
+                        </div>
+                        <span class="text-[10px] font-extrabold bg-white text-[#256839] border border-emerald-200 px-2.5 py-1 rounded-xl shrink-0 self-start sm:self-center">Klinik Süreklilik</span>
+                    </div>
+
+                    <!-- ADIM 3 & 4: DANIŞAN ADI SOYADI VE TELEFONU -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div class="relative">
-                            <label class="block font-bold text-slate-700 mb-1">2. Danışan Adı Soyadı</label>
+                            <label class="block font-bold text-slate-700 mb-1" id="psk-lbl-danisan-ad">3. Danışan Adı Soyadı</label>
                             <input type="text" id="pr-danisan-ad" required autocomplete="off" oninput="pskCanliDanisanAra('ad', this.value)" placeholder="Danışan Ad Soyad" class="w-full bg-slate-50 p-2.5 rounded-xl border border-slate-200 font-medium">
-                            <div id="psk-oneri-kutusu-ad" class="hidden absolute top-full left-0 w-full mt-1 bg-white border border-slate-200 rounded-2xl shadow-xl z-50 max-h-48 overflow-y-auto divide-y divide-slate-100"></div>
+                            <div id="psk-oneri-kutusu-ad" class="hidden absolute top-full left-0 w-full mt-1 bg-white border border-slate-200 rounded-2xl shadow-xl z-50 max-h-52 overflow-y-auto divide-y divide-slate-100"></div>
                         </div>
                         <div class="relative">
-                            <label class="block font-bold text-slate-700 mb-1">3. Telefon Numarası (10 Hane)</label>
+                            <label class="block font-bold text-slate-700 mb-1" id="psk-lbl-danisan-tel">4. Telefon Numarası (10 Hane)</label>
                             <input type="text" id="pr-danisan-tel" required autocomplete="off" oninput="pskCanliDanisanAra('tel', this.value)" placeholder="5072727136" class="w-full bg-slate-50 p-2.5 rounded-xl border border-slate-200 font-medium">
-                            <div id="psk-oneri-kutusu-tel" class="hidden absolute top-full left-0 w-full mt-1 bg-white border border-slate-200 rounded-2xl shadow-xl z-50 max-h-48 overflow-y-auto divide-y divide-slate-100"></div>
+                            <div id="psk-oneri-kutusu-tel" class="hidden absolute top-full left-0 w-full mt-1 bg-white border border-slate-200 rounded-2xl shadow-xl z-50 max-h-52 overflow-y-auto divide-y divide-slate-100"></div>
                         </div>
                     </div>
 
-                    <!-- DİNAMİK ÇİFT SEANSI İKİNCİ DANIŞAN ALANLARI (Ad Soyad ve Tel'in tam altında) -->
+                    <!-- DİNAMİK ÇİFT SEANSI İKİNCİ DANIŞAN ALANLARI -->
                     <div id="pr-ikinci-danisan-kapsayici" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-4 bg-purple-50/70 p-4 rounded-2xl border border-purple-200">
                         <div>
-                            <label class="block font-bold text-purple-950 mb-1">İkinci Danışan (Eş) Adı Soyadı <span class="text-[10px] font-normal text-purple-700">(Rehbere Eş Olarak Kaydedilir)</span></label>
+                            <label class="block font-bold text-purple-950 mb-1">İkinci Danışan (Eş) Adı Soyadı <span class="text-[10px] font-normal text-purple-700">(İsteğe Bağlı - Rehbere Eş Olarak Kaydedilir)</span></label>
                             <input type="text" id="pr-ikinci-danisan-ad" placeholder="Örn: Ayşe Can" class="w-full bg-white p-2.5 rounded-xl border border-purple-200 font-medium text-slate-800">
                         </div>
                         <div>
@@ -141,16 +166,39 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-1">
-                        <div>
-                            <label class="block font-bold text-slate-700 mb-1">4. Hizmet Türü</label>
-                            <select id="pr-hizmet-turu" onchange="pskHizmetTuruDegisti(this.value); pskFormSubeDegisti();" class="w-full bg-slate-50 p-2.5 rounded-xl border border-slate-200 font-bold">
-                                <option value="Çocuk">Çocuk</option>
-                                <option value="Ergen">Ergen</option>
-                                <option value="Yetişkin" selected>Yetişkin</option>
-                                <option value="Çift">Çift</option>
-                            </select>
+                    <!-- DİNAMİK ÇOCUK VE ERGEN EBEVEYN ALANLARI -->
+                    <div id="pr-ebeveyn-kapsayici" class="hidden space-y-3 bg-amber-50/70 p-4 rounded-2xl border border-amber-200">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-amber-200">
+                            <span class="font-extrabold text-amber-950 text-xs"><i class="fa-solid fa-people-roof mr-1.5 text-[#256839]"></i>Anne & Baba İletişim Bilgileri</span>
+                            <label class="flex items-center space-x-1.5 cursor-pointer font-extrabold text-amber-900 bg-amber-100 px-3 py-1 rounded-xl">
+                                <input type="checkbox" id="pr-ebeveyn-gorusmesi" class="rounded text-[#256839] w-4 h-4">
+                                <span>Sadece Anne - Baba Görüşmesi (Çocuk / Ergen Katılmayacak)</span>
+                            </label>
                         </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                            <div>
+                                <label class="block font-bold text-amber-950 mb-1">Anne Adı Soyadı</label>
+                                <input type="text" id="pr-anne-ad" placeholder="Örn: Zeynep Aslan" class="w-full bg-white p-2.5 rounded-xl border border-amber-200 font-medium text-slate-800">
+                            </div>
+                            <div>
+                                <label class="block font-bold text-amber-950 mb-1">Anne Telefon (10 Hane)</label>
+                                <input type="text" id="pr-anne-tel" placeholder="5321112233" class="w-full bg-white p-2.5 rounded-xl border border-amber-200 font-medium text-slate-800">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block font-bold text-amber-950 mb-1">Baba Adı Soyadı</label>
+                                <input type="text" id="pr-baba-ad" placeholder="Örn: Murat Aslan" class="w-full bg-white p-2.5 rounded-xl border border-amber-200 font-medium text-slate-800">
+                            </div>
+                            <div>
+                                <label class="block font-bold text-amber-950 mb-1">Baba Telefon (10 Hane)</label>
+                                <input type="text" id="pr-baba-tel" placeholder="5332223344" class="w-full bg-white p-2.5 rounded-xl border border-amber-200 font-medium text-slate-800">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ADIM 5 & 6: SEANS TARİHİ VE SAATİ -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
                         <div>
                             <label class="block font-bold text-slate-700 mb-1">5. Seans Tarihi (Geçmiş Seçilemez)</label>
                             <input type="date" id="pr-tarih" required onchange="pskFormSubeDegisti()" class="w-full bg-slate-50 p-2.5 rounded-xl border border-slate-200 font-medium">
@@ -184,7 +232,10 @@
                 <div id="psk-sonuc-alani" class="hidden space-y-4 pt-4 border-t border-slate-100">
                     <div class="p-3.5 rounded-2xl border text-xs" id="psk-uzman-durum-kutu"></div>
                     <div class="space-y-2">
-                        <span class="font-extrabold text-slate-800 text-xs block">Seçilen Şubenin Odaları ve Uygunluk Durumu:</span>
+                        <div class="flex items-center justify-between">
+                            <span class="font-extrabold text-slate-800 text-xs block">Seçilen Şubenin Odaları ve Uygunluk Durumu:</span>
+                            <span class="text-[10px] text-slate-400 font-semibold">Tüm hizmet türleri için boş olan her oda seçilebilir</span>
+                        </div>
                         <div id="pr-oda-kart-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-3"></div>
                     </div>
                     <div class="flex justify-between items-center pt-2">
@@ -203,16 +254,16 @@
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-3">
                     <div>
                         <h2 class="text-xl font-extrabold text-slate-900">Danışan Rehberim (<span id="psk-rehber-sayisi">0</span>)</h2>
-                        <p class="text-xs text-slate-500">Yalnızca sizinle görüşmesi bulunan danışanlar ve eşleşmiş çift kayıtları listelenir.</p>
+                        <p class="text-xs text-slate-500">Yalnızca sizinle görüşmesi bulunan danışanlar, ebeveyn ve eşleşmiş çift kayıtları listelenir.</p>
                     </div>
-                    <input type="text" id="psk-danisan-arama-input" onkeyup="pskRehberiCiz()" placeholder="Danışan veya Tel Ara..." class="p-2 bg-slate-50 border border-slate-200 rounded-xl text-xs w-full sm:w-64">
+                    <input type="text" id="psk-danisan-arama-input" onkeyup="pskRehberiCiz()" placeholder="Danışan, Ebeveyn veya Tel Ara..." class="p-2 bg-slate-50 border border-slate-200 rounded-xl text-xs w-full sm:w-64">
                 </div>
                 <div class="overflow-x-auto border border-slate-200 rounded-2xl max-h-[550px]">
                     <table class="w-full text-left border-collapse text-xs">
                         <thead class="sticky top-0 bg-slate-50 border-b font-extrabold">
                             <tr>
                                 <th class="p-3.5">Ad Soyad</th>
-                                <th class="p-3.5">Telefon</th>
+                                <th class="p-3.5">Telefon / Ebeveyn</th>
                                 <th class="p-3.5 text-center">Benimle Seans Sayısı</th>
                                 <th class="p-3.5 text-center">İşlem</th>
                             </tr>
@@ -296,6 +347,7 @@
                 <button onclick="pskDetayKapat()" class="text-slate-400 font-bold cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div id="pd-es-bilgi-kutusu" class="hidden bg-purple-50 border border-purple-200 p-3 rounded-2xl flex items-center justify-between"></div>
+            <div id="pd-ebeveyn-bilgi-kutusu" class="hidden bg-amber-50 border border-amber-200 p-3 rounded-2xl text-[11px] text-amber-950 font-medium"></div>
             <div id="pd-seans-listesi" class="space-y-2 max-h-60 overflow-y-auto"></div>
         </div>
     </div>
@@ -379,7 +431,6 @@
             return GUN_ADLARI[new Date(p[0], p[1] - 1, p[2]).getDay()];
         }
 
-        // GEÇMİŞ TARİH VE GEÇMİŞ SAAT KONTROLÜ
         function gecmisTarihSaatMi(tarih, saat) {
             if (!tarih || !saat) return true;
             let bugun = new Date();
@@ -390,6 +441,33 @@
                 if (saat <= suanSaat) return true;
             }
             return false;
+        }
+
+        function pskTakipEdenUzmanBul(danisanId, dbInstance = null) {
+            if (!danisanId) return null;
+            let db = dbInstance || AsistDB.get();
+            let gecmis = db.seanslar
+                .filter(s => (s.danisanId === danisanId || s.ikinciDanisanId === danisanId) && s.durum !== 'iptal')
+                .sort((a, b) => b.tarih.localeCompare(a.tarih) || b.saat.localeCompare(a.saat));
+
+            if (gecmis.length === 0) return null;
+            let sonSeans = gecmis[0];
+            let uz = db.psikologlar.find(p => p.id === sonSeans.uzmanId);
+            return uz ? { uzman: uz, seansSayisi: gecmis.length, sonTarih: sonSeans.tarih } : null;
+        }
+
+        function pskTakipEdenUzmanUyarisiGoster(danisanId) {
+            const kutu = document.getElementById('psk-takip-eden-uzman-kutu');
+            const aciklama = document.getElementById('psk-takip-eden-uzman-aciklama');
+            if (!kutu || !aciklama) return;
+
+            let bilgi = pskTakipEdenUzmanBul(danisanId);
+            if (bilgi && bilgi.uzman) {
+                aciklama.innerHTML = `Bu danışanla sistemde kayıtlı <strong>${bilgi.seansSayisi} seans</strong> bulunmaktadır (Son görüşme: ${escapeHtml(bilgi.sonTarih)} • Takip Eden Uzman: <strong>${escapeHtml(bilgi.uzman.ad)}</strong>).`;
+                kutu.classList.remove('hidden');
+            } else {
+                kutu.classList.add('hidden');
+            }
         }
 
         function varsayilanTarihiAyarla() {
@@ -447,29 +525,71 @@
             pskHizmetTuruDegisti(hizmetSel.value);
         }
 
-        // HİZMET TÜRÜ ÇİFT SEÇİLDİĞİNDE DİNAMİK ALANLARI AÇ VE EŞLEŞMİŞ EŞ VARSA DOLDUR
+        // HİZMET TÜRÜ DEĞİŞTİĞİNDE (2. SIRADAKİ SEÇENEK): Çocuk, Ergen veya Çift alanlarını yönet
         function pskHizmetTuruDegisti(tur) {
+            const lblAd = document.getElementById('psk-lbl-danisan-ad');
+            const lblTel = document.getElementById('psk-lbl-danisan-tel');
+            const inpTel = document.getElementById('pr-danisan-tel');
             const ikinciKapsayici = document.getElementById('pr-ikinci-danisan-kapsayici');
-            if (!ikinciKapsayici) return;
-            if (tur === 'Çift') {
+            const ebeveynKapsayici = document.getElementById('pr-ebeveyn-kapsayici');
+
+            if (!lblAd || !ikinciKapsayici || !ebeveynKapsayici) return;
+
+            let seciliId = parseInt(document.getElementById('psk-secili-danisan-id').value, 10);
+            let db = seciliId ? AsistDB.get() : null;
+            let seciliDanisan = (db && seciliId) ? db.danisanlar.find(x => x.id === seciliId) : null;
+
+            if (tur === 'Çocuk') {
+                lblAd.innerText = "3. Danışan Adı Soyadı (Çocuk Adı Soyadı)";
+                if (lblTel) lblTel.innerHTML = `4. Telefon Numarası <span class="text-[10px] font-normal text-slate-400">(İsteğe Bağlı - Çocuk)</span>`;
+                if (inpTel) { inpTel.required = false; inpTel.placeholder = "İsteğe bağlı (Yoksa anne/baba tel baz alınır)"; }
+                ikinciKapsayici.classList.add('hidden');
+                ebeveynKapsayici.classList.remove('hidden');
+                if (seciliDanisan) {
+                    document.getElementById('pr-anne-ad').value = seciliDanisan.anneAd || '';
+                    document.getElementById('pr-anne-tel').value = normalizeTelefon10Hane(seciliDanisan.anneTel);
+                    document.getElementById('pr-baba-ad').value = seciliDanisan.babaAd || '';
+                    document.getElementById('pr-baba-tel').value = normalizeTelefon10Hane(seciliDanisan.babaTel);
+                }
+            } else if (tur === 'Ergen') {
+                lblAd.innerText = "3. Danışan Adı Soyadı (Ergen Adı Soyadı)";
+                if (lblTel) lblTel.innerHTML = `4. Telefon Numarası <span class="text-[10px] font-normal text-slate-400">(İsteğe Bağlı - Ergen)</span>`;
+                if (inpTel) { inpTel.required = false; inpTel.placeholder = "İsteğe bağlı (Yoksa anne/baba tel baz alınır)"; }
+                ikinciKapsayici.classList.add('hidden');
+                ebeveynKapsayici.classList.remove('hidden');
+                if (seciliDanisan) {
+                    document.getElementById('pr-anne-ad').value = seciliDanisan.anneAd || '';
+                    document.getElementById('pr-anne-tel').value = normalizeTelefon10Hane(seciliDanisan.anneTel);
+                    document.getElementById('pr-baba-ad').value = seciliDanisan.babaAd || '';
+                    document.getElementById('pr-baba-tel').value = normalizeTelefon10Hane(seciliDanisan.babaTel);
+                }
+            } else if (tur === 'Çift') {
+                lblAd.innerText = "3. Danışan Adı Soyadı (1. Danışan)";
+                if (lblTel) lblTel.innerText = "4. Telefon Numarası (10 Hane)";
+                if (inpTel) { inpTel.required = true; inpTel.placeholder = "5072727136"; }
+                ebeveynKapsayici.classList.add('hidden');
+                document.getElementById('pr-ebeveyn-gorusmesi').checked = false;
                 ikinciKapsayici.classList.remove('hidden');
-                let seciliId = parseInt(document.getElementById('psk-secili-danisan-id').value, 10);
-                if (seciliId) {
-                    let db = AsistDB.get();
-                    let d = db.danisanlar.find(x => x.id === seciliId);
-                    if (d && d.esDanisanId) {
-                        let es = db.danisanlar.find(x => x.id === d.esDanisanId);
-                        if (es) {
-                            document.getElementById('pr-ikinci-danisan-ad').value = es.ad || '';
-                            document.getElementById('pr-ikinci-danisan-tel').value = normalizeTelefon10Hane(es.tel);
-                        }
+                if (seciliDanisan && seciliDanisan.esDanisanId) {
+                    let es = db.danisanlar.find(x => x.id === seciliDanisan.esDanisanId);
+                    if (es) {
+                        document.getElementById('pr-ikinci-danisan-ad').value = es.ad || '';
+                        document.getElementById('pr-ikinci-danisan-tel').value = normalizeTelefon10Hane(es.tel);
                     }
                 }
             } else {
+                lblAd.innerText = "3. Danışan Adı Soyadı";
+                if (lblTel) lblTel.innerText = "4. Telefon Numarası (10 Hane)";
+                if (inpTel) { inpTel.required = true; inpTel.placeholder = "5072727136"; }
                 ikinciKapsayici.classList.add('hidden');
-                document.getElementById('pr-ikinci-danisan-ad').value = '';
-                document.getElementById('pr-ikinci-danisan-tel').value = '';
+                ebeveynKapsayici.classList.add('hidden');
+                document.getElementById('pr-ebeveyn-gorusmesi').checked = false;
             }
+        }
+
+        // ODA KISITLAMALARI KALDIRILDI: Her hizmet türü için her boş oda seçilebilir
+        function odaHizmeteUygunMu(oda, hizmet, tumOdalar) {
+            return true;
         }
 
         window.onload = function() {
@@ -618,9 +738,12 @@
                         durumRozet = `<span class="bg-amber-100 text-amber-800 text-[10px] font-extrabold px-2 py-0.5 rounded-lg">Bekliyor</span>`;
                     }
 
-                    let ikinciKisiBilgi = s.ikinciDanisanAd
-                        ? `<span class="text-[11px] text-purple-800 font-semibold block">💍 Çift / Eş: ${escapeHtml(s.ikinciDanisanAd)} (${escapeHtml(formatTelefonGorunum(s.ikinciDanisanTel, telGorunur))})</span>`
-                        : '';
+                    let ekstraBilgi = '';
+                    if (s.hizmet === 'Çift' && s.ikinciDanisanAd) {
+                        ekstraBilgi = `<span class="text-[11px] text-purple-800 font-semibold block">💍 Çift / Eş: ${escapeHtml(s.ikinciDanisanAd)} (${escapeHtml(formatTelefonGorunum(s.ikinciDanisanTel, telGorunur))})</span>`;
+                    } else if (s.ebeveynGorusmesiMi) {
+                        ekstraBilgi = `<span class="text-[11px] text-amber-800 font-semibold block">👪 Sadece Anne-Baba (Ebeveyn) Görüşmesi</span>`;
+                    }
 
                     list.innerHTML += `
                         <div class="bg-slate-50/70 p-4 rounded-2xl border border-slate-200 flex items-center justify-between text-xs">
@@ -631,7 +754,7 @@
                                         <h4 class="font-extrabold text-slate-900">${escapeHtml(s.danisanAdi)}</h4>
                                         ${durumRozet}
                                     </div>
-                                    ${ikinciKisiBilgi}
+                                    ${ekstraBilgi}
                                     <p class="text-slate-500 font-semibold mt-0.5">${escapeHtml(s.subeAdi)} • ${escapeHtml(s.odaAdi)} • ${escapeHtml(s.hizmet || 'Yetişkin')} <span class="text-[10px] text-slate-400">(${escapeHtml(s.tarih)})</span></p>
                                 </div>
                             </div>
@@ -658,6 +781,7 @@
             let hedefKutu = kaynak === 'ad' ? oneriKutusuAd : oneriKutusuTel;
 
             document.getElementById('psk-secili-danisan-id').value = '';
+            pskTakipEdenUzmanUyarisiGoster(null);
 
             if (val.length < 2) { hedefKutu.classList.add('hidden'); return; }
             let kendiDanisanIdleri = new Set();
@@ -669,16 +793,27 @@
             let rakamlar = val.replace(/\D/g, '').replace(/^0+/, '');
             let eslesenler = db.danisanlar.filter(d => {
                 if (!kendiDanisanIdleri.has(d.id)) return false;
-                return kaynak === 'ad'
-                    ? (d.ad || '').toLowerCase().includes(val)
-                    : (rakamlar.length >= 2 && normalizeTelefon10Hane(d.tel).includes(rakamlar));
+                if (kaynak === 'ad') {
+                    return (d.ad || '').toLowerCase().includes(val) ||
+                           (d.anneAd || '').toLowerCase().includes(val) ||
+                           (d.babaAd || '').toLowerCase().includes(val);
+                } else {
+                    if (rakamlar.length < 2) return false;
+                    return normalizeTelefon10Hane(d.tel).includes(rakamlar) ||
+                           normalizeTelefon10Hane(d.anneTel).includes(rakamlar) ||
+                           normalizeTelefon10Hane(d.babaTel).includes(rakamlar);
+                }
             });
             if (eslesenler.length === 0) { hedefKutu.classList.add('hidden'); return; }
 
             hedefKutu.innerHTML = '';
-            eslesenler.slice(0, 5).forEach(d => {
+            eslesenler.slice(0, 6).forEach(d => {
                 let es = d.esDanisanId ? db.danisanlar.find(x => x.id === d.esDanisanId) : null;
                 let esEtiket = es ? `<span class="text-[10px] bg-purple-50 text-purple-800 border border-purple-200 px-1.5 py-0.5 rounded font-bold ml-1.5">💍 Eş: ${escapeHtml(es.ad)}</span>` : '';
+
+                let ebeveynNot = (d.anneAd || d.babaAd)
+                    ? `<span class="block text-[10px] text-amber-800">Anne: ${escapeHtml(d.anneAd || '-')} • Baba: ${escapeHtml(d.babaAd || '-')}</span>`
+                    : '';
 
                 let item = document.createElement('div');
                 item.className = "p-2.5 hover:bg-emerald-50 cursor-pointer flex justify-between items-center";
@@ -686,20 +821,26 @@
                     document.getElementById('psk-secili-danisan-id').value = d.id;
                     document.getElementById('pr-danisan-ad').value = d.ad;
                     document.getElementById('pr-danisan-tel').value = normalizeTelefon10Hane(d.tel);
-                    if (document.getElementById('pr-hizmet-turu').value === 'Çift' && es) {
+                    let hizmetTuru = document.getElementById('pr-hizmet-turu').value;
+                    if (hizmetTuru === 'Çift' && es) {
                         document.getElementById('pr-ikinci-danisan-ad').value = es.ad || '';
                         document.getElementById('pr-ikinci-danisan-tel').value = normalizeTelefon10Hane(es.tel);
+                    } else if (hizmetTuru === 'Çocuk' || hizmetTuru === 'Ergen') {
+                        document.getElementById('pr-anne-ad').value = d.anneAd || '';
+                        document.getElementById('pr-anne-tel').value = normalizeTelefon10Hane(d.anneTel);
+                        document.getElementById('pr-baba-ad').value = d.babaAd || '';
+                        document.getElementById('pr-baba-tel').value = normalizeTelefon10Hane(d.babaTel);
                     }
+                    pskTakipEdenUzmanUyarisiGoster(d.id);
                     oneriKutusuAd.classList.add('hidden');
                     oneriKutusuTel.classList.add('hidden');
                 };
-                item.innerHTML = `<div><span class="font-bold">${escapeHtml(d.ad)}</span> - <span class="text-slate-400 font-mono">${escapeHtml(formatTelefonGorunum(d.tel, telGorunur))}</span>${esEtiket}</div>`;
+                item.innerHTML = `<div><span class="font-bold">${escapeHtml(d.ad)}</span> - <span class="text-slate-400 font-mono">${escapeHtml(formatTelefonGorunum(d.tel, telGorunur))}</span>${esEtiket}${ebeveynNot}</div>`;
                 hedefKutu.appendChild(item);
             });
             hedefKutu.classList.remove('hidden');
         }
 
-        // MÜSAİTLİK KONTROLÜ (Geçmiş tarih/saat ve çakışma kuralları dahil)
         function pskUygunlukKontrolEt(db, secilenSubeId, tarih, saat, hizmet) {
             let uz = db.psikologlar.find(p => p.id === AKTIF_UZMAN_ID);
             let sube = db.subeler.find(s => s.id === secilenSubeId);
@@ -738,14 +879,6 @@
             return { uygun: true, mesaj: "Bu şubede seçtiğiniz tarih ve saatte tamamen müsaitsiniz." };
         }
 
-        function odaHizmeteUygunMu(oda, hizmet, tumOdalar) {
-            if (!oda || !oda.tip) return true;
-            let arananTip = hizmet === 'Çocuk' ? 'cocuk' : 'yetiskin';
-            let subedeBuTipOdaVarMi = (tumOdalar || []).some(o => o.tip === arananTip);
-            if (!subedeBuTipOdaVarMi) return true;
-            return oda.tip === arananTip;
-        }
-
         function pskMusaittlikSorgula(e) {
             e.preventDefault();
             let db = AsistDB.get();
@@ -753,12 +886,27 @@
             let tarih = document.getElementById('pr-tarih').value;
             let saat = document.getElementById('pr-saat').value;
             let hizmet = document.getElementById('pr-hizmet-turu').value;
-            let tel = normalizeTelefon10Hane(document.getElementById('pr-danisan-tel').value);
 
-            if (tel.length !== 10) {
-                alert("Lütfen danışan telefon numarasını başında 0 olmadan 10 haneli (5XXXXXXXXX) giriniz!");
-                return;
+            let anaTel = normalizeTelefon10Hane(document.getElementById('pr-danisan-tel').value);
+            let anneTel = normalizeTelefon10Hane(document.getElementById('pr-anne-tel').value);
+            let babaTel = normalizeTelefon10Hane(document.getElementById('pr-baba-tel').value);
+
+            if (hizmet === 'Çocuk' || hizmet === 'Ergen') {
+                if (anaTel.length > 0 && anaTel.length !== 10) {
+                    alert("Çocuk/Ergen telefon numarası girilecekse 10 haneli olmalıdır (Yoksa boş bırakabilirsiniz).");
+                    return;
+                }
+                if (anaTel.length !== 10 && anneTel.length !== 10 && babaTel.length !== 10) {
+                    alert("Lütfen iletişim için en az bir geçerli telefon numarası (Anne, Baba veya Danışan telefonu - 10 hane) giriniz!");
+                    return;
+                }
+            } else {
+                if (anaTel.length !== 10) {
+                    alert("Lütfen danışan telefon numarasını başında 0 olmadan 10 haneli (5XXXXXXXXX) giriniz!");
+                    return;
+                }
             }
+
             if (gecmisTarihSaatMi(tarih, saat)) {
                 alert("Geçmiş bir tarih veya geçmiş bir saate randevu oluşturulamaz.");
                 return;
@@ -780,6 +928,7 @@
                 uzmanKutu.innerText = `✅ ${kontrol.mesaj}`;
             }
 
+            // Odalar (Oda kısıtlaması olmadan boş olan her oda seçilebilir)
             const grid = document.getElementById('pr-oda-kart-grid');
             grid.innerHTML = '';
             let sube = db.subeler.find(s => s.id === secilenSubeId);
@@ -787,10 +936,10 @@
 
             odalar.forEach(oda => {
                 let dolu = db.seanslar.some(s => s.subeId === secilenSubeId && s.tarih === tarih && s.saat === saat && s.odaId === oda.id && s.durum !== 'iptal');
-                let tipUygun = odaHizmeteUygunMu(oda, hizmet, odalar);
+                let odaTipYazi = oda.tip === 'cocuk' ? 'Oyun / Çocuk Odası' : 'Yetişkin / Çift Odası';
                 let card = document.createElement('div');
 
-                if (!dolu && tipUygun && kontrol.uygun) {
+                if (!dolu && kontrol.uygun) {
                     card.className = "p-3 border-2 border-emerald-500 rounded-xl cursor-pointer text-center hover:bg-emerald-50 transition";
                     card.onclick = function() {
                         pskSecilenOdaId = oda.id;
@@ -800,11 +949,11 @@
                         document.getElementById('pr-btn-onayla').disabled = false;
                         document.getElementById('pr-btn-onayla').classList.remove('opacity-50', 'cursor-not-allowed');
                     };
-                    card.innerHTML = `<span class="font-extrabold block">${escapeHtml(oda.adi)}</span><span class="text-[10px] text-emerald-800 font-bold">✅ Boş ve Uygun Oda</span>`;
+                    card.innerHTML = `<span class="font-extrabold block">${escapeHtml(oda.adi)}</span><span class="text-[10px] text-slate-500 block">${odaTipYazi}</span><span class="text-[10px] text-emerald-800 font-bold">✅ Boş (Seçilebilir)</span>`;
                 } else {
-                    let sebep = dolu ? "Dolu" : (!tipUygun ? `"${hizmet}" İçin Uygun Değil` : "Uzman Müsait Değil");
+                    let sebep = dolu ? "Bu Saatte Dolu" : "Uzman Müsait Değil";
                     card.className = "p-3 border border-red-200 rounded-xl opacity-60 text-center bg-red-50 text-red-600 cursor-not-allowed";
-                    card.innerHTML = `<span class="font-bold block">${escapeHtml(oda.adi)}</span><span class="text-[10px] font-bold">❌ ${escapeHtml(sebep)}</span>`;
+                    card.innerHTML = `<span class="font-bold block">${escapeHtml(oda.adi)}</span><span class="text-[10px] text-slate-400 block">${odaTipYazi}</span><span class="text-[10px] font-bold">❌ ${escapeHtml(sebep)}</span>`;
                 }
                 grid.appendChild(card);
             });
@@ -818,7 +967,7 @@
             let secilenSubeId = parseInt(document.getElementById('pr-sube-id').value, 10);
             let danisanId = document.getElementById('psk-secili-danisan-id').value;
             let ad = document.getElementById('pr-danisan-ad').value.trim();
-            let tel = normalizeTelefon10Hane(document.getElementById('pr-danisan-tel').value);
+            let girilenTel = normalizeTelefon10Hane(document.getElementById('pr-danisan-tel').value);
             let tarih = document.getElementById('pr-tarih').value;
             let saat = document.getElementById('pr-saat').value;
             let hizmet = document.getElementById('pr-hizmet-turu').value;
@@ -826,9 +975,30 @@
             let ikinciAd = document.getElementById('pr-ikinci-danisan-ad').value.trim();
             let ikinciTel = normalizeTelefon10Hane(document.getElementById('pr-ikinci-danisan-tel').value);
 
-            if (!ad || tel.length !== 10) {
-                alert("Lütfen danışan adını ve 10 haneli telefon numarasını eksiksiz giriniz!");
-                return;
+            let ebeveynGorusmesiMi = (hizmet === 'Çocuk' || hizmet === 'Ergen') ? document.getElementById('pr-ebeveyn-gorusmesi').checked : false;
+            let anneAd = document.getElementById('pr-anne-ad').value.trim();
+            let anneTel = normalizeTelefon10Hane(document.getElementById('pr-anne-tel').value);
+            let babaAd = document.getElementById('pr-baba-ad').value.trim();
+            let babaTel = normalizeTelefon10Hane(document.getElementById('pr-baba-tel').value);
+
+            if (!ad) { alert("Lütfen danışan adını giriniz!"); return; }
+
+            let tel = girilenTel;
+            if (hizmet === 'Çocuk' || hizmet === 'Ergen') {
+                if (girilenTel.length > 0 && girilenTel.length !== 10) {
+                    alert("Çocuk/Ergen telefon numarası girilecekse 10 haneli olmalıdır (Yoksa boş bırakabilirsiniz).");
+                    return;
+                }
+                if (!tel) tel = anneTel || babaTel || "";
+                if (tel.length !== 10) {
+                    alert("Lütfen iletişim için en az bir geçerli telefon numarası (Anne, Baba veya Danışan telefonu - 10 hane) giriniz!");
+                    return;
+                }
+            } else {
+                if (tel.length !== 10) {
+                    alert("Lütfen danışan telefon numarasını 10 haneli (5XXXXXXXXX) giriniz!");
+                    return;
+                }
             }
 
             let kontrol = pskUygunlukKontrolEt(db, secilenSubeId, tarih, saat, hizmet);
@@ -841,16 +1011,12 @@
                 alert("❌ Seçilen oda bu tarih ve saatte başka bir işlemle doldurulmuş. Lütfen tekrar sorgulayınız.");
                 return;
             }
-            let subeObj = db.subeler.find(s => s.id === secilenSubeId);
-            let odaObj = subeObj ? (subeObj.odalar || []).find(o => o.id === pskSecilenOdaId) : null;
-            if (!odaObj || !odaHizmeteUygunMu(odaObj, hizmet, subeObj.odalar)) {
-                alert("❌ Seçilen oda bu hizmet türü için uygun değil. Lütfen tekrar sorgulayınız.");
-                return;
-            }
 
             let hedefDanisan = null;
             if (danisanId) hedefDanisan = db.danisanlar.find(x => x.id === parseInt(danisanId, 10));
-            if (!hedefDanisan) hedefDanisan = db.danisanlar.find(x => normalizeTelefon10Hane(x.tel) === tel);
+            if (!hedefDanisan && girilenTel.length === 10) {
+                hedefDanisan = db.danisanlar.find(x => normalizeTelefon10Hane(x.tel) === girilenTel);
+            }
 
             if (hedefDanisan && hedefDanisan.firmaId) {
                 alert("❌ Bu danışan kurumsal bir firmaya bağlıdır. Firma seansları ücretlendirme farklı olduğu için randevuyu lütfen asistan paneli üzerinden oluşturunuz.");
@@ -862,9 +1028,16 @@
                     if (!confirm("Bu telefon numarası sistemde başka bir isimle kayıtlı. Randevu mevcut kayıt için oluşturulsun mu?")) return;
                 }
                 danisanId = hedefDanisan.id;
+                if (anneAd) hedefDanisan.anneAd = anneAd;
+                if (anneTel) hedefDanisan.anneTel = anneTel;
+                if (babaAd) hedefDanisan.babaAd = babaAd;
+                if (babaTel) hedefDanisan.babaTel = babaTel;
             } else {
                 danisanId = (typeof AsistDB.yeniId === 'function') ? AsistDB.yeniId() : Date.now();
-                db.danisanlar.unshift({ id: danisanId, ad: ad, tel: tel, subeId: secilenSubeId, firmaId: null, esDanisanId: null });
+                db.danisanlar.unshift({
+                    id: danisanId, ad: ad, tel: tel, subeId: secilenSubeId, firmaId: null,
+                    esDanisanId: null, anneAd: anneAd, anneTel: anneTel, babaAd: babaAd, babaTel: babaTel
+                });
             }
 
             // ÇİFT SEANSIYSA İKİNCİ KİŞİYİ REHBERE BAĞIMSIZ DANIŞAN OLARAK KAYDET VE KARŞILIKLI EŞLEŞTİR
@@ -901,7 +1074,8 @@
                 odemeTipi: "",
                 iptalSebebi: "",
                 ikinciDanisanAd: hizmet === 'Çift' ? ikinciAd : "",
-                ikinciDanisanTel: hizmet === 'Çift' ? ikinciTel : ""
+                ikinciDanisanTel: hizmet === 'Çift' ? ikinciTel : "",
+                ebeveynGorusmesiMi: ebeveynGorusmesiMi
             });
 
             if (!AsistDB.save(db)) return;
@@ -909,6 +1083,7 @@
             document.getElementById('psk-sonuc-alani').classList.add('hidden');
             document.getElementById('psk-randevu-form').reset();
             document.getElementById('psk-secili-danisan-id').value = '';
+            pskTakipEdenUzmanUyarisiGoster(null);
             varsayilanTarihiAyarla();
             pskSecilenOdaId = null;
             pskHizmetTuruDegisti(document.getElementById('pr-hizmet-turu').value);
@@ -926,7 +1101,6 @@
             let aramaMetni = document.getElementById('psk-danisan-arama-input') ? document.getElementById('psk-danisan-arama-input').value.trim().toLowerCase() : '';
             let aramaRakam = aramaMetni.replace(/\D/g, '').replace(/^0+/, '');
 
-            // Uzmanın hem ana danışanlarını hem de çift seansındaki 2. kişileri rehberde göster
             let uzmaninDanisanIdSet = new Set();
             db.seanslar.filter(s => s.uzmanId === AKTIF_UZMAN_ID).forEach(s => {
                 if (s.danisanId) uzmaninDanisanIdSet.add(s.danisanId);
@@ -936,10 +1110,16 @@
             let kendiDanisanlarim = db.danisanlar.filter(d => {
                 if (!uzmaninDanisanIdSet.has(d.id)) return false;
                 if (!aramaMetni) return true;
-                let adUygun = (d.ad || '').toLowerCase().includes(aramaMetni);
+                let adUygun = (d.ad || '').toLowerCase().includes(aramaMetni) ||
+                              (d.anneAd || '').toLowerCase().includes(aramaMetni) ||
+                              (d.babaAd || '').toLowerCase().includes(aramaMetni);
                 let telUygun = telGorunur && (
                     (d.tel || '').includes(aramaMetni) ||
-                    (aramaRakam.length >= 2 && normalizeTelefon10Hane(d.tel).includes(aramaRakam))
+                    (aramaRakam.length >= 2 && (
+                        normalizeTelefon10Hane(d.tel).includes(aramaRakam) ||
+                        normalizeTelefon10Hane(d.anneTel).includes(aramaRakam) ||
+                        normalizeTelefon10Hane(d.babaTel).includes(aramaRakam)
+                    ))
                 );
                 return adUygun || telUygun;
             });
@@ -958,13 +1138,17 @@
                 let es = d.esDanisanId ? db.danisanlar.find(x => x.id === d.esDanisanId) : null;
                 let esRozet = es ? `<span class="bg-purple-50 text-purple-900 border border-purple-200 px-2 py-0.5 rounded font-bold text-[10px] ml-1.5">💍 Eş: ${escapeHtml(es.ad)}</span>` : '';
 
+                let ebeveynBilgi = (d.anneAd || d.babaAd)
+                    ? `<span class="block text-[10px] text-amber-800 font-semibold">Anne: ${escapeHtml(d.anneAd || '-')} • Baba: ${escapeHtml(d.babaAd || '-')}</span>`
+                    : '';
+
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50 transition">
                         <td class="p-3.5 font-bold text-slate-900">${escapeHtml(d.ad)} ${esRozet}</td>
-                        <td class="p-3.5 text-slate-600 font-mono">${escapeHtml(formatTelefonGorunum(d.tel, telGorunur))}</td>
+                        <td class="p-3.5 text-slate-600 font-mono">${escapeHtml(formatTelefonGorunum(d.tel || d.anneTel || d.babaTel, telGorunur))}${ebeveynBilgi}</td>
                         <td class="p-3.5 text-center font-black">${sSayisi} Seans</td>
                         <td class="p-3.5 text-center space-x-1">
-                            <button onclick="pskHizliBireyselRandevu(${d.id})" class="bg-slate-100 hover:bg-emerald-50 text-slate-700 hover:text-[#256839] px-2.5 py-1 rounded-lg font-bold border border-slate-200 cursor-pointer" title="Bu Kişiye Bireysel Randevu Aç">+ Randevu</button>
+                            <button onclick="pskHizliBireyselRandevu(${d.id})" class="bg-slate-100 hover:bg-emerald-50 text-slate-700 hover:text-[#256839] px-2.5 py-1 rounded-lg font-bold border border-slate-200 cursor-pointer" title="Bu Kişiye Randevu Aç">+ Randevu</button>
                             <button onclick="pskDanisanDetayAc(${d.id})" class="bg-emerald-50 text-[#256839] px-2.5 py-1 rounded-lg font-bold border border-emerald-200 cursor-pointer">Detay</button>
                         </td>
                     </tr>
@@ -982,10 +1166,12 @@
             document.getElementById('pr-danisan-ad').value = d.ad;
             document.getElementById('pr-danisan-tel').value = normalizeTelefon10Hane(d.tel);
             const hizmetSel = document.getElementById('pr-hizmet-turu');
-            if ([...hizmetSel.options].some(o => o.value === 'Yetişkin')) {
-                hizmetSel.value = 'Yetişkin';
+            let hedefHizmet = (d.anneAd || d.babaAd) ? 'Çocuk' : 'Yetişkin';
+            if ([...hizmetSel.options].some(o => o.value === hedefHizmet)) {
+                hizmetSel.value = hedefHizmet;
             }
             pskHizmetTuruDegisti(hizmetSel.value);
+            pskTakipEdenUzmanUyarisiGoster(d.id);
         }
 
         function pskDanisanDetayAc(danisanId) {
@@ -1016,6 +1202,20 @@
                 esKutu.classList.add('hidden');
             }
 
+            const ebeveynKutu = document.getElementById('pd-ebeveyn-bilgi-kutusu');
+            if (ebeveynKutu) {
+                if (d.anneAd || d.babaAd) {
+                    ebeveynKutu.classList.remove('hidden');
+                    ebeveynKutu.innerHTML = `
+                        <span class="font-extrabold text-amber-950 block mb-0.5"><i class="fa-solid fa-people-roof mr-1"></i>Ebeveyn Kayıtları:</span>
+                        ${d.anneAd ? `Anne: <strong>${escapeHtml(d.anneAd)}</strong> (${escapeHtml(formatTelefonGorunum(d.anneTel || '', telGorunur))})<br>` : ''}
+                        ${d.babaAd ? `Baba: <strong>${escapeHtml(d.babaAd)}</strong> (${escapeHtml(formatTelefonGorunum(d.babaTel || '', telGorunur))})` : ''}
+                    `;
+                } else {
+                    ebeveynKutu.classList.add('hidden');
+                }
+            }
+
             const container = document.getElementById('pd-seans-listesi');
             container.innerHTML = '';
 
@@ -1025,7 +1225,9 @@
 
             seanslar.forEach(rawS => {
                 let s = AsistDB.resolveSeans(rawS, db);
-                let turEtiket = s.hizmet === 'Çift' ? '<span class="text-[10px] font-extrabold text-purple-800 bg-purple-100 px-1.5 py-0.5 rounded mr-1">Çift Seansı</span>' : '<span class="text-[10px] font-bold text-slate-600 bg-slate-200 px-1.5 py-0.5 rounded mr-1">Bireysel</span>';
+                let turEtiket = s.hizmet === 'Çift'
+                    ? '<span class="text-[10px] font-extrabold text-purple-800 bg-purple-100 px-1.5 py-0.5 rounded mr-1">Çift Seansı</span>'
+                    : (s.ebeveynGorusmesiMi ? '<span class="text-[10px] font-extrabold text-amber-800 bg-amber-100 px-1.5 py-0.5 rounded mr-1">Ebeveyn Görüşmesi</span>' : `<span class="text-[10px] font-bold text-slate-600 bg-slate-200 px-1.5 py-0.5 rounded mr-1">${escapeHtml(s.hizmet || 'Bireysel')}</span>`);
                 container.innerHTML += `
                     <div class="p-2.5 bg-slate-50 border rounded-xl flex justify-between items-center">
                         <span>${turEtiket}${escapeHtml(s.tarih)} - ${escapeHtml(s.saat)} (${escapeHtml(s.subeAdi)} - ${escapeHtml(s.odaAdi)})</span>

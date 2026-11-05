@@ -1,6 +1,6 @@
 /**
  * AsistPsikolog - Merkezi Veritabanı, Yetkilendirme ve Senkronizasyon Motoru (db.js)
- * Şube, Oda, Uzman, Firma, KDV Motoru, Çocuk/Ergen Ebeveyn ve Eşleştirilmiş Çift/Bireysel Mimarisi
+ * Şube, Oda, Uzman, Firma, KDV Motoru, Çocuk/Ergen Ebeveyn, Çift/Bireysel Eşleştirme ve Takip Eden Uzman Motoru
  */
 
 const ASIST_DB_KEY = 'ASIST_PSIKOLOG_CENTRAL_DB_V2';
@@ -41,6 +41,7 @@ function asistTelGorunum(tel10) {
 
 /**
  * KDV ve Hak Ediş Hesaplama Motoru
+ * kdvDahil true ise: Brüt ücretten iç yüzde ile KDV ayrılır, kalan Matrah üzerinden Ofis ve Uzman payı hesaplanır.
  */
 function asistHesaplaFinans(ucret, ofisOranYuzde, kdvDahil = false, kdvOrani = 20) {
     let brut = Number(ucret);
@@ -118,6 +119,22 @@ function asistCiftDanisanSenkronizeEt(db, anaDanisanId, ikinciAd, ikinciTelRaw, 
     }
 
     return esDanisan;
+}
+
+/**
+ * Danışanı Takip Eden Uzmanı (En Son Görüştüğü Uzmanı) Bulan Merkezi Motor
+ */
+function asistTakipEdenUzmanBul(danisanId, dbInstance = null) {
+    if (!danisanId) return null;
+    let db = dbInstance || AsistDB.get();
+    let gecmis = (db.seanslar || [])
+        .filter(s => (s.danisanId === danisanId || s.ikinciDanisanId === danisanId) && s.durum !== 'iptal')
+        .sort((a, b) => b.tarih.localeCompare(a.tarih) || b.saat.localeCompare(a.saat));
+
+    if (gecmis.length === 0) return null;
+    let sonSeans = gecmis[0];
+    let uz = (db.psikologlar || []).find(p => p.id === sonSeans.uzmanId);
+    return uz ? { uzman: uz, seansSayisi: gecmis.length, sonTarih: sonSeans.tarih } : null;
 }
 
 const SEED_TARIHI = asistSeedTarihi();
@@ -305,6 +322,7 @@ const AsistDB = {
     normalizeTel: asistTel10,
     hesaplaFinans: asistHesaplaFinans,
     ciftDanisanSenkronizeEt: asistCiftDanisanSenkronizeEt,
+    takipEdenUzmanBul: asistTakipEdenUzmanBul,
 
     get: function() {
         const raw = localStorage.getItem(ASIST_DB_KEY);
@@ -356,12 +374,17 @@ const AsistDB = {
             ...seans,
             subeAdi: sube ? sube.adi : "Silinmiş Şube",
             danisanAdi: danisan ? danisan.ad : "Silinmiş Danışan",
-            danisanTel: danisan ? danisan.tel : "",
+            danisanTel: danisan ? (danisan.tel || danisan.anneTel || danisan.babaTel || "") : "",
+            anneAd: danisan ? (danisan.anneAd || "") : "",
+            anneTel: danisan ? (danisan.anneTel || "") : "",
+            babaAd: danisan ? (danisan.babaAd || "") : "",
+            babaTel: danisan ? (danisan.babaTel || "") : "",
             uzmanAdi: uzman ? uzman.ad : "Silinmiş Uzman",
             odaAdi: oda ? oda.adi : "Silinmiş Oda",
             firmaAdi: firma ? firma.adi : "",
             ikinciDanisanAd: ikinciDanisan ? ikinciDanisan.ad : (seans.ikinciDanisanAd || ""),
-            ikinciDanisanTel: ikinciDanisan ? ikinciDanisan.tel : (seans.ikinciDanisanTel || "")
+            ikinciDanisanTel: ikinciDanisan ? ikinciDanisan.tel : (seans.ikinciDanisanTel || ""),
+            ebeveynGorusmesiMi: !!seans.ebeveynGorusmesiMi
         };
     }
 };

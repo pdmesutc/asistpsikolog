@@ -145,20 +145,21 @@
             </div>
         </div>
 
-        <!-- 2. RANDEVU OLUŞTUR (ÇOCUK, ERGEN, ÇİFT VE EBEVEYN GÖRÜŞMESİ DESTEKLİ) -->
+        <!-- 2. RANDEVU OLUŞTUR (YENİ UX SIRALAMASI, TAKİP EDEN UZMAN TAVSİYESİ VE ESNEK ODA SEÇİMİ) -->
         <div id="asekm-randevu-olustur" class="asistan-sekme hidden space-y-6">
             <div class="bg-white p-6 md:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-5">
                 <div class="border-b border-slate-100 pb-3 flex items-center justify-between">
                     <div>
                         <h2 class="text-xl font-extrabold text-slate-900">Randevu Bilgileri</h2>
-                        <p class="text-xs text-slate-500">Çocuk ve ergen seanslarında ebeveyn bilgileri kaydedilir; çocuk/ergen olmadan sadece ebeveyn görüşmesi seçilebilir.</p>
+                        <p class="text-xs text-slate-500">Hizmet türüne göre ilgili danışan/ebeveyn/eş alanları dinamik açılır ve takip eden uzman otomatik tavsiye edilir.</p>
                     </div>
                 </div>
 
                 <form id="randevu-on-form" onsubmit="musaittlikSorgula(event)" class="space-y-4 text-xs">
                     <input type="hidden" id="secili-danisan-id" value="">
                     
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                    <!-- ADIM 1 & 2: BAŞVURU TÜRÜ VE HİZMET TÜRÜ -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-200">
                         <div>
                             <label class="block font-bold text-slate-700 mb-1">1. Danışan Başvuru Türü</label>
                             <select id="input-basvuru-turu" onchange="basvuruTuruDegisti(this.value)" class="w-full bg-white p-2.5 rounded-xl border border-slate-200 font-bold text-slate-800">
@@ -168,41 +169,63 @@
                             </select>
                         </div>
                         <div id="alan-kurumsal-firma" class="hidden">
-                            <label class="block font-bold text-slate-700 mb-1">2. Kurumsal Firma</label>
-                            <select id="input-kurumsal-firma-id" class="w-full bg-white p-2.5 rounded-xl border border-slate-200 font-bold text-slate-800"></select>
+                            <label class="block font-bold text-slate-700 mb-1">Kurumsal Firma Seçimi</label>
+                            <select id="input-kurumsal-firma-id" onchange="tarihVeyaSaatDegisti()" class="w-full bg-white p-2.5 rounded-xl border border-slate-200 font-bold text-slate-800"></select>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-[#256839] mb-1">2. Hizmet Türü</label>
+                            <select id="input-hizmet-turu" onchange="asistanHizmetTuruDegisti(this.value)" class="w-full bg-white p-2.5 rounded-xl border border-emerald-300 font-extrabold text-slate-900">
+                                <option value="Yetişkin" selected>Yetişkin</option>
+                                <option value="Çocuk">Çocuk</option>
+                                <option value="Ergen">Ergen</option>
+                                <option value="Çift">Çift</option>
+                            </select>
                         </div>
                     </div>
 
+                    <!-- TAKİP EDEN UZMAN TAVSİYE UYARISI (Dinamik - Kısıtlama Koymaz, Bilgilendirir) -->
+                    <div id="takip-eden-uzman-kutu" class="hidden bg-emerald-50/90 border border-emerald-300 p-3.5 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div class="flex items-start space-x-2.5">
+                            <i class="fa-solid fa-user-check text-[#256839] text-base mt-0.5"></i>
+                            <div>
+                                <span class="font-extrabold text-emerald-950 block" id="takip-eden-uzman-baslik">Takip Eden Uzman Tavsiyesi</span>
+                                <p class="text-[11px] text-emerald-800 font-medium" id="takip-eden-uzman-aciklama"></p>
+                            </div>
+                        </div>
+                        <span class="text-[10px] font-extrabold bg-white text-[#256839] border border-emerald-200 px-2.5 py-1 rounded-xl shrink-0 self-start sm:self-center">Bilgi / Tavsiye</span>
+                    </div>
+
+                    <!-- ADIM 3 & 4: DANIŞAN ADI SOYADI VE TELEFONU -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div class="relative">
-                            <label class="block font-bold text-slate-700 mb-1" id="lbl-danisan-ad">2. Danışan Adı Soyadı</label>
+                            <label class="block font-bold text-slate-700 mb-1" id="lbl-danisan-ad">3. Danışan Adı Soyadı</label>
                             <input type="text" id="input-danisan-ad" required autocomplete="off" oninput="canliDanisanAra('ad', this.value)" placeholder="Örn: Mehmet Can" class="w-full bg-slate-50 p-2.5 rounded-xl border border-slate-200 font-medium">
-                            <div id="oneri-kutusu-ad" class="hidden absolute top-full left-0 w-full mt-1 bg-white border border-slate-200 rounded-2xl shadow-xl z-50 max-h-48 overflow-y-auto divide-y divide-slate-100"></div>
+                            <div id="oneri-kutusu-ad" class="hidden absolute top-full left-0 w-full mt-1 bg-white border border-slate-200 rounded-2xl shadow-xl z-50 max-h-52 overflow-y-auto divide-y divide-slate-100"></div>
                         </div>
 
                         <div class="relative">
-                            <label class="block font-bold text-slate-700 mb-1">3. Telefon Numarası (10 Hane)</label>
+                            <label class="block font-bold text-slate-700 mb-1" id="lbl-danisan-tel">4. Telefon Numarası (10 Hane)</label>
                             <input type="text" id="input-danisan-tel" required autocomplete="off" oninput="canliDanisanAra('tel', this.value)" placeholder="5072727136" class="w-full bg-slate-50 p-2.5 rounded-xl border border-slate-200 font-medium">
-                            <div id="oneri-kutusu-tel" class="hidden absolute top-full left-0 w-full mt-1 bg-white border border-slate-200 rounded-2xl shadow-xl z-50 max-h-48 overflow-y-auto divide-y divide-slate-100"></div>
+                            <div id="oneri-kutusu-tel" class="hidden absolute top-full left-0 w-full mt-1 bg-white border border-slate-200 rounded-2xl shadow-xl z-50 max-h-52 overflow-y-auto divide-y divide-slate-100"></div>
                         </div>
                     </div>
 
-                    <!-- ÇİFT SEANSI İKİNCİ DANIŞAN ALANLARI -->
+                    <!-- DİNAMİK ÇİFT SEANSI İKİNCİ DANIŞAN ALANLARI -->
                     <div id="asistan-ikinci-danisan-kapsayici" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-4 bg-purple-50/70 p-4 rounded-2xl border border-purple-200">
                         <div>
-                            <label class="block font-bold text-purple-950 mb-1">İkinci Danışan (Eş) Adı Soyadı <span class="text-[10px] font-normal text-slate-500">(İsteğe Bağlı)</span></label>
+                            <label class="block font-bold text-purple-950 mb-1">İkinci Danışan (Eş) Adı Soyadı <span class="text-[10px] font-normal text-purple-700">(İsteğe Bağlı - Rehbere Eş Olarak Kaydedilir)</span></label>
                             <input type="text" id="input-ikinci-danisan-ad" placeholder="Örn: Ayşe Can" class="w-full bg-white p-2.5 rounded-xl border border-purple-200 font-medium text-slate-800">
                         </div>
                         <div>
-                            <label class="block font-bold text-purple-950 mb-1">İkinci Danışan (Eş) Telefon <span class="text-[10px] font-normal text-slate-500">(İsteğe Bağlı)</span></label>
+                            <label class="block font-bold text-purple-950 mb-1">İkinci Danışan (Eş) Telefon <span class="text-[10px] font-normal text-purple-700">(İsteğe Bağlı)</span></label>
                             <input type="text" id="input-ikinci-danisan-tel" placeholder="5051112233" class="w-full bg-white p-2.5 rounded-xl border border-purple-200 font-medium text-slate-800">
                         </div>
                     </div>
 
-                    <!-- ÇOCUK VE ERGEN İÇİN EBEVEYN BİLGİLERİ VE KATILIM SEÇENEĞİ -->
+                    <!-- DİNAMİK ÇOCUK VE ERGEN EBEVEYN ALANLARI -->
                     <div id="asistan-ebeveyn-kapsayici" class="hidden space-y-3 bg-amber-50/70 p-4 rounded-2xl border border-amber-200">
-                        <div class="flex items-center justify-between pb-2 border-b border-amber-200">
-                            <span class="font-extrabold text-amber-950 text-xs"><i class="fa-solid fa-family mr-1.5 text-[#256839]"></i>Ebeveyn İletişim Bilgileri</span>
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-amber-200">
+                            <span class="font-extrabold text-amber-950 text-xs"><i class="fa-solid fa-people-roof mr-1.5 text-[#256839]"></i>Anne & Baba İletişim Bilgileri</span>
                             <label class="flex items-center space-x-1.5 cursor-pointer font-extrabold text-amber-900 bg-amber-100 px-3 py-1 rounded-xl">
                                 <input type="checkbox" id="input-ebeveyn-gorusmesi" class="rounded text-[#256839] w-4 h-4">
                                 <span>Sadece Anne - Baba Görüşmesi (Çocuk / Ergen Katılmayacak)</span>
@@ -230,13 +253,8 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-1">
-                        <div>
-                            <label class="block font-bold text-slate-700 mb-1">4. Hizmet Türü</label>
-                            <select id="input-hizmet-turu" onchange="asistanHizmetTuruDegisti(this.value)" class="w-full bg-white p-2.5 rounded-xl border border-slate-200 font-bold text-slate-800">
-                                <option value="Çocuk">Çocuk</option><option value="Ergen">Ergen</option><option value="Yetişkin" selected>Yetişkin</option><option value="Çift">Çift</option>
-                            </select>
-                        </div>
+                    <!-- ADIM 5 & 6: TARİH VE SAAT -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
                         <div>
                             <label class="block font-bold text-slate-700 mb-1">5. Seans Tarihi (Geçmiş Seçilemez)</label>
                             <input type="date" id="input-tarih" required onchange="tarihVeyaSaatDegisti()" class="w-full bg-slate-50 p-2.5 rounded-xl border border-slate-200 font-medium">
@@ -265,7 +283,10 @@
                     <div id="uzman-kart-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
                 </div>
                 <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-3">
-                    <h3 class="text-xs font-extrabold text-slate-900">Oda Müsaitliği (<span id="txt-aktif-sube-odalar"></span>)</h3>
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-xs font-extrabold text-slate-900">Oda Müsaitliği (<span id="txt-aktif-sube-odalar"></span>)</h3>
+                        <span class="text-[10px] text-slate-400 font-semibold">Tüm hizmet türleri için boş olan her oda seçilebilir</span>
+                    </div>
                     <div id="oda-kart-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-3"></div>
                 </div>
                 <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs flex justify-between items-center">
@@ -308,17 +329,17 @@
                 <div class="flex items-center justify-between pb-4 border-b border-slate-100">
                     <div>
                         <h2 class="text-xl font-extrabold text-slate-900">Danışan Rehberi (<span id="txt-rehber-sayisi">0</span>)</h2>
-                        <p class="text-xs text-slate-500">Kayıtlı danışanların güncel seans geçmişi ve ebeveyn/eş bilgileri.</p>
+                        <p class="text-xs text-slate-500">Kayıtlı danışanların güncel seans geçmişi, takip eden uzmanları ve ebeveyn/eş bilgileri.</p>
                     </div>
-                    <input type="text" id="danisan-arama-input" onkeyup="danisanlariFiltrele(this.value)" placeholder="Danışan veya Tel Ara..." class="p-2 bg-slate-50 border rounded-xl text-xs w-64">
+                    <input type="text" id="danisan-arama-input" onkeyup="danisanlariFiltrele(this.value)" placeholder="Danışan, Ebeveyn veya Tel Ara..." class="p-2 bg-slate-50 border rounded-xl text-xs w-64">
                 </div>
                 <div class="overflow-x-auto border border-slate-200 rounded-2xl max-h-[550px]">
                     <table class="w-full text-left border-collapse text-xs">
                         <thead class="sticky top-0 bg-slate-50 border-b font-extrabold">
                             <tr>
                                 <th class="p-3.5">Ad Soyad</th>
-                                <th class="p-3.5">Telefon</th>
-                                <th class="p-3.5">Başvuru Kategorisi</th>
+                                <th class="p-3.5">Telefon / Ebeveyn</th>
+                                <th class="p-3.5">Takip Eden Uzman</th>
                                 <th class="p-3.5 text-center">Toplam Seans</th>
                                 <th class="p-3.5 text-center">İşlem</th>
                             </tr>
@@ -457,6 +478,7 @@
                 <h3 id="detay-modal-baslik" class="font-extrabold text-slate-900 text-sm"></h3>
                 <button onclick="danisanDetayModalKapat()" class="text-slate-400 font-bold cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
             </div>
+            <div id="detay-es-bilgi-kutusu" class="hidden bg-purple-50 border border-purple-200 p-3 rounded-2xl flex items-center justify-between"></div>
             <div id="detay-ebeveyn-bilgi-kutusu" class="hidden bg-amber-50 border border-amber-200 p-3 rounded-2xl text-[11px] text-amber-950 font-medium"></div>
             <div id="detay-seans-listesi" class="space-y-2 max-h-60 overflow-y-auto pr-1"></div>
         </div>
@@ -582,6 +604,7 @@
         let secilenUzmanId = null;
         let secilenOdaId = null;
         let aktifSeciliId = null;
+        let tavsiyeEdilenUzmanId = null;
 
         function asistanCikisYap() {
             if (typeof AsistAuth !== 'undefined') {
@@ -683,6 +706,36 @@
             return { brut: ucret, matrah, kdvDahil, kdvOrani, kdvTutari, ofisPay, uzmanPay, ofisKasaToplam: ofisPay + kdvTutari };
         }
 
+        // DANIŞANI TAKİP EDEN UZMANI BULMA VE TAVSİYE MOTORU
+        function danisanTakipEdenUzmanBul(danisanId, dbInstance = null) {
+            if (!danisanId) return null;
+            let db = dbInstance || AsistDB.get();
+            let gecmis = db.seanslar
+                .filter(s => (s.danisanId === danisanId || s.ikinciDanisanId === danisanId) && s.durum !== 'iptal')
+                .sort((a, b) => b.tarih.localeCompare(a.tarih) || b.saat.localeCompare(a.saat));
+
+            if (gecmis.length === 0) return null;
+            let sonSeans = gecmis[0];
+            let uz = db.psikologlar.find(p => p.id === sonSeans.uzmanId);
+            return uz ? { uzman: uz, seansSayisi: gecmis.length, sonTarih: sonSeans.tarih } : null;
+        }
+
+        function takipEdenUzmanUyarisiGoster(danisanId) {
+            const kutu = document.getElementById('takip-eden-uzman-kutu');
+            const aciklama = document.getElementById('takip-eden-uzman-aciklama');
+            if (!kutu || !aciklama) return;
+
+            let bilgi = danisanTakipEdenUzmanBul(danisanId);
+            if (bilgi && bilgi.uzman) {
+                tavsiyeEdilenUzmanId = bilgi.uzman.id;
+                aciklama.innerHTML = `Bu danışanın sistemde kayıtlı <strong>${bilgi.seansSayisi} seansı</strong> bulunmaktadır (Son görüşme: ${escapeHTML(bilgi.sonTarih)}). Klinik süreklilik açısından <strong>${escapeHTML(bilgi.uzman.ad)}</strong> uzmanına randevu oluşturulması tavsiye olunur.`;
+                kutu.classList.remove('hidden');
+            } else {
+                tavsiyeEdilenUzmanId = null;
+                kutu.classList.add('hidden');
+            }
+        }
+
         function tarihVeyaSaatDegisti() {
             secilenUzmanId = null;
             secilenOdaId = null;
@@ -693,52 +746,72 @@
             document.getElementById('sonuc-alani').classList.add('hidden');
         }
 
-        // HİZMET TÜRÜ DEĞİŞTİĞİNDE: Çocuk/Ergen veya Çift alanlarını yönet
+        // HİZMET TÜRÜ DEĞİŞTİĞİNDE (2. SIRADAKİ SEÇENEK): Dinamik etiketler ve çocuk/ergen/çift blokları
         function asistanHizmetTuruDegisti(tur) {
             tarihVeyaSaatDegisti();
             const lblAd = document.getElementById('lbl-danisan-ad');
+            const lblTel = document.getElementById('lbl-danisan-tel');
+            const inpTel = document.getElementById('input-danisan-tel');
             const ikinciKapsayici = document.getElementById('asistan-ikinci-danisan-kapsayici');
             const ebeveynKapsayici = document.getElementById('asistan-ebeveyn-kapsayici');
 
             if (!lblAd || !ikinciKapsayici || !ebeveynKapsayici) return;
 
+            let seciliId = parseInt(document.getElementById('secili-danisan-id').value, 10);
+            let db = seciliId ? AsistDB.get() : null;
+            let seciliDanisan = (db && seciliId) ? db.danisanlar.find(x => x.id === seciliId) : null;
+
             if (tur === 'Çocuk') {
-                lblAd.innerText = "2. Danışan Adı Soyadı (Çocuk Adı Soyadı)";
+                lblAd.innerText = "3. Danışan Adı Soyadı (Çocuk Adı Soyadı)";
+                if (lblTel) lblTel.innerHTML = `4. Telefon Numarası <span class="text-[10px] font-normal text-slate-400">(İsteğe Bağlı - Çocuk)</span>`;
+                if (inpTel) { inpTel.required = false; inpTel.placeholder = "İsteğe bağlı (Yoksa anne/baba tel baz alınır)"; }
                 ikinciKapsayici.classList.add('hidden');
                 ebeveynKapsayici.classList.remove('hidden');
+                if (seciliDanisan) {
+                    document.getElementById('input-anne-ad').value = seciliDanisan.anneAd || '';
+                    document.getElementById('input-anne-tel').value = normalizeTelefon10Hane(seciliDanisan.anneTel);
+                    document.getElementById('input-baba-ad').value = seciliDanisan.babaAd || '';
+                    document.getElementById('input-baba-tel').value = normalizeTelefon10Hane(seciliDanisan.babaTel);
+                }
             } else if (tur === 'Ergen') {
-                lblAd.innerText = "2. Danışan Adı Soyadı (Ergen Adı Soyadı)";
+                lblAd.innerText = "3. Danışan Adı Soyadı (Ergen Adı Soyadı)";
+                if (lblTel) lblTel.innerHTML = `4. Telefon Numarası <span class="text-[10px] font-normal text-slate-400">(İsteğe Bağlı - Ergen)</span>`;
+                if (inpTel) { inpTel.required = false; inpTel.placeholder = "İsteğe bağlı (Yoksa anne/baba tel baz alınır)"; }
                 ikinciKapsayici.classList.add('hidden');
                 ebeveynKapsayici.classList.remove('hidden');
+                if (seciliDanisan) {
+                    document.getElementById('input-anne-ad').value = seciliDanisan.anneAd || '';
+                    document.getElementById('input-anne-tel').value = normalizeTelefon10Hane(seciliDanisan.anneTel);
+                    document.getElementById('input-baba-ad').value = seciliDanisan.babaAd || '';
+                    document.getElementById('input-baba-tel').value = normalizeTelefon10Hane(seciliDanisan.babaTel);
+                }
             } else if (tur === 'Çift') {
-                lblAd.innerText = "2. Danışan Adı Soyadı";
+                lblAd.innerText = "3. Danışan Adı Soyadı (1. Danışan)";
+                if (lblTel) lblTel.innerText = "4. Telefon Numarası (10 Hane)";
+                if (inpTel) { inpTel.required = true; inpTel.placeholder = "5072727136"; }
                 ebeveynKapsayici.classList.add('hidden');
+                document.getElementById('input-ebeveyn-gorusmesi').checked = false;
                 ikinciKapsayici.classList.remove('hidden');
-                let seciliId = parseInt(document.getElementById('secili-danisan-id').value, 10);
-                if (seciliId) {
-                    let db = AsistDB.get();
-                    let d = db.danisanlar.find(x => x.id === seciliId);
-                    if (d && d.esDanisanId) {
-                        let es = db.danisanlar.find(x => x.id === d.esDanisanId);
-                        if (es) {
-                            document.getElementById('input-ikinci-danisan-ad').value = es.ad || '';
-                            document.getElementById('input-ikinci-danisan-tel').value = normalizeTelefon10Hane(es.tel);
-                        }
+                if (seciliDanisan && seciliDanisan.esDanisanId) {
+                    let es = db.danisanlar.find(x => x.id === seciliDanisan.esDanisanId);
+                    if (es) {
+                        document.getElementById('input-ikinci-danisan-ad').value = es.ad || '';
+                        document.getElementById('input-ikinci-danisan-tel').value = normalizeTelefon10Hane(es.tel);
                     }
                 }
             } else {
-                lblAd.innerText = "2. Danışan Adı Soyadı";
+                lblAd.innerText = "3. Danışan Adı Soyadı";
+                if (lblTel) lblTel.innerText = "4. Telefon Numarası (10 Hane)";
+                if (inpTel) { inpTel.required = true; inpTel.placeholder = "5072727136"; }
                 ikinciKapsayici.classList.add('hidden');
                 ebeveynKapsayici.classList.add('hidden');
+                document.getElementById('input-ebeveyn-gorusmesi').checked = false;
             }
         }
 
+        // ODA KISITLAMALARI KALDIRILDI: Her hizmet türü için her boş oda seçilebilir
         function odaHizmeteUygunMu(oda, hizmet, tumOdalar) {
-            if (!oda || !oda.tip) return true;
-            let arananTip = (hizmet === 'Çocuk') ? 'cocuk' : 'yetiskin';
-            let subedeBuTipOdaVarMi = (tumOdalar || []).some(o => o.tip === arananTip);
-            if (!subedeBuTipOdaVarMi) return true;
-            return oda.tip === arananTip;
+            return true;
         }
 
         function subeSaatKontrol(sube, saat) {
@@ -804,7 +877,6 @@
                 }
                 let oda = sube.odalar.find(o => o.id === p.odaId);
                 if (!oda) return "Oda seçilmedi veya bulunamadı.";
-                if (!odaHizmeteUygunMu(oda, p.hizmet, sube.odalar)) return `"${oda.adi}" bu hizmet türü için uygun değil.`;
             }
 
             let takvimHata = uzmanTakvimKontrol(db, p.uzmanId, p.subeId, p.tarih, p.saat);
@@ -1489,7 +1561,7 @@
             tumGorunumleriYenile();
         }
 
-        // MÜSAİTLİK VE EBEVEYN/ÇOCUK ODA UYUM KONTROLÜ
+        // MÜSAİTLİK SORGULAMA (Takip Eden Uzman Rozetli ve Oda Kısıtlamasız)
         function musaittlikSorgula(e) {
             e.preventDefault();
             let db = AsistDB.get();
@@ -1498,6 +1570,26 @@
             let hizmetTuru = document.getElementById('input-hizmet-turu').value;
             let tarih = document.getElementById('input-tarih').value;
             let saat = document.getElementById('input-saat').value;
+
+            let anaTel = normalizeTelefon10Hane(document.getElementById('input-danisan-tel').value);
+            let anneTel = normalizeTelefon10Hane(document.getElementById('input-anne-tel').value);
+            let babaTel = normalizeTelefon10Hane(document.getElementById('input-baba-tel').value);
+
+            if (hizmetTuru === 'Çocuk' || hizmetTuru === 'Ergen') {
+                if (anaTel.length > 0 && anaTel.length !== 10) {
+                    alert("Çocuk/Ergen telefon numarası girilecekse 10 haneli olmalıdır (Yoksa boş bırakabilirsiniz).");
+                    return;
+                }
+                if (anaTel.length !== 10 && anneTel.length !== 10 && babaTel.length !== 10) {
+                    alert("Lütfen iletişim için en az bir geçerli telefon numarası (Anne, Baba veya Danışan telefonu - 10 hane) giriniz.");
+                    return;
+                }
+            } else {
+                if (anaTel.length !== 10) {
+                    alert("Lütfen danışan telefon numarasını 10 haneli (5XXXXXXXXX) giriniz.");
+                    return;
+                }
+            }
 
             if (!tarihGecerliMi(tarih)) { alert("Lütfen geçerli bir randevu tarihi seçiniz."); return; }
             if (gecmisTarihSaatMi(tarih, saat)) { alert("Geçmiş bir tarih veya geçmiş bir saate randevu oluşturulamaz."); return; }
@@ -1518,6 +1610,11 @@
             document.getElementById('ozet-tarih-saat').innerText = `${tarih} • ${saat}`;
 
             let subeUzmanlari = db.psikologlar.filter(p => (p.subeIds || []).includes(AKTIF_SUBE_ID) && p.durum !== 'pasif');
+            // Takip eden uzmanı listenin en başına alalım (kullanıcı deneyimi için)
+            if (tavsiyeEdilenUzmanId) {
+                subeUzmanlari.sort((a, b) => (a.id === tavsiyeEdilenUzmanId ? -1 : (b.id === tavsiyeEdilenUzmanId ? 1 : 0)));
+            }
+
             let firmaObj = firmaId ? db.firmalar.find(f => f.id === firmaId) : null;
 
             const ug = document.getElementById('uzman-kart-grid');
@@ -1526,6 +1623,10 @@
             subeUzmanlari.forEach(u => {
                 let uygun = true;
                 let redSebebi = "";
+                let takipEdenMi = (tavsiyeEdilenUzmanId && u.id === tavsiyeEdilenUzmanId);
+                let tavsiyeRozet = takipEdenMi
+                    ? `<span class="inline-block bg-amber-100 text-amber-900 border border-amber-300 text-[10px] font-extrabold px-2 py-0.5 rounded-lg mb-1">⭐ Takip Eden Uzman (Tavsiye)</span>`
+                    : '';
 
                 if (!(u.alanlar || []).includes(hizmetTuru)) { uygun = false; redSebebi = `"${hizmetTuru}" yetkisi yok.`; }
                 if (uygun && basvuruTuru === 'firma' && firmaObj && !firmaObj.tumUzmanlar) {
@@ -1542,7 +1643,7 @@
 
                 let card = document.createElement('div');
                 if (uygun) {
-                    card.className = "uzman-kart border-2 border-emerald-500 bg-emerald-50/60 p-3 rounded-2xl cursor-pointer transition hover:bg-emerald-100/70";
+                    card.className = `uzman-kart border-2 ${takipEdenMi ? 'border-amber-500 bg-amber-50/70' : 'border-emerald-500 bg-emerald-50/60'} p-3 rounded-2xl cursor-pointer transition hover:bg-emerald-100/70`;
                     card.onclick = function() {
                         secilenUzmanId = u.id;
                         document.querySelectorAll('.uzman-kart').forEach(k => k.classList.remove('ring-4', 'ring-[#256839]', 'bg-emerald-200'));
@@ -1550,35 +1651,25 @@
                         document.getElementById('secim-uzman-yazi').innerText = u.ad;
                         kontrolOnayButon();
                     };
-                    card.innerHTML = `<span class="font-extrabold text-slate-900 block">${escapeHTML(u.ad)}</span><span class="text-[10px] text-emerald-800 font-bold">✅ Bu Şubede Müsait</span>`;
+                    card.innerHTML = `${tavsiyeRozet}<span class="font-extrabold text-slate-900 block">${escapeHTML(u.ad)}</span><span class="text-[10px] text-emerald-800 font-bold">✅ Bu Şubede Müsait</span>`;
                 } else {
                     card.className = "border border-red-200 bg-red-50/50 p-3 rounded-2xl opacity-75 cursor-not-allowed";
-                    card.innerHTML = `<span class="font-bold text-slate-700 block">${escapeHTML(u.ad)}</span><span class="text-[10px] text-red-600 font-bold">❌ ${escapeHTML(redSebebi)}</span>`;
+                    card.innerHTML = `${tavsiyeRozet}<span class="font-bold text-slate-700 block">${escapeHTML(u.ad)}</span><span class="text-[10px] text-red-600 font-bold">❌ ${escapeHTML(redSebebi)}</span>`;
                 }
                 ug.appendChild(card);
             });
 
-            // Odalar (Ebeveyn görüşmesiyse oyun odası yerine yetişkin/çift odası açılır)
+            // Odalar (Oda tipi kısıtlaması olmadan boş olan her oda seçilebilir)
             const og = document.getElementById('oda-kart-grid');
             og.innerHTML = '';
             let tumOdalar = aktifSubeObj.odalar || [];
-            let ebeveynGorusmesiMi = document.getElementById('input-ebeveyn-gorusmesi').checked;
 
             tumOdalar.forEach(oda => {
                 let dolu = db.seanslar.some(s => s.subeId === AKTIF_SUBE_ID && s.tarih === tarih && s.saat === saat && s.odaId === oda.id && s.durum !== 'iptal');
-                let tipUygun = false;
-                if (hizmetTuru === 'Çocuk') {
-                    if (ebeveynGorusmesiMi) {
-                        tipUygun = (oda.tip === 'yetiskin'); // Sadece ebeveynse yetişkin odası uygun
-                    } else {
-                        tipUygun = (oda.tip === 'cocuk'); // Çocuk geliyorsa oyun odası uygun
-                    }
-                } else {
-                    tipUygun = odaHizmeteUygunMu(oda, hizmetTuru, tumOdalar);
-                }
+                let odaTipYazi = oda.tip === 'cocuk' ? 'Oyun / Çocuk Odası' : 'Yetişkin / Çift Odası';
 
                 let card = document.createElement('div');
-                if (!dolu && tipUygun) {
+                if (!dolu) {
                     card.className = "oda-kart border-2 border-emerald-500 bg-emerald-50/60 p-4 rounded-2xl text-center cursor-pointer transition hover:bg-emerald-100/70";
                     card.onclick = function() {
                         secilenOdaId = oda.id;
@@ -1587,11 +1678,10 @@
                         document.getElementById('secim-oda-yazi').innerText = oda.adi;
                         kontrolOnayButon();
                     };
-                    card.innerHTML = `<h4 class="font-extrabold text-slate-900 text-xs">${escapeHTML(oda.adi)}</h4><span class="text-[10px] font-bold text-emerald-800">✅ Boş Oda</span>`;
+                    card.innerHTML = `<h4 class="font-extrabold text-slate-900 text-xs">${escapeHTML(oda.adi)}</h4><span class="text-[10px] text-slate-500 block">${odaTipYazi}</span><span class="text-[10px] font-bold text-emerald-800">✅ Boş (Seçilebilir)</span>`;
                 } else {
                     card.className = "border border-red-200 bg-red-50/50 p-4 rounded-2xl text-center opacity-75 cursor-not-allowed";
-                    let sebep = dolu ? "Dolu" : (ebeveynGorusmesiMi ? "Ebeveyn görüşmesi için yetişkin odası gerekli" : `"${hizmetTuru}" için uygun değil`);
-                    card.innerHTML = `<h4 class="font-bold text-slate-700 text-xs">${escapeHTML(oda.adi)}</h4><span class="text-[10px] font-bold text-red-600">❌ ${escapeHTML(sebep)}</span>`;
+                    card.innerHTML = `<h4 class="font-bold text-slate-700 text-xs">${escapeHTML(oda.adi)}</h4><span class="text-[10px] text-slate-400 block">${odaTipYazi}</span><span class="text-[10px] font-bold text-red-600">❌ Bu Saatte Dolu</span>`;
                 }
                 og.appendChild(card);
             });
@@ -1611,7 +1701,7 @@
             let db = AsistDB.get();
             let danisanId = document.getElementById('secili-danisan-id').value;
             let ad = document.getElementById('input-danisan-ad').value.trim();
-            let tel = normalizeTelefon10Hane(document.getElementById('input-danisan-tel').value);
+            let girilenTel = normalizeTelefon10Hane(document.getElementById('input-danisan-tel').value);
             let tarih = document.getElementById('input-tarih').value;
             let saat = document.getElementById('input-saat').value;
             let hizmetTuru = document.getElementById('input-hizmet-turu').value;
@@ -1621,14 +1711,29 @@
             let ikinciDanisanAd = document.getElementById('input-ikinci-danisan-ad').value.trim();
             let ikinciDanisanTel = normalizeTelefon10Hane(document.getElementById('input-ikinci-danisan-tel').value);
 
-            let ebeveynGorusmesiMi = document.getElementById('input-ebeveyn-gorusmesi').checked;
+            let ebeveynGorusmesiMi = (hizmetTuru === 'Çocuk' || hizmetTuru === 'Ergen') ? document.getElementById('input-ebeveyn-gorusmesi').checked : false;
             let anneAd = document.getElementById('input-anne-ad').value.trim();
             let anneTel = normalizeTelefon10Hane(document.getElementById('input-anne-tel').value);
             let babaAd = document.getElementById('input-baba-ad').value.trim();
             let babaTel = normalizeTelefon10Hane(document.getElementById('input-baba-tel').value);
 
             if (!ad) { alert("Lütfen danışan adını giriniz."); return; }
-            if (tel.length !== 10) { alert("Lütfen telefon numarasını 10 haneli (5XXXXXXXXX) giriniz."); return; }
+
+            let tel = girilenTel;
+            if (hizmetTuru === 'Çocuk' || hizmetTuru === 'Ergen') {
+                if (girilenTel.length > 0 && girilenTel.length !== 10) {
+                    alert("Çocuk/Ergen telefon numarası girilecekse 10 haneli olmalıdır (Yoksa boş bırakabilirsiniz).");
+                    return;
+                }
+                if (!tel) tel = anneTel || babaTel || "";
+                if (tel.length !== 10) {
+                    alert("Lütfen iletişim için en az bir geçerli telefon numarası (Anne, Baba veya Danışan telefonu - 10 hane) giriniz.");
+                    return;
+                }
+            } else {
+                if (tel.length !== 10) { alert("Lütfen telefon numarasını 10 haneli (5XXXXXXXXX) giriniz."); return; }
+            }
+
             if (basvuruTuru === 'firma' && !firmaId) { alert("Lütfen kurumsal firmayı seçiniz."); return; }
             if (!secilenUzmanId || !secilenOdaId) { alert("Lütfen uzman ve oda seçiniz."); return; }
 
@@ -1643,7 +1748,9 @@
 
             let mevcut = null;
             if (danisanId) mevcut = db.danisanlar.find(d => d.id === parseInt(danisanId, 10));
-            if (!mevcut) mevcut = db.danisanlar.find(d => normalizeTelefon10Hane(d.tel) === tel);
+            if (!mevcut && girilenTel.length === 10) {
+                mevcut = db.danisanlar.find(d => normalizeTelefon10Hane(d.tel) === girilenTel);
+            }
 
             if (mevcut) {
                 if (!danisanId && (mevcut.ad || '').trim().toLowerCase() !== ad.toLowerCase()) {
@@ -1710,6 +1817,7 @@
             document.getElementById('randevu-on-form').reset();
             document.getElementById('secili-danisan-id').value = '';
             document.getElementById('input-tarih').value = formatTarihISO(new Date());
+            takipEdenUzmanUyarisiGoster(null);
             basvuruTuruDegisti('ofis');
             asistanHizmetTuruDegisti('Yetişkin');
             secilenUzmanId = null;
@@ -1725,18 +1833,38 @@
             let hedefKutu = kaynak === 'ad' ? oneriKutusuAd : oneriKutusuTel;
 
             document.getElementById('secili-danisan-id').value = '';
+            takipEdenUzmanUyarisiGoster(null);
 
             if (val.length < 2) { hedefKutu.classList.add('hidden'); return; }
             let rakamlar = val.replace(/\D/g, '').replace(/^0+/, '');
-            let eslesenler = db.danisanlar.filter(d => kaynak === 'ad'
-                ? (d.ad || '').toLowerCase().includes(val)
-                : (rakamlar.length >= 2 && normalizeTelefon10Hane(d.tel).includes(rakamlar)));
+            let eslesenler = db.danisanlar.filter(d => {
+                if (kaynak === 'ad') {
+                    return (d.ad || '').toLowerCase().includes(val) ||
+                           (d.anneAd || '').toLowerCase().includes(val) ||
+                           (d.babaAd || '').toLowerCase().includes(val);
+                } else {
+                    if (rakamlar.length < 2) return false;
+                    return normalizeTelefon10Hane(d.tel).includes(rakamlar) ||
+                           normalizeTelefon10Hane(d.anneTel).includes(rakamlar) ||
+                           normalizeTelefon10Hane(d.babaTel).includes(rakamlar);
+                }
+            });
+
             if (eslesenler.length === 0) { hedefKutu.classList.add('hidden'); return; }
 
             hedefKutu.innerHTML = '';
-            eslesenler.slice(0, 5).forEach(d => {
+            eslesenler.slice(0, 6).forEach(d => {
                 let es = d.esDanisanId ? db.danisanlar.find(x => x.id === d.esDanisanId) : null;
                 let esEtiket = es ? `<span class="text-[10px] bg-purple-50 text-purple-800 border border-purple-200 px-1.5 py-0.5 rounded font-bold ml-1.5">💍 Eş: ${escapeHTML(es.ad)}</span>` : '';
+
+                let takipBilgi = danisanTakipEdenUzmanBul(d.id, db);
+                let takipEtiket = takipBilgi && takipBilgi.uzman
+                    ? `<span class="text-[10px] bg-emerald-50 text-[#256839] border border-emerald-200 px-1.5 py-0.5 rounded font-bold ml-1.5">👨‍⚕️ ${escapeHTML(takipBilgi.uzman.ad)}</span>`
+                    : '';
+
+                let ebeveynNot = (d.anneAd || d.babaAd)
+                    ? `<span class="block text-[10px] text-amber-800">Anne: ${escapeHTML(d.anneAd || '-')} • Baba: ${escapeHTML(d.babaAd || '-')}</span>`
+                    : '';
 
                 let item = document.createElement('div');
                 item.className = "p-2.5 hover:bg-emerald-50 cursor-pointer flex justify-between items-center";
@@ -1753,16 +1881,20 @@
                     if (hizmetTuru === 'Çift' && es) {
                         document.getElementById('input-ikinci-danisan-ad').value = es.ad || '';
                         document.getElementById('input-ikinci-danisan-tel').value = normalizeTelefon10Hane(es.tel);
-                    } else if ((hizmetTuru === 'Çocuk' || hizmetTuru === 'Ergen')) {
-                        if (d.anneAd) document.getElementById('input-anne-ad').value = d.anneAd;
-                        if (d.anneTel) document.getElementById('input-anne-tel').value = normalizeTelefon10Hane(d.anneTel);
-                        if (d.babaAd) document.getElementById('input-baba-ad').value = d.babaAd;
-                        if (d.babaTel) document.getElementById('input-baba-tel').value = normalizeTelefon10Hane(d.babaTel);
+                    } else if (hizmetTuru === 'Çocuk' || hizmetTuru === 'Ergen') {
+                        document.getElementById('input-anne-ad').value = d.anneAd || '';
+                        document.getElementById('input-anne-tel').value = normalizeTelefon10Hane(d.anneTel);
+                        document.getElementById('input-baba-ad').value = d.babaAd || '';
+                        document.getElementById('input-baba-tel').value = normalizeTelefon10Hane(d.babaTel);
                     }
+
+                    // Takip eden uzman tavsiyesini göster
+                    takipEdenUzmanUyarisiGoster(d.id);
+
                     oneriKutusuAd.classList.add('hidden');
                     oneriKutusuTel.classList.add('hidden');
                 };
-                item.innerHTML = `<div><span class="font-bold">${escapeHTML(d.ad)}</span> - <span class="text-slate-400 font-mono">${escapeHTML(formatTelefonGorunum(d.tel))}</span>${esEtiket}</div>`;
+                item.innerHTML = `<div><span class="font-bold">${escapeHTML(d.ad)}</span> - <span class="text-slate-400 font-mono">${escapeHTML(formatTelefonGorunum(d.tel))}</span>${esEtiket}${takipEtiket}${ebeveynNot}</div>`;
                 hedefKutu.appendChild(item);
             });
             hedefKutu.classList.remove('hidden');
@@ -1785,8 +1917,8 @@
                 if (!aramaMetni) return true;
                 let adUygun = (d.ad || '').toLowerCase().includes(aramaMetni);
                 let telUygun = (d.tel && d.tel.includes(aramaMetni)) || (aramaRakam.length >= 2 && normalizeTelefon10Hane(d.tel).includes(aramaRakam));
-                let anneUygun = (d.anneAd || '').toLowerCase().includes(aramaMetni) || (d.anneTel && normalizeTelefon10Hane(d.anneTel).includes(aramaRakam));
-                let babaUygun = (d.babaAd || '').toLowerCase().includes(aramaMetni) || (d.babaTel && normalizeTelefon10Hane(d.babaTel).includes(aramaRakam));
+                let anneUygun = (d.anneAd || '').toLowerCase().includes(aramaMetni) || (d.anneTel && aramaRakam.length >= 2 && normalizeTelefon10Hane(d.anneTel).includes(aramaRakam));
+                let babaUygun = (d.babaAd || '').toLowerCase().includes(aramaMetni) || (d.babaTel && aramaRakam.length >= 2 && normalizeTelefon10Hane(d.babaTel).includes(aramaRakam));
                 return adUygun || telUygun || anneUygun || babaUygun;
             });
 
@@ -1797,14 +1929,22 @@
                 let es = d.esDanisanId ? db.danisanlar.find(x => x.id === d.esDanisanId) : null;
                 let esRozet = es ? `<span class="bg-purple-50 text-purple-900 border border-purple-200 px-2 py-0.5 rounded font-bold text-[10px] ml-1.5">💍 Eş: ${escapeHTML(es.ad)}</span>` : '';
 
-                let kategori = d.firmaId ? '<span class="bg-blue-50 text-blue-900 border border-blue-200 px-2 py-0.5 rounded font-extrabold text-[10px]">Kurumsal Firma</span>' : '<span class="text-slate-500 font-semibold text-[11px]">Bireysel / Aile</span>';
-                let telStr = formatTelefonGorunum(d.tel);
+                let takipBilgi = danisanTakipEdenUzmanBul(d.id, db);
+                let takipYazi = takipBilgi && takipBilgi.uzman
+                    ? `<span class="font-bold text-[#256839]">${escapeHTML(takipBilgi.uzman.ad)}</span>`
+                    : `<span class="text-slate-400 italic">Henüz Yok</span>`;
+
+                let ebeveynBilgi = (d.anneAd || d.babaAd)
+                    ? `<span class="block text-[10px] text-amber-800 font-semibold">Anne: ${escapeHTML(d.anneAd || '-')} • Baba: ${escapeHTML(d.babaAd || '-')}</span>`
+                    : '';
+
+                let telStr = formatTelefonGorunum(d.tel || d.anneTel || d.babaTel);
 
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50 transition">
                         <td class="p-3.5 font-bold text-slate-900">${escapeHTML(d.ad)} ${esRozet}</td>
-                        <td class="p-3.5 text-slate-600 font-mono">${escapeHTML(telStr)}</td>
-                        <td class="p-3.5">${kategori}</td>
+                        <td class="p-3.5 text-slate-600 font-mono">${escapeHTML(telStr)}${ebeveynBilgi}</td>
+                        <td class="p-3.5">${takipYazi}</td>
                         <td class="p-3.5 text-center font-black">${seanslar.length} Seans</td>
                         <td class="p-3.5 text-center space-x-1">
                             <button onclick="danisanHizliBireyselRandevu(${d.id})" class="bg-slate-100 hover:bg-emerald-50 text-slate-700 hover:text-[#256839] px-2.5 py-1 rounded-lg font-bold border border-slate-200 cursor-pointer" title="Bu Kişiye Randevu Aç">+ Randevu</button>
@@ -1824,13 +1964,17 @@
             document.getElementById('secili-danisan-id').value = d.id;
             document.getElementById('input-danisan-ad').value = d.ad;
             document.getElementById('input-danisan-tel').value = normalizeTelefon10Hane(d.tel);
-            document.getElementById('input-hizmet-turu').value = 'Yetişkin';
-            asistanHizmetTuruDegisti('Yetişkin');
+
+            let varsayilanHizmet = (d.anneAd || d.babaAd) ? 'Çocuk' : 'Yetişkin';
+            document.getElementById('input-hizmet-turu').value = varsayilanHizmet;
+            asistanHizmetTuruDegisti(varsayilanHizmet);
+
             if (d.firmaId) {
                 document.getElementById('input-basvuru-turu').value = 'firma';
                 basvuruTuruDegisti('firma');
                 document.getElementById('input-kurumsal-firma-id').value = d.firmaId;
             }
+            takipEdenUzmanUyarisiGoster(d.id);
         }
 
         function danisanDetayAc(id) {
@@ -1840,12 +1984,30 @@
 
             document.getElementById('detay-modal-baslik').innerText = `${d.ad} - Seans Geçmişi`;
 
+            const esKutu = document.getElementById('detay-es-bilgi-kutusu');
+            let es = d.esDanisanId ? db.danisanlar.find(x => x.id === d.esDanisanId) : null;
+            if (es && esKutu) {
+                esKutu.classList.remove('hidden');
+                esKutu.innerHTML = `
+                    <div>
+                        <span class="font-extrabold text-purple-950 block">💍 Eşleşmiş Çift Kaydı: ${escapeHTML(es.ad)}</span>
+                        <span class="text-[10px] text-purple-700">${escapeHTML(formatTelefonGorunum(es.tel))}</span>
+                    </div>
+                    <div class="flex space-x-1.5">
+                        <button onclick="danisanDetayAc(${es.id})" class="bg-white text-purple-900 border border-purple-200 px-2.5 py-1 rounded-xl font-bold cursor-pointer">Eşin Geçmişi</button>
+                        <button onclick="danisanHizliBireyselRandevu(${es.id})" class="bg-[#256839] text-white px-2.5 py-1 rounded-xl font-bold cursor-pointer">Eşe Bireysel Randevu</button>
+                    </div>
+                `;
+            } else if (esKutu) {
+                esKutu.classList.add('hidden');
+            }
+
             const ebeveynKutu = document.getElementById('detay-ebeveyn-bilgi-kutusu');
             if (ebeveynKutu) {
                 if (d.anneAd || d.babaAd) {
                     ebeveynKutu.classList.remove('hidden');
                     ebeveynKutu.innerHTML = `
-                        <span class="font-extrabold text-amber-950 block mb-0.5"><i class="fa-solid fa-family mr-1"></i>Ebeveyn Kayıtları:</span>
+                        <span class="font-extrabold text-amber-950 block mb-0.5"><i class="fa-solid fa-people-roof mr-1"></i>Ebeveyn Kayıtları:</span>
                         ${d.anneAd ? `Anne: <strong>${escapeHTML(d.anneAd)}</strong> (${escapeHTML(formatTelefonGorunum(d.anneTel || ''))})<br>` : ''}
                         ${d.babaAd ? `Baba: <strong>${escapeHTML(d.babaAd)}</strong> (${escapeHTML(formatTelefonGorunum(d.babaTel || ''))})` : ''}
                     `;
@@ -1868,7 +2030,7 @@
                     let kdvBilgi = (f.kdvDahil && f.kdvTutari > 0) ? ` [KDV: ₺${f.kdvTutari}]` : '';
                     let turEtiket = s.hizmet === 'Çift' 
                         ? '<span class="text-[10px] font-extrabold text-purple-800 bg-purple-100 px-1.5 py-0.5 rounded mr-1">Çift Seansı</span>' 
-                        : (s.ebeveynGorusmesiMi ? '<span class="text-[10px] font-extrabold text-amber-800 bg-amber-100 px-1.5 py-0.5 rounded mr-1">Ebeveyn Görüşmesi</span>' : '<span class="text-[10px] font-bold text-slate-600 bg-slate-200 px-1.5 py-0.5 rounded mr-1">Bireysel</span>');
+                        : (s.ebeveynGorusmesiMi ? '<span class="text-[10px] font-extrabold text-amber-800 bg-amber-100 px-1.5 py-0.5 rounded mr-1">Ebeveyn Görüşmesi</span>' : `<span class="text-[10px] font-bold text-slate-600 bg-slate-200 px-1.5 py-0.5 rounded mr-1">${escapeHTML(s.hizmet || 'Bireysel')}</span>`);
                     
                     let rozet = (s.odemeTipi === 'firma_cari' || s.basvuruTuru === 'firma')
                         ? '<span class="text-[10px] font-bold text-blue-800 bg-blue-50 px-2 py-0.5 rounded">Firma Carisi</span>'
