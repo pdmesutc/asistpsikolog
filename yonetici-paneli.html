@@ -13,7 +13,7 @@
         :root { --primary: #256839; --primary-dark: #12612d; }
     </style>
 </head>
-<body class="bg-slate-100 text-slate-900 min-h-screen flex flex-col md:flex-row pb-20 md:pb-0">
+<body class="bg-slate-100 text-slate-900 min-h-screen flex flex-col md:flex-row pb-24 md:pb-0">
 
     <!-- SOL DİKEY MENÜ (Masaüstü ve Tablet) -->
     <aside class="w-full md:w-72 bg-white border-r border-slate-200 flex flex-col justify-between shrink-0 sticky top-0 md:h-screen z-40 shadow-xs">
@@ -29,9 +29,9 @@
                     </div>
                 </div>
 
-                <!-- Mobilde Hızlı Çıkış İkonu -->
-                <button onclick="yoneticiCikisYap()" class="md:hidden w-9 h-9 rounded-xl bg-red-50 text-red-600 flex items-center justify-center cursor-pointer hover:bg-red-100 transition" title="Çıkış">
-                    <i class="fa-solid fa-right-from-bracket text-xs"></i>
+                <!-- Mobilde Üst Hızlı Menü Butonu -->
+                <button type="button" onclick="yonMobilDahaFazlaAc()" class="md:hidden w-9 h-9 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 flex items-center justify-center cursor-pointer hover:bg-slate-100 transition" title="Tüm Menü">
+                    <i class="fa-solid fa-bars text-sm"></i>
                 </button>
             </div>
 
@@ -39,7 +39,7 @@
             <div class="p-4 border-b border-slate-100 bg-emerald-50/40 space-y-2">
                 <span class="text-[10px] font-extrabold text-[#256839] uppercase tracking-wider block">Hızlı Panel Geçişi (Gözlem)</span>
                 <div class="relative" id="asistan-gecis-kapsayici">
-                    <button onclick="asistanGecisDropdownToggle()" class="w-full bg-white hover:bg-emerald-50 text-slate-800 border border-emerald-200 py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-between shadow-2xs cursor-pointer">
+                    <button type="button" onclick="asistanGecisDropdownToggle()" class="w-full bg-white hover:bg-emerald-50 text-slate-800 border border-emerald-200 py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-between shadow-2xs cursor-pointer">
                         <span class="flex items-center"><i class="fa-solid fa-headset mr-2 text-[#256839]"></i> Asistan Paneli</span>
                         <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
                     </button>
@@ -54,28 +54,28 @@
                 </a>
             </div>
 
-            <!-- Navigasyon Butonları (Mobilde Yatay Kaydırılabilir, Masaüstünde Dikey) -->
-            <nav class="p-3 sm:p-4 space-y-1 md:space-y-1.5 flex md:flex-col overflow-x-auto gap-1 md:gap-0 text-xs font-bold shrink-0">
-                <button onclick="tabDegistir('subeler')" id="btn-subeler" class="tab-btn whitespace-nowrap py-2.5 px-3 md:py-3 md:px-4 rounded-xl transition flex items-center space-x-2 md:space-x-3 bg-[#256839] text-white shadow-xs cursor-pointer shrink-0">
-                    <i class="fa-solid fa-building w-4 text-center"></i><span>Şube & Odalar</span>
+            <!-- Masaüstü Navigasyon Butonları -->
+            <nav class="p-4 space-y-1.5 hidden md:block text-xs font-bold">
+                <button onclick="tabDegistir('subeler')" id="btn-subeler" class="tab-btn w-full py-3 px-4 rounded-xl transition flex items-center space-x-3 bg-[#256839] text-white shadow-xs cursor-pointer">
+                    <i class="fa-solid fa-building w-5 text-center"></i><span>Şube & Odalar</span>
                 </button>
-                <button onclick="tabDegistir('asistanlar')" id="btn-asistanlar" class="tab-btn whitespace-nowrap py-2.5 px-3 md:py-3 md:px-4 rounded-xl transition flex items-center space-x-2 md:space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer shrink-0">
-                    <i class="fa-solid fa-headset w-4 text-center"></i><span>Asistanlar</span>
+                <button onclick="tabDegistir('asistanlar')" id="btn-asistanlar" class="tab-btn w-full py-3 px-4 rounded-xl transition flex items-center space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer">
+                    <i class="fa-solid fa-headset w-5 text-center"></i><span>Asistanlar</span>
                 </button>
-                <button onclick="tabDegistir('psikologlar')" id="btn-psikologlar" class="tab-btn whitespace-nowrap py-2.5 px-3 md:py-3 md:px-4 rounded-xl transition flex items-center space-x-2 md:space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer shrink-0">
-                    <i class="fa-solid fa-user-doctor w-4 text-center"></i><span>Psikologlar</span>
+                <button onclick="tabDegistir('psikologlar')" id="btn-psikologlar" class="tab-btn w-full py-3 px-4 rounded-xl transition flex items-center space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer">
+                    <i class="fa-solid fa-user-doctor w-5 text-center"></i><span>Psikologlar & Oranlar</span>
                 </button>
-                <button onclick="tabDegistir('firmalar')" id="btn-firmalar" class="tab-btn whitespace-nowrap py-2.5 px-3 md:py-3 md:px-4 rounded-xl transition flex items-center space-x-2 md:space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer shrink-0">
-                    <i class="fa-solid fa-handshake w-4 text-center"></i><span>Kurumsal Firmalar</span>
+                <button onclick="tabDegistir('firmalar')" id="btn-firmalar" class="tab-btn w-full py-3 px-4 rounded-xl transition flex items-center space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer">
+                    <i class="fa-solid fa-handshake w-5 text-center"></i><span>Kurumsal Firmalar</span>
                 </button>
-                <button onclick="tabDegistir('fiyatlar')" id="btn-fiyatlar" class="tab-btn whitespace-nowrap py-2.5 px-3 md:py-3 md:px-4 rounded-xl transition flex items-center space-x-2 md:space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer shrink-0">
-                    <i class="fa-solid fa-tags w-4 text-center"></i><span>Fiyat Modülü</span>
+                <button onclick="tabDegistir('fiyatlar')" id="btn-fiyatlar" class="tab-btn w-full py-3 px-4 rounded-xl transition flex items-center space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer">
+                    <i class="fa-solid fa-tags w-5 text-center"></i><span>Fiyat Modülü</span>
                 </button>
-                <button onclick="tabDegistir('sms-sablonlari')" id="btn-sms-sablonlari" class="tab-btn whitespace-nowrap py-2.5 px-3 md:py-3 md:px-4 rounded-xl transition flex items-center space-x-2 md:space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer shrink-0">
-                    <i class="fa-solid fa-envelope-open-text w-4 text-center"></i><span>SMS Şablonları</span>
+                <button onclick="tabDegistir('sms-sablonlari')" id="btn-sms-sablonlari" class="tab-btn w-full py-3 px-4 rounded-xl transition flex items-center space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer">
+                    <i class="fa-solid fa-envelope-open-text w-5 text-center"></i><span>SMS Şablonları</span>
                 </button>
-                <button onclick="tabDegistir('muhasebe')" id="btn-muhasebe" class="tab-btn whitespace-nowrap py-2.5 px-3 md:py-3 md:px-4 rounded-xl transition flex items-center space-x-2 md:space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer shrink-0">
-                    <i class="fa-solid fa-chart-line w-4 text-center"></i><span>Muhasebe & Kasa</span>
+                <button onclick="tabDegistir('muhasebe')" id="btn-muhasebe" class="tab-btn w-full py-3 px-4 rounded-xl transition flex items-center space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer">
+                    <i class="fa-solid fa-chart-line w-5 text-center"></i><span>Muhasebe & Kasa</span>
                 </button>
             </nav>
         </div>
@@ -94,6 +94,53 @@
             </div>
         </div>
     </aside>
+
+    <!-- MOBİL ALT MENÜ BARI: Şubeler -> Uzmanlar -> Firmalar -> Muhasebe -> Menü -->
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 z-40 flex items-center justify-around py-2 px-1 text-[10px] font-extrabold shadow-lg">
+        <button onclick="tabDegistir('subeler')" id="ymbtn-subeler" class="yon-mobile-nav-btn flex flex-col items-center py-1 px-1.5 rounded-xl transition text-[#256839] font-black cursor-pointer">
+            <i class="fa-solid fa-building text-base mb-0.5"></i><span>Şubeler</span>
+        </button>
+        <button onclick="tabDegistir('psikologlar')" id="ymbtn-psikologlar" class="yon-mobile-nav-btn flex flex-col items-center py-1 px-1.5 rounded-xl transition text-slate-400 font-bold cursor-pointer">
+            <i class="fa-solid fa-user-doctor text-base mb-0.5"></i><span>Uzmanlar</span>
+        </button>
+        <button onclick="tabDegistir('firmalar')" id="ymbtn-firmalar" class="yon-mobile-nav-btn flex flex-col items-center py-1 px-1.5 rounded-xl transition text-slate-400 font-bold cursor-pointer">
+            <i class="fa-solid fa-handshake text-base mb-0.5"></i><span>Firmalar</span>
+        </button>
+        <button onclick="tabDegistir('muhasebe')" id="ymbtn-muhasebe" class="yon-mobile-nav-btn flex flex-col items-center py-1 px-1.5 rounded-xl transition text-slate-400 font-bold cursor-pointer">
+            <i class="fa-solid fa-chart-line text-base mb-0.5"></i><span>Muhasebe</span>
+        </button>
+        <button onclick="yonMobilDahaFazlaAc()" id="ymbtn-daha-fazla" class="yon-mobile-nav-btn flex flex-col items-center py-1 px-1.5 rounded-xl transition text-slate-400 font-bold cursor-pointer">
+            <i class="fa-solid fa-bars text-base mb-0.5"></i><span>Menü</span>
+        </button>
+    </nav>
+
+    <!-- MOBİL "MENÜ / DİĞER MODÜLLER" BOTTOM SHEET -->
+    <div id="yon-mobil-daha-fazla-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-end justify-center md:hidden">
+        <div class="bg-white w-full rounded-t-3xl p-5 space-y-3.5 shadow-2xl animate-in slide-in-from-bottom duration-200">
+            <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-1"></div>
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+                <span class="font-extrabold text-slate-900 text-sm">Yönetim Modülleri</span>
+                <button onclick="yonMobilDahaFazlaKapat()" class="text-slate-400 p-1 font-bold cursor-pointer"><i class="fa-solid fa-xmark text-base"></i></button>
+            </div>
+            <div class="grid grid-cols-2 gap-2 text-xs font-bold">
+                <button onclick="yonMobilModulSec('asistanlar')" class="p-3.5 bg-slate-50 hover:bg-emerald-50 rounded-2xl border border-slate-200 flex items-center space-x-2.5 text-slate-800">
+                    <i class="fa-solid fa-headset text-[#256839] text-base"></i><span>Asistanlar</span>
+                </button>
+                <button onclick="yonMobilModulSec('fiyatlar')" class="p-3.5 bg-slate-50 hover:bg-emerald-50 rounded-2xl border border-slate-200 flex items-center space-x-2.5 text-slate-800">
+                    <i class="fa-solid fa-tags text-amber-700 text-base"></i><span>Fiyat Modülü</span>
+                </button>
+                <button onclick="yonMobilModulSec('sms-sablonlari')" class="p-3.5 bg-slate-50 hover:bg-emerald-50 rounded-2xl border border-slate-200 flex items-center space-x-2.5 text-slate-800 col-span-2">
+                    <i class="fa-solid fa-envelope-open-text text-blue-700 text-base"></i><span>SMS & İletişim Şablonları</span>
+                </button>
+            </div>
+            <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
+                <span class="text-[11px] text-slate-500 font-semibold" id="yon-mobil-sheet-kullanici">Merkez Yöneticisi</span>
+                <button onclick="yoneticiCikisYap()" class="text-xs font-extrabold text-red-600 bg-red-50 hover:bg-red-100 px-3.5 py-1.5 rounded-xl flex items-center space-x-1.5 cursor-pointer">
+                    <i class="fa-solid fa-right-from-bracket"></i><span>Çıkış Yap</span>
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- SAĞ ANA İÇERİK -->
     <main class="flex-grow p-4 sm:p-6 md:p-10 max-w-7xl w-full mx-auto overflow-y-auto space-y-6 sm:space-y-8">
@@ -287,7 +334,7 @@
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                     <div>
                         <h2 class="text-xl font-extrabold text-slate-900">Kurumsal Firmalar</h2>
-                        <p class="text-xs text-slate-500">Anlaşmalı kurumları ve yetkili uzmanları yönetin.</p>
+                        <p class="text-xs text-slate-500">Anlaşmalı kurumları, geçerli şubeleri ve yetkili uzmanları yönetin.</p>
                     </div>
                     <button onclick="firmaFormunuAc('yeni')" class="bg-[#256839] hover:bg-[#12612d] text-white px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-2 shadow-sm cursor-pointer w-full sm:w-auto">
                         <i class="fa-solid fa-plus"></i><span>Yeni Firma Ekle</span>
@@ -409,7 +456,7 @@
                     </div>
                 </div>
 
-                <!-- Sadeleştirilmiş Tarih Şeridi (Bugün Butonu Kaldırılmış, Dengeli Navigasyon) -->
+                <!-- Sadeleştirilmiş Tarih Şeridi -->
                 <div class="bg-slate-50 p-3 sm:p-4 rounded-2xl border border-slate-200 space-y-2.5 text-xs">
                     <div class="grid grid-cols-4 gap-1 bg-white p-1 rounded-xl border border-slate-200 shadow-2xs">
                         <button onclick="muhZamanFiltrele('gunluk')" id="mflt-gunluk" class="muh-flt-btn py-2 text-center rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Gün</button>
@@ -592,6 +639,19 @@
             return Date.now() * 1000 + Math.floor(Math.random() * 1000);
         }
 
+        function yonMobilDahaFazlaAc() {
+            document.getElementById('yon-mobil-daha-fazla-modal').classList.remove('hidden');
+        }
+
+        function yonMobilDahaFazlaKapat() {
+            document.getElementById('yon-mobil-daha-fazla-modal').classList.add('hidden');
+        }
+
+        function yonMobilModulSec(tabAdi) {
+            yonMobilDahaFazlaKapat();
+            tabDegistir(tabAdi);
+        }
+
         function tumYoneticiGorunumleriniYenile() {
             subeleriCiz();
             asistanlariCiz();
@@ -605,8 +665,13 @@
         }
 
         window.onload = function() {
-            if (AKTIF_OTURUM && document.getElementById('aktif-yonetici-ad')) {
-                document.getElementById('aktif-yonetici-ad').innerText = AKTIF_OTURUM.ad;
+            if (AKTIF_OTURUM) {
+                if (document.getElementById('aktif-yonetici-ad')) {
+                    document.getElementById('aktif-yonetici-ad').innerText = AKTIF_OTURUM.ad;
+                }
+                if (document.getElementById('yon-mobil-sheet-kullanici')) {
+                    document.getElementById('yon-mobil-sheet-kullanici').innerText = AKTIF_OTURUM.ad;
+                }
             }
 
             let bugunISO = formatTarihISO(yoneticiSeciliTarih);
@@ -620,6 +685,14 @@
 
         window.addEventListener('asist-db-updated', function() { tumYoneticiGorunumleriniYenile(); });
         window.addEventListener('storage', function(e) { if (!e.key || e.key.startsWith('ASIST_PSIKOLOG_CENTRAL_DB')) tumYoneticiGorunumleriniYenile(); });
+
+        document.addEventListener('click', function(e) {
+            const kapsayici = document.getElementById('asistan-gecis-kapsayici');
+            const menu = document.getElementById('asistan-gecis-menu');
+            if (kapsayici && menu && !kapsayici.contains(e.target)) {
+                menu.classList.add('hidden');
+            }
+        });
 
         function asistanGecisDropdownToggle() {
             document.getElementById('asistan-gecis-menu').classList.toggle('hidden');
@@ -651,6 +724,28 @@
                 aktifBtn.classList.remove('text-slate-600', 'hover:bg-slate-50');
                 aktifBtn.classList.add('bg-[#256839]', 'text-white', 'shadow-xs');
             }
+
+            // Mobil Alt Menü Aktif Renk Güncellemesi
+            document.querySelectorAll('.yon-mobile-nav-btn').forEach(mbtn => {
+                mbtn.classList.remove('text-[#256839]', 'font-black');
+                mbtn.classList.add('text-slate-400', 'font-bold');
+            });
+
+            if (['asistanlar', 'fiyatlar', 'sms-sablonlari'].includes(tabAdi)) {
+                const mDiger = document.getElementById('ymbtn-daha-fazla');
+                if (mDiger) {
+                    mDiger.classList.remove('text-slate-400', 'font-bold');
+                    mDiger.classList.add('text-[#256839]', 'font-black');
+                }
+            } else {
+                const mAktif = document.getElementById('ymbtn-' + tabAdi);
+                if (mAktif) {
+                    mAktif.classList.remove('text-slate-400', 'font-bold');
+                    mAktif.classList.add('text-[#256839]', 'font-black');
+                }
+            }
+
+            if (tabAdi === 'subeler') subeleriCiz();
             if (tabAdi === 'muhasebe') ofisMuhasebeHesapla();
             if (tabAdi === 'firmalar') firmalariCiz();
             if (tabAdi === 'asistanlar') asistanlariCiz();
@@ -716,7 +811,7 @@
         // ==========================================
         function psikologPasifToggle(id) {
             let db = AsistDB.get();
-            let p = db.psikologlar.find(x => x.id === id);
+            let p = db.psikologlar.find(x => Number(x.id) === Number(id));
             if (!p) return;
             let yeniDurum = (p.durum === 'pasif') ? 'aktif' : 'pasif';
             let mesaj = yeniDurum === 'pasif'
@@ -725,7 +820,14 @@
             if (!confirm(mesaj)) return;
 
             p.durum = yeniDurum;
-            if (yeniDurum === 'pasif') p.subeIds = [];
+            if (yeniDurum === 'pasif') {
+                p.oncekiSubeIds = Array.isArray(p.subeIds) && p.subeIds.length > 0 ? p.subeIds.slice() : [1];
+                p.subeIds = [];
+            } else {
+                p.subeIds = (Array.isArray(p.oncekiSubeIds) && p.oncekiSubeIds.length > 0)
+                    ? p.oncekiSubeIds.slice()
+                    : db.subeler.map(s => Number(s.id));
+            }
             if (!AsistDB.save(db)) return;
             psikologlariCiz();
             ofisMuhasebeHesapla();
@@ -733,22 +835,22 @@
 
         function psikologKapsamliSil(id) {
             let db = AsistDB.get();
-            let p = db.psikologlar.find(x => x.id === id);
+            let p = db.psikologlar.find(x => Number(x.id) === Number(id));
             if (!p) return;
-            let seansiVarMi = db.seanslar.some(s => s.uzmanId === id);
+            let seansiVarMi = db.seanslar.some(s => Number(s.uzmanId) === Number(id));
             if (seansiVarMi) {
                 alert("Bu uzmana ait seans veya muhasebe kayıtları bulunduğu için sistemden KALICI olarak silinemez. Lütfen 'Pasife Al / Arşivle' seçeneğini kullanınız.");
                 return;
             }
             if (!confirm("Bu uzmanı sistemden tamamen silmek istediğinize emin misiniz? Bu işlem geri alınamaz!")) return;
-            db.psikologlar = db.psikologlar.filter(x => x.id !== id);
+            db.psikologlar = db.psikologlar.filter(x => Number(x.id) !== Number(id));
             if (!AsistDB.save(db)) return;
             psikologlariCiz();
             ofisMuhasebeHesapla();
         }
 
         // ==========================================
-        // 1. ŞUBE & ODA YÖNETİMİ
+        // 1. ŞUBE & ODA YÖNETİMİ (SAAT VE DURUM KAYDI DÜZELTİLDİ)
         // ==========================================
         function subeleriCiz() {
             let db = AsistDB.get();
@@ -762,22 +864,25 @@
                     return `<span class="bg-white px-2.5 py-1 rounded-lg text-xs font-bold border border-slate-200 text-slate-700">${escapeHtml(odaAdi)}</span>`;
                 }).join('');
 
+                let saatBilgi = `${sube.saatBaslangic || '09:00'} - ${sube.saatBitis || '21:00'}`;
+
                 let card = document.createElement('div');
                 card.className = "bg-slate-50 p-4 sm:p-6 rounded-2xl border border-slate-200 flex flex-col justify-between";
                 card.innerHTML = `
                     <div>
                         <div class="flex items-center justify-between mb-2">
                             <h3 class="font-extrabold text-slate-900 text-base">${escapeHtml(sube.adi)}</h3>
-                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${sube.durum==='aktif'?'bg-emerald-100 text-[#256839]':'bg-slate-200 text-slate-600'}">${escapeHtml(sube.durum)}</span>
+                            <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase ${sube.durum==='aktif'?'bg-emerald-100 text-[#256839]':'bg-red-100 text-red-700'}">${escapeHtml(sube.durum)}</span>
                         </div>
-                        <p class="text-xs text-slate-500 mb-1"><i class="fa-solid fa-location-dot mr-1 text-[#256839]"></i> ${escapeHtml(sube.adres)}</p>
+                        <p class="text-xs text-slate-500 mb-1"><i class="fa-solid fa-location-dot mr-1.5 text-[#256839]"></i>${escapeHtml(sube.adres)}</p>
+                        <p class="text-xs text-slate-500 mb-3 font-semibold"><i class="fa-regular fa-clock mr-1.5 text-[#256839]"></i>Çalışma Saatleri: ${escapeHtml(saatBilgi)}</p>
                         <div class="border-t pt-3 mb-4">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Şube Odaları:</span>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Şube Odaları (${(sube.odalar || []).length}):</span>
                             <div class="flex flex-wrap gap-1.5">${odalarHtml || '<span class="text-slate-400 italic text-xs">Oda eklenmemiş</span>'}</div>
                         </div>
                     </div>
                     <div class="flex justify-end space-x-2 pt-3 border-t text-xs font-bold">
-                        <button onclick="subeFormunuAc('duzenle', ${sube.id})" class="bg-white border px-3 py-1.5 rounded-xl hover:bg-slate-100 transition cursor-pointer">Düzenle</button>
+                        <button onclick="subeFormunuAc('duzenle', ${sube.id})" class="bg-white border px-3.5 py-1.5 rounded-xl hover:bg-slate-100 transition cursor-pointer">Düzenle</button>
                     </div>
                 `;
                 grid.appendChild(card);
@@ -794,13 +899,19 @@
                 document.getElementById('input-sube-id').value = '';
                 document.getElementById('input-sube-adi').value = '';
                 document.getElementById('input-sube-adres').value = '';
+                document.getElementById('input-sube-baslangic').value = '09:00';
+                document.getElementById('input-sube-bitis').value = '21:00';
+                document.getElementById('input-sube-durum').value = 'aktif';
                 odaSatiriEkle('', '1. Oda');
             } else {
-                let s = db.subeler.find(x => x.id === id);
+                let s = db.subeler.find(x => Number(x.id) === Number(id));
                 if (!s) return;
                 document.getElementById('input-sube-id').value = s.id;
                 document.getElementById('input-sube-adi').value = s.adi;
                 document.getElementById('input-sube-adres').value = s.adres;
+                document.getElementById('input-sube-baslangic').value = s.saatBaslangic || '09:00';
+                document.getElementById('input-sube-bitis').value = s.saatBitis || '21:00';
+                document.getElementById('input-sube-durum').value = s.durum || 'aktif';
                 (s.odalar || []).forEach(o => {
                     let oId = typeof o === 'object' ? o.id : ('oda_' + Math.random().toString(36).substr(2, 6));
                     let oAd = typeof o === 'object' ? o.adi : o;
@@ -831,6 +942,10 @@
             let id = document.getElementById('input-sube-id').value;
             let adi = document.getElementById('input-sube-adi').value.trim();
             let adres = document.getElementById('input-sube-adres').value.trim();
+            let saatBaslangic = document.getElementById('input-sube-baslangic').value || '09:00';
+            let saatBitis = document.getElementById('input-sube-bitis').value || '21:00';
+            let durum = document.getElementById('input-sube-durum').value || 'aktif';
+
             let odalar = [];
             document.querySelectorAll('.oda-ad-input').forEach((inp, idx) => {
                 let oAd = inp.value.trim();
@@ -840,10 +955,17 @@
             if (odalar.length === 0) { alert("Lütfen en az bir oda ekleyiniz!"); return; }
 
             if (id === "") {
-                db.subeler.push({ id: yeniKayitId(), adi, adres, saatBaslangic: "09:00", saatBitis: "21:00", durum: "aktif", odalar });
+                db.subeler.push({ id: yeniKayitId(), adi, adres, saatBaslangic, saatBitis, durum, odalar });
             } else {
-                let s = db.subeler.find(x => x.id === parseInt(id, 10));
-                if (s) { s.adi = adi; s.adres = adres; s.odalar = odalar; }
+                let s = db.subeler.find(x => Number(x.id) === parseInt(id, 10));
+                if (s) {
+                    s.adi = adi;
+                    s.adres = adres;
+                    s.saatBaslangic = saatBaslangic;
+                    s.saatBitis = saatBitis;
+                    s.durum = durum;
+                    s.odalar = odalar;
+                }
             }
             AsistDB.save(db);
             subeFormunuKapat();
@@ -861,7 +983,7 @@
             if(!grid) return;
             grid.innerHTML = '';
             db.asistanlar.forEach(a => {
-                let sube = db.subeler.find(s => s.id === a.subeId);
+                let sube = db.subeler.find(s => Number(s.id) === Number(a.subeId));
                 let card = document.createElement('div');
                 card.className = "bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-200 flex flex-col justify-between";
                 card.innerHTML = `
@@ -894,7 +1016,7 @@
                 document.getElementById('input-asistan-mail').value = '';
                 document.getElementById('input-asistan-sifre').value = '123456';
             } else {
-                let a = db.asistanlar.find(x => x.id === id);
+                let a = db.asistanlar.find(x => Number(x.id) === Number(id));
                 if (!a) return;
                 document.getElementById('input-asistan-id').value = a.id;
                 document.getElementById('input-asistan-ad').value = a.ad;
@@ -919,7 +1041,7 @@
             if (id === "") {
                 db.asistanlar.push({ id: yeniKayitId(), ad, tel, telGorunum: formatTelefonGorunum(tel), mail, sifre, subeId, durum: 'aktif' });
             } else {
-                let a = db.asistanlar.find(x => x.id === parseInt(id, 10));
+                let a = db.asistanlar.find(x => Number(x.id) === parseInt(id, 10));
                 if (a) { a.ad = ad; a.tel = tel; a.telGorunum = formatTelefonGorunum(tel); a.mail = mail; a.sifre = sifre; a.subeId = subeId; }
             }
             AsistDB.save(db);
@@ -930,13 +1052,13 @@
         function asistanSil(id) {
             if (!confirm("Asistanı silmek istiyor musunuz?")) return;
             let db = AsistDB.get();
-            db.asistanlar = db.asistanlar.filter(x => x.id !== id);
+            db.asistanlar = db.asistanlar.filter(x => Number(x.id) !== Number(id));
             AsistDB.save(db);
             asistanlariCiz();
         }
 
         // ==========================================
-        // 3. PSİKOLOGLAR
+        // 3. PSİKOLOGLAR (KART DETAYLARI ZENGİNLEŞTİRİLDİ)
         // ==========================================
         function psikologlariCiz() {
             let db = AsistDB.get();
@@ -946,15 +1068,23 @@
 
             db.psikologlar.forEach(p => {
                 let pasifMi = p.durum === 'pasif';
+                let subeAdlari = db.subeler
+                    .filter(s => (p.subeIds || []).map(Number).includes(Number(s.id)))
+                    .map(s => s.adi)
+                    .join(', ') || 'Şube Atanmamış';
+                let alanlarMetin = (p.alanlar || []).join(', ') || '-';
+
                 let card = document.createElement('div');
                 card.className = `bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-200 flex flex-col justify-between ${pasifMi ? 'opacity-60' : ''}`;
                 card.innerHTML = `
-                    <div class="space-y-2">
+                    <div class="space-y-1.5">
                         <div class="flex items-center justify-between">
                             <h3 class="font-extrabold text-slate-900 text-base">${escapeHtml(p.ad)}</h3>
-                            <span class="text-[10px] ${pasifMi ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-[#256839]'} px-2 py-0.5 rounded font-bold">${pasifMi ? 'Pasif (Arşiv)' : 'Aktif'}</span>
+                            <span class="text-[10px] ${pasifMi ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-[#256839]'} px-2.5 py-0.5 rounded-full font-bold uppercase">${pasifMi ? 'Pasif (Arşiv)' : 'Aktif'}</span>
                         </div>
-                        <p class="text-xs text-slate-500">Kendi Danışanı: %${p.oranKendi !== undefined ? p.oranKendi : 30} • Yönlendirme: %${p.oranYonlendirme !== undefined ? p.oranYonlendirme : 50}</p>
+                        <p class="text-xs text-slate-600 font-semibold">Ofis Payı: Kendi %${p.oranKendi !== undefined ? p.oranKendi : 30} • Yönlendirme %${p.oranYonlendirme !== undefined ? p.oranYonlendirme : 50}</p>
+                        <p class="text-[11px] text-slate-500"><i class="fa-solid fa-building mr-1 text-[#256839]"></i>${escapeHtml(subeAdlari)} • <span class="font-semibold text-slate-700">${escapeHtml(alanlarMetin)}</span></p>
+                        <p class="text-[11px] text-slate-400 font-mono">${escapeHtml(formatTelefonGorunum(p.tel))} ${p.mail ? '• ' + escapeHtml(p.mail) : ''}</p>
                     </div>
                     <div class="flex justify-end space-x-2 pt-4 border-t border-slate-200 mt-4 text-xs font-bold">
                         <button onclick="psikologPasifToggle(${p.id})" class="text-amber-700 hover:bg-amber-50 px-3 py-1.5 rounded-xl transition cursor-pointer">${pasifMi ? 'Aktifleştir' : 'Pasife Al (Arşivle)'}</button>
@@ -983,7 +1113,7 @@
                 document.querySelectorAll('.psk-sube-check').forEach(c => c.checked = true);
                 document.querySelectorAll('.psk-alan-check').forEach(c => c.checked = true);
             } else {
-                let p = db.psikologlar.find(x => x.id === id);
+                let p = db.psikologlar.find(x => Number(x.id) === Number(id));
                 if (!p) return;
                 document.getElementById('input-psikolog-id').value = p.id;
                 document.getElementById('input-psikolog-ad').value = p.ad;
@@ -992,7 +1122,7 @@
                 document.getElementById('input-psikolog-sifre').value = p.sifre || '123456';
                 document.getElementById('input-psikolog-oran-kendi').value = p.oranKendi !== undefined ? p.oranKendi : 30;
                 document.getElementById('input-psikolog-oran-yonlendirme').value = p.oranYonlendirme !== undefined ? p.oranYonlendirme : 50;
-                document.querySelectorAll('.psk-sube-check').forEach(c => c.checked = (p.subeIds || []).includes(parseInt(c.value, 10)));
+                document.querySelectorAll('.psk-sube-check').forEach(c => c.checked = (p.subeIds || []).map(Number).includes(parseInt(c.value, 10)));
                 document.querySelectorAll('.psk-alan-check').forEach(c => c.checked = (p.alanlar || []).includes(c.value));
             }
         }
@@ -1014,16 +1144,22 @@
             let alanlar = [];
             document.querySelectorAll('.psk-alan-check:checked').forEach(c => alanlar.push(c.value));
 
+            if (alanlar.length === 0) {
+                alert("Lütfen uzmanın yetkili olduğu en az bir danışmanlık alanı seçiniz!");
+                return;
+            }
+
             if (id === "") {
                 db.psikologlar.push({
                     id: yeniKayitId(), ad, tel, telGorunum: formatTelefonGorunum(tel), mail, sifre,
                     subeIds, alanlar, oranKendi, oranYonlendirme, durum: 'aktif', sms: true, telGor: true
                 });
             } else {
-                let p = db.psikologlar.find(x => x.id === parseInt(id, 10));
+                let p = db.psikologlar.find(x => Number(x.id) === parseInt(id, 10));
                 if (p) {
                     p.ad = ad; p.tel = tel; p.telGorunum = formatTelefonGorunum(tel); p.mail = mail; p.sifre = sifre;
                     p.subeIds = subeIds; p.alanlar = alanlar; p.oranKendi = oranKendi; p.oranYonlendirme = oranYonlendirme;
+                    if (subeIds.length > 0 && p.durum === 'pasif') p.durum = 'aktif';
                 }
             }
             AsistDB.save(db);
@@ -1032,22 +1168,36 @@
         }
 
         // ==========================================
-        // 4. KURUMSAL FİRMALAR
+        // 4. KURUMSAL FİRMALAR (DURUM VE DETAY GÖSTERİMİ DÜZELTİLDİ)
         // ==========================================
         function firmaTumUzmanlarDegisti(tum) {
             document.querySelectorAll('.firma-uzman-check').forEach(c => c.checked = tum);
         }
+
         function firmalariCiz() {
             let db = AsistDB.get();
             const grid = document.getElementById('firma-liste-grid');
             if(!grid) return;
             grid.innerHTML = '';
             db.firmalar.forEach(f => {
+                let subeAdlari = db.subeler
+                    .filter(s => (f.subeIds || []).map(Number).includes(Number(s.id)))
+                    .map(s => s.adi)
+                    .join(', ') || 'Tüm Şubeler';
+
+                let uzmanBilgi = f.tumUzmanlar
+                    ? 'Tüm Uzmanlar Geçerli'
+                    : (db.psikologlar.filter(p => (f.uzmanIds || []).map(Number).includes(Number(p.id))).map(p => p.ad).join(', ') || 'Uzman Seçilmemiş');
+
                 grid.innerHTML += `
                     <div class="bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-200 flex flex-col justify-between">
-                        <div>
-                            <h3 class="font-extrabold text-slate-900 text-base mb-1">${escapeHtml(f.adi)}</h3>
-                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-[#256839]">${escapeHtml(f.durum)}</span>
+                        <div class="space-y-1.5">
+                            <div class="flex items-center justify-between">
+                                <h3 class="font-extrabold text-slate-900 text-base">${escapeHtml(f.adi)}</h3>
+                                <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase ${f.durum === 'aktif' ? 'bg-emerald-100 text-[#256839]' : 'bg-red-100 text-red-700'}">${escapeHtml(f.durum || 'aktif')}</span>
+                            </div>
+                            <p class="text-xs text-slate-600"><i class="fa-solid fa-building mr-1.5 text-[#256839]"></i><strong>Şubeler:</strong> ${escapeHtml(subeAdlari)}</p>
+                            <p class="text-[11px] text-slate-500"><i class="fa-solid fa-user-doctor mr-1.5 text-[#256839]"></i><strong>Uzmanlar:</strong> ${escapeHtml(uzmanBilgi)}</p>
                         </div>
                         <div class="flex justify-end space-x-2 pt-4 border-t border-slate-200 mt-4 text-xs font-bold">
                             <button onclick="firmaSil(${f.id})" class="text-red-600 hover:bg-red-50 px-3 py-1.5 rounded-xl transition cursor-pointer">Sil</button>
@@ -1056,6 +1206,7 @@
                     </div>`;
             });
         }
+
         function firmaFormunuAc(mod, id = null) {
             let db = AsistDB.get();
             document.getElementById('firma-form-card').classList.remove('hidden');
@@ -1067,17 +1218,19 @@
             if (mod === 'yeni') {
                 document.getElementById('input-firma-id').value = '';
                 document.getElementById('input-firma-adi').value = '';
+                document.getElementById('input-firma-durum').value = 'aktif';
                 document.getElementById('input-firma-tum-uzmanlar').checked = true;
                 document.querySelectorAll('.firma-sube-check').forEach(c => c.checked = true);
                 firmaTumUzmanlarDegisti(true);
             } else {
-                let f = db.firmalar.find(x => x.id === id);
+                let f = db.firmalar.find(x => Number(x.id) === Number(id));
                 if (!f) return;
                 document.getElementById('input-firma-id').value = f.id;
                 document.getElementById('input-firma-adi').value = f.adi;
+                document.getElementById('input-firma-durum').value = f.durum || 'aktif';
                 document.getElementById('input-firma-tum-uzmanlar').checked = !!f.tumUzmanlar;
-                document.querySelectorAll('.firma-sube-check').forEach(c => c.checked = (f.subeIds || []).includes(parseInt(c.value, 10)));
-                document.querySelectorAll('.firma-uzman-check').forEach(c => c.checked = !!f.tumUzmanlar || (f.uzmanIds || []).includes(parseInt(c.value, 10)));
+                document.querySelectorAll('.firma-sube-check').forEach(c => c.checked = (f.subeIds || []).map(Number).includes(parseInt(c.value, 10)));
+                document.querySelectorAll('.firma-uzman-check').forEach(c => c.checked = !!f.tumUzmanlar || (f.uzmanIds || []).map(Number).includes(parseInt(c.value, 10)));
             }
         }
         function firmaFormunuKapat() { document.getElementById('firma-form-card').classList.add('hidden'); }
@@ -1087,31 +1240,46 @@
             let db = AsistDB.get();
             let id = document.getElementById('input-firma-id').value;
             let adi = document.getElementById('input-firma-adi').value.trim();
+            let durum = document.getElementById('input-firma-durum').value || 'aktif';
             let tumUzmanlar = document.getElementById('input-firma-tum-uzmanlar').checked;
+
             let subeIds = [];
             document.querySelectorAll('.firma-sube-check:checked').forEach(c => subeIds.push(parseInt(c.value, 10)));
+            if (subeIds.length === 0) {
+                alert("Lütfen firmanın geçerli olduğu en az bir şube seçiniz!");
+                return;
+            }
+
             let uzmanIds = [];
             if (!tumUzmanlar) {
                 document.querySelectorAll('.firma-uzman-check:checked').forEach(c => uzmanIds.push(parseInt(c.value, 10)));
             }
 
             if (id === "") {
-                db.firmalar.push({ id: yeniKayitId(), adi, subeIds, uzmanIds, tumUzmanlar, durum: 'aktif' });
+                db.firmalar.push({ id: yeniKayitId(), adi, subeIds, uzmanIds, tumUzmanlar, durum });
             } else {
-                let f = db.firmalar.find(x => x.id === parseInt(id, 10));
-                if (f) { f.adi = adi; f.subeIds = subeIds; f.uzmanIds = uzmanIds; f.tumUzmanlar = tumUzmanlar; }
+                let f = db.firmalar.find(x => Number(x.id) === parseInt(id, 10));
+                if (f) {
+                    f.adi = adi;
+                    f.durum = durum;
+                    f.subeIds = subeIds;
+                    f.uzmanIds = uzmanIds;
+                    f.tumUzmanlar = tumUzmanlar;
+                }
             }
             AsistDB.save(db);
             firmaFormunuKapat();
             firmalariCiz();
+            ofisMuhasebeHesapla();
         }
 
         function firmaSil(id) {
             if (!confirm("Firmayı silmek istediğinize emin misiniz?")) return;
             let db = AsistDB.get();
-            db.firmalar = db.firmalar.filter(x => x.id !== id);
+            db.firmalar = db.firmalar.filter(x => Number(x.id) !== Number(id));
             AsistDB.save(db);
             firmalariCiz();
+            ofisMuhasebeHesapla();
         }
 
         // ==========================================
@@ -1158,11 +1326,11 @@
             let seciliSubeVal = document.getElementById('muh-sube-secimi').value;
 
             let filtrelenmis = db.seanslar.filter(s => {
-                let subeUygun = (seciliSubeVal === 'hepsi') || (s.subeId === parseInt(seciliSubeVal, 10));
+                let subeUygun = (seciliSubeVal === 'hepsi') || (Number(s.subeId) === parseInt(seciliSubeVal, 10));
                 return subeUygun && s.durum === 'odendi';
             });
 
-            let subeMasraflari = (db.masraflar || []).filter(m => (seciliSubeVal === 'hepsi') || (m.subeId === parseInt(seciliSubeVal, 10)));
+            let subeMasraflari = (db.masraflar || []).filter(m => (seciliSubeVal === 'hepsi') || (Number(m.subeId) === parseInt(seciliSubeVal, 10)));
             let filtrelenmisMasraflar = [];
 
             if (seciliZamanPeriyodu === 'gunluk') {
@@ -1175,7 +1343,7 @@
                 filtrelenmisMasraflar = subeMasraflari.filter(m => m.tarih >= aralik.baslangic && m.tarih <= aralik.bitis);
             } else if (seciliZamanPeriyodu === 'aylik') {
                 let ayPrefix = `${yoneticiSeciliTarih.getFullYear()}-${String(yoneticiSeciliTarih.getMonth() + 1).padStart(2, '0')}`;
-                filtrelenmis = filtrelenmis.filter(s => s.tarih.startsWith(ayPrefix));
+                filtrelenmis = filtrelenmis.filter(s => s.tarih && s.tarih.startsWith(ayPrefix));
                 filtrelenmisMasraflar = subeMasraflari.filter(m => m.tarih && m.tarih.startsWith(ayPrefix));
             } else if (seciliZamanPeriyodu === 'ozel') {
                 let bas = document.getElementById('muh-ozel-baslangic').value;
@@ -1190,16 +1358,16 @@
             let firmaSeansMap = {}, uzmanMap = {};
 
             filtrelenmis.forEach(s => {
-                let uz = db.psikologlar.find(p => p.id === s.uzmanId);
+                let uz = db.psikologlar.find(p => Number(p.id) === Number(s.uzmanId));
                 let uzKey = `uz_${s.uzmanId}`;
                 let uzAd = uz ? uz.ad : 'Silinmiş Uzman';
                 if (!uzmanMap[uzKey]) uzmanMap[uzKey] = { adi: uzAd, ofisAdet: 0, kendiAdet: 0, firmaAdetleri: {}, kdv: 0, ofisPay: 0, uzmanHak: 0 };
 
                 if (s.basvuruTuru === 'firma') {
                     kurumsalSeans++;
-                    let fId = s.firmaId || 0;
+                    let fId = Number(s.firmaId) || 0;
                     uzmanMap[uzKey].firmaAdetleri[fId] = (uzmanMap[uzKey].firmaAdetleri[fId] || 0) + 1;
-                    if(!firmaSeansMap[fId]) firmaSeansMap[fId] = { id: fId, adi: db.firmalar.find(f => f.id === fId)?.adi || 'Kurum', adet: 0 };
+                    if(!firmaSeansMap[fId]) firmaSeansMap[fId] = { id: fId, adi: db.firmalar.find(f => Number(f.id) === fId)?.adi || 'Kurum', adet: 0 };
                     firmaSeansMap[fId].adet++;
                 } else {
                     bireyselSeans++;
@@ -1245,7 +1413,7 @@
                     masrafListEl.innerHTML = `<div class="p-3 text-center text-slate-400 italic">Bu döneme ait masraf kaydı bulunmuyor.</div>`;
                 } else {
                     filtrelenmisMasraflar.forEach(m => {
-                        let subeObj = db.subeler.find(s => s.id === m.subeId);
+                        let subeObj = db.subeler.find(s => Number(s.id) === Number(m.subeId));
                         masrafListEl.innerHTML += `
                             <div class="flex justify-between items-center p-2.5 bg-white text-xs">
                                 <div>
@@ -1298,7 +1466,7 @@
                     let d = uzmanMap[k];
                     let r = `<td class="p-3.5 font-bold">${escapeHtml(d.adi)}</td><td class="p-3.5 text-center">${d.ofisAdet}</td><td class="p-3.5 text-center">${d.kendiAdet}</td>`;
                     tumFirmalar.forEach(f => {
-                        let ad = d.firmaAdetleri[f.id] || 0;
+                        let ad = d.firmaAdetleri[Number(f.id)] || 0;
                         r += `<td class="p-3.5 text-center border-x">${ad > 0 ? ad + ' Seans' : '-'}</td>`;
                     });
                     r += `<td class="p-3.5 text-right font-extrabold text-amber-800">₺${d.kdv.toLocaleString('tr-TR')}</td>`;
@@ -1315,16 +1483,16 @@
             }
         }
 
-        // Yönetici Paneli Kurumsal Firma Excel (CSV) İndirme
+        // Yönetici Paneli Kurumsal Firma Excel (CSV) İndirme (Özel Tarih Aralığı Eklendi)
         function yoneticiFirmaExcelIndir(firmaId) {
             let db = AsistDB.get();
-            let f = db.firmalar.find(x => x.id === firmaId);
+            let f = db.firmalar.find(x => Number(x.id) === Number(firmaId));
             if (!f) return;
 
             let seciliSubeVal = document.getElementById('muh-sube-secimi').value;
             let kurumsalSeanslar = db.seanslar.filter(s => {
-                let subeUygun = (seciliSubeVal === 'hepsi') || (s.subeId === parseInt(seciliSubeVal, 10));
-                return subeUygun && s.basvuruTuru === 'firma' && s.firmaId === firmaId && s.durum === 'odendi';
+                let subeUygun = (seciliSubeVal === 'hepsi') || (Number(s.subeId) === parseInt(seciliSubeVal, 10));
+                return subeUygun && s.basvuruTuru === 'firma' && Number(s.firmaId) === Number(firmaId) && s.durum === 'odendi';
             });
 
             if (seciliZamanPeriyodu === 'gunluk') {
@@ -1334,7 +1502,13 @@
                 kurumsalSeanslar = kurumsalSeanslar.filter(k => k.tarih >= a.baslangic && k.tarih <= a.bitis);
             } else if (seciliZamanPeriyodu === 'aylik') {
                 let p = `${yoneticiSeciliTarih.getFullYear()}-${String(yoneticiSeciliTarih.getMonth() + 1).padStart(2, '0')}`;
-                kurumsalSeanslar = kurumsalSeanslar.filter(k => k.tarih.startsWith(p));
+                kurumsalSeanslar = kurumsalSeanslar.filter(k => k.tarih && k.tarih.startsWith(p));
+            } else if (seciliZamanPeriyodu === 'ozel') {
+                let bas = document.getElementById('muh-ozel-baslangic').value;
+                let bit = document.getElementById('muh-ozel-bitis').value;
+                if (bas && bit) {
+                    kurumsalSeanslar = kurumsalSeanslar.filter(k => k.tarih >= bas && k.tarih <= bit);
+                }
             }
 
             if (kurumsalSeanslar.length === 0) {
@@ -1347,7 +1521,7 @@
 
             kurumsalSeanslar.forEach(rawS => {
                 let s = AsistDB.resolveSeans(rawS, db);
-                csvContent += `"${s.tarih}";"${s.saat}";"${s.subeAdi}";"${s.danisanAdi}";"${s.danisanTel}";"${s.hizmet || 'Bireysel'}";"Tamamlandı"\n`;
+                csvContent += `"${s.tarih}";"${s.saat}";"${s.subeAdi}";"${s.danisanAdi}";"${s.danisanTel}";"${s.uzmanAdi}";"${s.hizmet || 'Bireysel'}";"Tamamlandı"\n`;
             });
 
             let blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });

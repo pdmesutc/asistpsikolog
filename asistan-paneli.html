@@ -916,6 +916,10 @@
             if (!saatSelect || !tarihInput) return;
 
             let bugunISO = formatTarihISO(new Date());
+            tarihInput.min = bugunISO;
+            if (!tarihInput.value || tarihInput.value < bugunISO) {
+                tarihInput.value = bugunISO;
+            }
             if (tarihInput.value === bugunISO) {
                 let simdiSaat = new Date().getHours() + 1;
                 let uygunSaat = String(Math.max(9, Math.min(20, simdiSaat))).padStart(2, '0') + ':00';
@@ -980,7 +984,7 @@
             let db = AsistDB.get();
             let bilgi = (typeof AsistDB.takipEdenUzmanBul === 'function') ? AsistDB.takipEdenUzmanBul(danisanId, db) : null;
             if (bilgi && bilgi.uzman) {
-                tavsiyeEdilenUzmanId = bilgi.uzman.id;
+                tavsiyeEdilenUzmanId = Number(bilgi.uzman.id);
                 aciklama.innerHTML = `Bu danışanın sistemde <strong>${bilgi.seansSayisi} görüşmesi</strong> mevcuttur. Süreç için <strong>${escapeHTML(bilgi.uzman.ad)}</strong> uzmanına oluşturulması tavsiye edilir.`;
                 kutu.classList.remove('hidden');
             } else {
@@ -998,6 +1002,37 @@
             document.getElementById('secim-oda-yazi').className = "text-slate-400 italic";
             kontrolOnayButon();
             document.getElementById('sonuc-alani').classList.add('hidden');
+        }
+
+        // MERKEZİ YENİLEME FONKSİYONU (EKSİK OLAN FONKSİYON EKLENDİ)
+        function tumGorunumleriYenile() {
+            firmaSecenekleriniDoldur();
+            seanslarTablosunuYenile();
+            takvimMatrisiniCiz();
+            danisanRehberiniCiz();
+            kasaHesapla();
+            masraflariListele();
+            firmaRaporlariniCiz();
+        }
+
+        function firmaSecenekleriniDoldur() {
+            let db = AsistDB.get();
+            const sel1 = document.getElementById('input-kurumsal-firma-id');
+            const sel2 = document.getElementById('modal-firma-id');
+            if(!sel1 || !sel2) return;
+
+            let subeFirmalari = (db.firmalar || []).filter(f => 
+                f.durum === 'aktif' && 
+                Array.isArray(f.subeIds) && 
+                f.subeIds.map(Number).includes(Number(AKTIF_SUBE_ID))
+            );
+
+            let html = subeFirmalari.length > 0
+                ? subeFirmalari.map(f => `<option value="${f.id}">${escapeHTML(f.adi)}</option>`).join('')
+                : `<option value="">Bu şubede tanımlı aktif firma yok</option>`;
+
+            sel1.innerHTML = html;
+            sel2.innerHTML = html;
         }
 
         function smsModuAc() {
@@ -1049,7 +1084,7 @@
             let simdiSaat = new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
 
             db.seanslar.forEach(s => {
-                if (seciliIds.includes(s.id)) {
+                if (seciliIds.includes(Number(s.id))) {
                     s.smsGonderildiZamani = simdiSaat;
                 }
             });
@@ -1111,7 +1146,7 @@
             }
 
             if(sekmeAdi === 'bugun') { smsModuKapat(); seanslarTablosunuYenile(); }
-            if(sekmeAdi === 'randevu-olustur') { akilliVarsayilanSaatAyarla(); }
+            if(sekmeAdi === 'randevu-olustur') { firmaSecenekleriniDoldur(); akilliVarsayilanSaatAyarla(); }
             if(sekmeAdi === 'takvim') takvimMatrisiniCiz();
             if(sekmeAdi === 'danisanlar') danisanRehberiniCiz();
             if(sekmeAdi === 'kasa') kasaHesapla();
@@ -1142,7 +1177,7 @@
             list.innerHTML = '';
             document.getElementById('seans-aktif-tarih-etiket').innerText = formatTarihTurkce(seciliTarih);
 
-            let subeSeanslari = db.seanslar.filter(s => s.subeId === AKTIF_SUBE_ID);
+            let subeSeanslari = db.seanslar.filter(s => Number(s.subeId) === Number(AKTIF_SUBE_ID));
             let filtrelenmis = [];
 
             if (seansAktifPeriyot === 'gun') {
@@ -1152,14 +1187,14 @@
                 filtrelenmis = subeSeanslari.filter(s => s.tarih >= aralik.baslangic && s.tarih <= aralik.bitis);
             } else if (seansAktifPeriyot === 'ay') {
                 let ayPrefix = `${seciliTarih.getFullYear()}-${String(seciliTarih.getMonth() + 1).padStart(2, '0')}`;
-                filtrelenmis = subeSeanslari.filter(s => s.tarih.startsWith(ayPrefix));
+                filtrelenmis = subeSeanslari.filter(s => s.tarih && s.tarih.startsWith(ayPrefix));
             } else if (seansAktifPeriyot === 'ozel') {
                 let bas = document.getElementById('seans-ozel-baslangic').value;
                 let bit = document.getElementById('seans-ozel-bitis').value;
                 if(bas && bit) filtrelenmis = subeSeanslari.filter(s => s.tarih >= bas && s.tarih <= bit);
             }
 
-            filtrelenmis.sort((a,b) => a.tarih.localeCompare(b.tarih) || a.saat.localeCompare(b.saat));
+            filtrelenmis.sort((a,b) => String(a.tarih || '').localeCompare(String(b.tarih || '')) || String(a.saat || '').localeCompare(String(b.saat || '')));
 
             let b = 0, o = 0, i = 0;
 
@@ -1181,7 +1216,7 @@
 
                     if (s.durum === 'odendi') {
                         o++;
-                        rozet = `<span class="bg-emerald-100 text-[#256839] text-[10px] font-extrabold px-2.5 py-1 rounded-lg">Ödendi (₺${seansUcreti.toLocaleString('tr-TR')})</span>`;
+                        rozet = `<span class="bg-emerald-100 text-[#256839] text-[10px] font-extrabold px-2.5 py-1 rounded-lg">${s.basvuruTuru === 'firma' ? 'Tamamlandı (Kurum)' : 'Ödendi (₺' + seansUcreti.toLocaleString('tr-TR') + ')'}</span>`;
                     } else if (s.durum === 'iptal') {
                         i++;
                         rozet = `<span class="bg-red-100 text-red-700 text-[10px] font-extrabold px-2.5 py-1 rounded-lg">İptal</span>`;
@@ -1210,7 +1245,7 @@
                                 </div>
                             </div>
                             <div class="flex items-center space-x-1.5 justify-end pt-1 sm:pt-0">
-                                ${s.durum === 'bekliyor' ? `<button onclick="hizliTahsilat(${s.id})" class="bg-[#256839] hover:bg-[#12612d] text-white px-3 py-1.5 rounded-xl font-bold cursor-pointer transition">Ödeme Al</button>` : ''}
+                                ${s.durum === 'bekliyor' ? `<button onclick="hizliTahsilat(${s.id})" class="bg-[#256839] hover:bg-[#12612d] text-white px-3 py-1.5 rounded-xl font-bold cursor-pointer transition">${s.basvuruTuru === 'firma' ? 'Tamamla' : 'Ödeme Al'}</button>` : ''}
                                 <button onclick="duzenleModalAc(${s.id})" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-xl font-bold transition cursor-pointer">Düzenle</button>
                                 <button onclick="danisanDetayAc(${s.danisanId})" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-3 py-1.5 rounded-xl font-bold transition cursor-pointer">Detay</button>
                             </div>
@@ -1225,7 +1260,12 @@
             document.getElementById('badge-bugun-sayi').innerText = filtrelenmis.length;
         }
 
-        function seansTarihKaydir(y) { seciliTarih.setDate(seciliTarih.getDate() + y); seanslarTablosunuYenile(); }
+        function seansTarihKaydir(y) {
+            if (seansAktifPeriyot === 'ay') seciliTarih.setMonth(seciliTarih.getMonth() + y);
+            else if (seansAktifPeriyot === 'hafta') seciliTarih.setDate(seciliTarih.getDate() + (y * 7));
+            else seciliTarih.setDate(seciliTarih.getDate() + y);
+            seanslarTablosunuYenile();
+        }
 
         // ==========================================
         // KASA & ÖDEMELER (MASRAF DÜŞÜMLÜ VE GİDER DÖKÜMLÜ HESAPLAMA)
@@ -1246,14 +1286,19 @@
             kasaHesapla();
         }
 
-        function kasaTarihKaydir(y) { kasaSeciliTarih.setDate(kasaSeciliTarih.getDate() + y); kasaHesapla(); }
+        function kasaTarihKaydir(y) {
+            if (kasaAktifPeriyot === 'ay') kasaSeciliTarih.setMonth(kasaSeciliTarih.getMonth() + y);
+            else if (kasaAktifPeriyot === 'hafta') kasaSeciliTarih.setDate(kasaSeciliTarih.getDate() + (y * 7));
+            else kasaSeciliTarih.setDate(kasaSeciliTarih.getDate() + y);
+            kasaHesapla();
+        }
 
         function kasaHesapla() {
             let db = AsistDB.get();
             const labelEl = document.getElementById('kasa-aktif-tarih-etiket');
             if (labelEl) labelEl.innerText = formatTarihTurkce(kasaSeciliTarih);
 
-            let subeSeanslari = db.seanslar.filter(s => s.subeId === AKTIF_SUBE_ID);
+            let subeSeanslari = db.seanslar.filter(s => Number(s.subeId) === Number(AKTIF_SUBE_ID));
             let bugunISO = formatTarihISO(new Date());
             let bekleyenOdemeSayisi = subeSeanslari.filter(s => s.tarih <= bugunISO && s.durum === 'bekliyor' && s.basvuruTuru !== 'firma').length;
             const uyariKutusu = document.getElementById('kasa-bekleyen-uyari-kutusu');
@@ -1265,7 +1310,7 @@
             }
 
             let filtrelenmis = subeSeanslari.filter(s => s.durum === 'odendi' && s.basvuruTuru !== 'firma');
-            let subeMasraflari = (db.masraflar || []).filter(m => m.subeId === AKTIF_SUBE_ID);
+            let subeMasraflari = (db.masraflar || []).filter(m => Number(m.subeId) === Number(AKTIF_SUBE_ID));
             let filtrelenmisMasraflar = [];
 
             if (kasaAktifPeriyot === 'gun') {
@@ -1278,7 +1323,7 @@
                 filtrelenmisMasraflar = subeMasraflari.filter(m => m.tarih >= aralik.baslangic && m.tarih <= aralik.bitis);
             } else if (kasaAktifPeriyot === 'ay') {
                 let ayPrefix = `${kasaSeciliTarih.getFullYear()}-${String(kasaSeciliTarih.getMonth() + 1).padStart(2, '0')}`;
-                filtrelenmis = filtrelenmis.filter(s => s.tarih.startsWith(ayPrefix));
+                filtrelenmis = filtrelenmis.filter(s => s.tarih && s.tarih.startsWith(ayPrefix));
                 filtrelenmisMasraflar = subeMasraflari.filter(m => m.tarih && m.tarih.startsWith(ayPrefix));
             } else if (kasaAktifPeriyot === 'ozel') {
                 let bas = document.getElementById('kasa-ozel-baslangic').value;
@@ -1301,7 +1346,7 @@
                 uzmanPayiToplam += f.uzmanPay;
 
                 let uzKey = `uz_${s.uzmanId}`;
-                let uz = db.psikologlar.find(p => p.id === s.uzmanId);
+                let uz = db.psikologlar.find(p => Number(p.id) === Number(s.uzmanId));
                 let uzAd = uz ? uz.ad : 'Uzman';
 
                 if (!map[uzKey]) map[uzKey] = { ad: uzAd, adet: 0, hak: 0, ofis: 0, kdv: 0, brut: 0 };
@@ -1396,21 +1441,31 @@
 
             let filtrelenmis = db.danisanlar.filter(d => {
                 if (!aramaMetni) return true;
-                let adUygun = (d.ad || '').toLowerCase().includes(aramaMetni);
-                let telUygun = (d.tel && d.tel.includes(aramaMetni)) || (aramaRakam.length >= 2 && normalizeTelefon10Hane(d.tel).includes(aramaRakam));
+                let adUygun = (d.ad || '').toLowerCase().includes(aramaMetni) ||
+                              (d.anneAd || '').toLowerCase().includes(aramaMetni) ||
+                              (d.babaAd || '').toLowerCase().includes(aramaMetni);
+                let telUygun = (d.tel && d.tel.includes(aramaMetni)) ||
+                               (aramaRakam.length >= 2 && (
+                                   normalizeTelefon10Hane(d.tel).includes(aramaRakam) ||
+                                   normalizeTelefon10Hane(d.anneTel).includes(aramaRakam) ||
+                                   normalizeTelefon10Hane(d.babaTel).includes(aramaRakam)
+                               ));
                 return adUygun || telUygun;
             });
 
             document.getElementById('txt-rehber-sayisi').innerText = filtrelenmis.length;
 
             filtrelenmis.forEach(d => {
-                let seanslar = db.seanslar.filter(s => (s.danisanId === d.id || s.ikinciDanisanId === d.id) && s.durum !== 'iptal');
+                let seanslar = db.seanslar.filter(s => (Number(s.danisanId) === Number(d.id) || Number(s.ikinciDanisanId) === Number(d.id)) && s.durum !== 'iptal');
                 let kategori = d.firmaId ? '<span class="bg-blue-50 text-blue-900 border border-blue-200 px-2 py-0.5 rounded font-extrabold text-[10px]">Firma</span>' : '<span class="text-slate-500 font-semibold text-[11px]">Bireysel / Aile</span>';
+                let ebeveynNot = (d.anneAd || d.babaAd)
+                    ? `<span class="block text-[10px] text-amber-800 font-semibold">Anne: ${escapeHTML(d.anneAd || '-')} • Baba: ${escapeHTML(d.babaAd || '-')}</span>`
+                    : '';
 
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50 transition">
                         <td class="p-3.5 font-bold text-slate-900">${escapeHTML(d.ad)}</td>
-                        <td class="p-3.5 text-slate-600 font-mono">${escapeHTML(formatTelefonGorunum(d.tel))}</td>
+                        <td class="p-3.5 text-slate-600 font-mono">${escapeHTML(formatTelefonGorunum(d.tel))}${ebeveynNot}</td>
                         <td class="p-3.5">${kategori}</td>
                         <td class="p-3.5 text-center font-black">${seanslar.length} Seans</td>
                         <td class="p-3.5 text-center space-x-1">
@@ -1424,7 +1479,7 @@
 
         function danisanDuzenleModalAc(id) {
             let db = AsistDB.get();
-            let d = db.danisanlar.find(x => x.id === id);
+            let d = db.danisanlar.find(x => Number(x.id) === Number(id));
             if (!d) return;
             document.getElementById('edit-danisan-id').value = d.id;
             document.getElementById('edit-danisan-ad').value = d.ad || '';
@@ -1440,7 +1495,7 @@
             e.preventDefault();
             let db = AsistDB.get();
             let id = parseInt(document.getElementById('edit-danisan-id').value, 10);
-            let d = db.danisanlar.find(x => x.id === id);
+            let d = db.danisanlar.find(x => Number(x.id) === id);
             if (!d) return;
 
             d.ad = document.getElementById('edit-danisan-ad').value.trim();
@@ -1460,14 +1515,14 @@
         function danisanRehberdenSil() {
             let id = parseInt(document.getElementById('edit-danisan-id').value, 10);
             let db = AsistDB.get();
-            let seansVarMi = db.seanslar.some(s => s.danisanId === id || s.ikinciDanisanId === id);
+            let seansVarMi = db.seanslar.some(s => Number(s.danisanId) === id || Number(s.ikinciDanisanId) === id);
             if (seansVarMi) {
                 alert("Bu danışana ait seans ve muhasebe kayıtları bulunmaktadır. Sistem tutarlılığı için silinemez!");
                 return;
             }
             if (!confirm("Bu danışanı rehberden silmek istediğinize emin misiniz?")) return;
 
-            db.danisanlar = db.danisanlar.filter(x => x.id !== id);
+            db.danisanlar = db.danisanlar.filter(x => Number(x.id) !== id);
             AsistDB.save(db);
             document.getElementById('danisan-duzenle-modal').classList.add('hidden');
             danisanRehberiniCiz();
@@ -1475,15 +1530,43 @@
 
         function danisanDetayAc(id) {
             let db = AsistDB.get();
-            let d = db.danisanlar.find(x => x.id === id);
+            let d = db.danisanlar.find(x => Number(x.id) === Number(id));
             if (!d) return;
 
             document.getElementById('detay-modal-baslik').innerText = `${d.ad} - Seans Geçmişi`;
 
+            // Eş Bilgisi Kutusu
+            const esKutu = document.getElementById('detay-es-bilgi-kutusu');
+            if (d.esDanisanId) {
+                let es = db.danisanlar.find(x => Number(x.id) === Number(d.esDanisanId));
+                if (es) {
+                    esKutu.innerHTML = `<span class="font-bold text-purple-950">💍 Eş / Partner: ${escapeHTML(es.ad)}</span><span class="font-mono text-purple-800">${escapeHTML(formatTelefonGorunum(es.tel))}</span>`;
+                    esKutu.classList.remove('hidden');
+                } else {
+                    esKutu.classList.add('hidden');
+                }
+            } else {
+                esKutu.classList.add('hidden');
+            }
+
+            // Anne & Baba Bilgisi Kutusu
+            const ebKutu = document.getElementById('detay-ebeveyn-bilgi-kutusu');
+            if (d.anneAd || d.babaAd || d.anneTel || d.babaTel) {
+                ebKutu.innerHTML = `
+                    <div class="flex flex-col sm:flex-row sm:justify-between gap-1">
+                        <span><strong>👩 Anne:</strong> ${escapeHTML(d.anneAd || '-')} (${escapeHTML(formatTelefonGorunum(d.anneTel))})</span>
+                        <span><strong>👨 Baba:</strong> ${escapeHTML(d.babaAd || '-')} (${escapeHTML(formatTelefonGorunum(d.babaTel))})</span>
+                    </div>
+                `;
+                ebKutu.classList.remove('hidden');
+            } else {
+                ebKutu.classList.add('hidden');
+            }
+
             const container = document.getElementById('detay-seans-listesi');
             container.innerHTML = '';
 
-            let tumSeanslar = db.seanslar.filter(s => s.danisanId === d.id || s.ikinciDanisanId === d.id).sort((a,b) => a.tarih.localeCompare(b.tarih) || a.saat.localeCompare(b.saat));
+            let tumSeanslar = db.seanslar.filter(s => Number(s.danisanId) === Number(d.id) || Number(s.ikinciDanisanId) === Number(d.id)).sort((a,b) => String(a.tarih || '').localeCompare(String(b.tarih || '')) || String(a.saat || '').localeCompare(String(b.saat || '')));
 
             let gecerliSayac = 0;
             let seansNoMap = {};
@@ -1556,7 +1639,7 @@
             if (!tbody) return;
             tbody.innerHTML = '';
 
-            let subeMasraflari = (db.masraflar || []).filter(m => m.subeId === AKTIF_SUBE_ID);
+            let subeMasraflari = (db.masraflar || []).filter(m => Number(m.subeId) === Number(AKTIF_SUBE_ID));
             if (subeMasraflari.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-slate-400 italic">Kayıtlı masraf bulunmuyor.</td></tr>`;
                 return;
@@ -1579,12 +1662,15 @@
         function masrafSil(id) {
             if (!confirm("Masraf kaydını silmek istiyor musunuz?")) return;
             let db = AsistDB.get();
-            db.masraflar = (db.masraflar || []).filter(m => m.id !== id);
+            db.masraflar = (db.masraflar || []).filter(m => Number(m.id) !== Number(id));
             AsistDB.save(db);
             masraflariListele();
             kasaHesapla();
         }
 
+        // ==========================================
+        // KURUMSAL FİRMA RAPORU (ÖZEL TARİH ARALIĞI EKLENDİ)
+        // ==========================================
         function firmaZamanFiltrele(p) {
             firmaAktifPeriyot = p;
             document.querySelectorAll('.firma-flt-btn').forEach(b => {
@@ -1617,7 +1703,7 @@
             if(!grid) return;
             grid.innerHTML = '';
 
-            let kurumsalSeanslar = db.seanslar.filter(s => s.subeId === AKTIF_SUBE_ID && s.basvuruTuru === 'firma');
+            let kurumsalSeanslar = db.seanslar.filter(s => Number(s.subeId) === Number(AKTIF_SUBE_ID) && s.basvuruTuru === 'firma');
 
             if (firmaAktifPeriyot === 'gun') {
                 kurumsalSeanslar = kurumsalSeanslar.filter(k => k.tarih === formatTarihISO(firmaSeciliTarih));
@@ -1626,15 +1712,21 @@
                 kurumsalSeanslar = kurumsalSeanslar.filter(k => k.tarih >= aralik.baslangic && k.tarih <= aralik.bitis);
             } else if (firmaAktifPeriyot === 'ay') {
                 let ayPrefix = `${firmaSeciliTarih.getFullYear()}-${String(firmaSeciliTarih.getMonth() + 1).padStart(2, '0')}`;
-                kurumsalSeanslar = kurumsalSeanslar.filter(k => k.tarih.startsWith(ayPrefix));
+                kurumsalSeanslar = kurumsalSeanslar.filter(k => k.tarih && k.tarih.startsWith(ayPrefix));
+            } else if (firmaAktifPeriyot === 'ozel') {
+                let bas = document.getElementById('firma-ozel-baslangic').value;
+                let bit = document.getElementById('firma-ozel-bitis').value;
+                if (bas && bit) {
+                    kurumsalSeanslar = kurumsalSeanslar.filter(k => k.tarih >= bas && k.tarih <= bit);
+                }
             }
 
-            let subeFirmalari = (db.firmalar || []).filter(f => f.subeIds && f.subeIds.includes(AKTIF_SUBE_ID));
+            let subeFirmalari = (db.firmalar || []).filter(f => Array.isArray(f.subeIds) && f.subeIds.map(Number).includes(Number(AKTIF_SUBE_ID)));
             document.getElementById('firma-sayac-seans').innerText = `${kurumsalSeanslar.length} Seans`;
             document.getElementById('firma-sayac-kurum').innerText = `${subeFirmalari.length} Kurum`;
 
             subeFirmalari.forEach(f => {
-                let fSeanslar = kurumsalSeanslar.filter(s => s.firmaId === f.id);
+                let fSeanslar = kurumsalSeanslar.filter(s => Number(s.firmaId) === Number(f.id));
                 let tamamlanan = fSeanslar.filter(s => s.durum === 'odendi').length;
                 let bekleyen = fSeanslar.filter(s => s.durum === 'bekliyor').length;
                 let iptal = fSeanslar.filter(s => s.durum === 'iptal').length;
@@ -1663,7 +1755,7 @@
                                 <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-slate-200">
                                     <div class="truncate pr-2">
                                         <span class="font-bold text-slate-900 block truncate">${escapeHTML(s.danisanAdi)}</span>
-                                        <span class="text-slate-400 text-[10px] block">${escapeHTML(s.tarih)} - ${escapeHTML(s.saat)}</span>
+                                        <span class="text-slate-400 text-[10px] block">${escapeHTML(s.tarih)} - ${escapeHTML(s.saat)} (${escapeHTML(s.uzmanAdi)})</span>
                                     </div>
                                     <span class="text-[10px] font-extrabold shrink-0 ${s.durum==='odendi'?'text-emerald-700':(s.durum==='iptal'?'text-red-600':'text-amber-700')}">${escapeHTML(s.durum)}</span>
                                 </div>
@@ -1677,17 +1769,21 @@
 
         function firmaSeansExcelIndir(firmaId) {
             let db = AsistDB.get();
-            let f = db.firmalar.find(x => x.id === firmaId);
+            let f = db.firmalar.find(x => Number(x.id) === Number(firmaId));
             if (!f) return;
 
-            let kurumsalSeanslar = db.seanslar.filter(s => s.subeId === AKTIF_SUBE_ID && s.basvuruTuru === 'firma' && s.firmaId === firmaId);
+            let kurumsalSeanslar = db.seanslar.filter(s => Number(s.subeId) === Number(AKTIF_SUBE_ID) && s.basvuruTuru === 'firma' && Number(s.firmaId) === Number(firmaId));
             if (firmaAktifPeriyot === 'gun') kurumsalSeanslar = kurumsalSeanslar.filter(k => k.tarih === formatTarihISO(firmaSeciliTarih));
             else if (firmaAktifPeriyot === 'hafta') {
                 let a = getHaftaAraligi(firmaSeciliTarih);
                 kurumsalSeanslar = kurumsalSeanslar.filter(k => k.tarih >= a.baslangic && k.tarih <= a.bitis);
             } else if (firmaAktifPeriyot === 'ay') {
                 let p = `${firmaSeciliTarih.getFullYear()}-${String(firmaSeciliTarih.getMonth() + 1).padStart(2, '0')}`;
-                kurumsalSeanslar = kurumsalSeanslar.filter(k => k.tarih.startsWith(p));
+                kurumsalSeanslar = kurumsalSeanslar.filter(k => k.tarih && k.tarih.startsWith(p));
+            } else if (firmaAktifPeriyot === 'ozel') {
+                let bas = document.getElementById('firma-ozel-baslangic').value;
+                let bit = document.getElementById('firma-ozel-bitis').value;
+                if (bas && bit) kurumsalSeanslar = kurumsalSeanslar.filter(k => k.tarih >= bas && k.tarih <= bit);
             }
 
             if (kurumsalSeanslar.length === 0) {
@@ -1726,11 +1822,10 @@
             if(!theadTr || !tbody) return;
             document.getElementById('takvim-aktif-tarih-etiket').innerText = formatTarihTurkce(takvimSeciliTarih);
             
-            // Saat sütununu w-14 (56px) olarak daraltıyoruz
             theadTr.innerHTML = '<th class="p-2 w-14 text-center border-r font-extrabold text-slate-700 text-[11px]">Saat</th>';
             tbody.innerHTML = '';
 
-            let aktifSube = db.subeler.find(s => s.id === AKTIF_SUBE_ID);
+            let aktifSube = db.subeler.find(s => Number(s.id) === Number(AKTIF_SUBE_ID));
             let odalar = aktifSube ? (aktifSube.odalar || []) : [];
             odalar.forEach(oda => {
                 let th = document.createElement('th');
@@ -1747,10 +1842,9 @@
                 let html = `<td class="p-2 text-center font-bold bg-slate-50 border-r border-slate-200 text-[11px] text-slate-700 w-14">${saat}</td>`;
                 
                 odalar.forEach(oda => {
-                    let seans = db.seanslar.find(s => s.subeId === AKTIF_SUBE_ID && s.saat === saat && s.odaId === oda.id && s.durum !== 'iptal' && s.tarih === seciliISO);
+                    let seans = db.seanslar.find(s => Number(s.subeId) === Number(AKTIF_SUBE_ID) && s.saat === saat && String(s.odaId) === String(oda.id) && s.durum !== 'iptal' && s.tarih === seciliISO);
                     if (seans) {
                         let res = AsistDB.resolveSeans(seans, db);
-                        // overflow-hidden ve truncate ile hücre dışına taşma engellenmiştir
                         html += `
                             <td class="p-1 sm:p-1.5 border-r border-slate-200 align-top overflow-hidden">
                                 <div class="bg-emerald-50 border border-emerald-200 p-1 sm:p-1.5 rounded-xl text-center overflow-hidden">
@@ -1773,7 +1867,7 @@
         }
 
         // ==========================================
-        // DİĞER MODALLAR VE RANDEVU YÖNETİMİ
+        // RANDEVU OLUŞTURMA VE FİRMA/ÇALIŞMA SAATİ KONTROLLERİ
         // ==========================================
         function asistanHizmetTuruDegisti(tur) {
             tarihVeyaSaatDegisti();
@@ -1785,7 +1879,7 @@
 
             let seciliId = parseInt(document.getElementById('secili-danisan-id').value, 10);
             let db = seciliId ? AsistDB.get() : null;
-            let d = (db && seciliId) ? db.danisanlar.find(x => x.id === seciliId) : null;
+            let d = (db && seciliId) ? db.danisanlar.find(x => Number(x.id) === seciliId) : null;
 
             if (tur === 'Çocuk') {
                 lblAd.innerText = "3. Danışan Adı Soyadı (Çocuk Adı Soyadı)";
@@ -1818,7 +1912,7 @@
                 ebeveynKapsayici.classList.add('hidden');
                 ikinciKapsayici.classList.remove('hidden');
                 if (d && d.esDanisanId) {
-                    let es = db.danisanlar.find(x => x.id === d.esDanisanId);
+                    let es = db.danisanlar.find(x => Number(x.id) === Number(d.esDanisanId));
                     if (es) {
                         document.getElementById('input-ikinci-danisan-ad').value = es.ad || '';
                         document.getElementById('input-ikinci-danisan-tel').value = normalizeTelefon10Hane(es.tel);
@@ -1842,6 +1936,36 @@
             let tarih = document.getElementById('input-tarih').value;
             let saat = document.getElementById('input-saat').value;
 
+            if (!tarihGecerliMi(tarih) || gecmisTarihSaatMi(tarih, saat)) {
+                alert("Geçmiş bir tarih veya saate randevu sorgulanamaz. Lütfen ileri bir tarih/saat seçiniz!");
+                return;
+            }
+
+            if (basvuruTuru === 'firma' && !firmaId) {
+                alert("Lütfen geçerli bir kurumsal firma seçiniz!");
+                return;
+            }
+
+            let anaTel = normalizeTelefon10Hane(document.getElementById('input-danisan-tel').value);
+            let anneTel = normalizeTelefon10Hane(document.getElementById('input-anne-tel').value);
+            let babaTel = normalizeTelefon10Hane(document.getElementById('input-baba-tel').value);
+
+            if (hizmetTuru === 'Çocuk' || hizmetTuru === 'Ergen') {
+                if (anaTel.length > 0 && anaTel.length !== 10) {
+                    alert("Telefon numarası girilecekse 10 haneli olmalıdır.");
+                    return;
+                }
+                if (anaTel.length !== 10 && anneTel.length !== 10 && babaTel.length !== 10) {
+                    alert("Lütfen iletişim için en az bir geçerli (10 haneli) telefon numarası giriniz!");
+                    return;
+                }
+            } else {
+                if (anaTel.length !== 10) {
+                    alert("Lütfen danışan telefon numarasını 10 haneli olarak giriniz!");
+                    return;
+                }
+            }
+
             secilenUzmanId = null; 
             secilenOdaId = null;
             document.getElementById('secim-uzman-yazi').innerText = "Seçilmedi";
@@ -1852,9 +1976,12 @@
 
             document.getElementById('ozet-tarih-saat').innerText = `${tarih} • ${saat}`;
 
-            let subeUzmanlari = db.psikologlar.filter(p => (p.subeIds || []).includes(AKTIF_SUBE_ID) && p.durum !== 'pasif');
+            let seciliFirmaObj = firmaId ? db.firmalar.find(f => Number(f.id) === Number(firmaId)) : null;
+            let sorguGunu = tarihGunAdi(tarih);
+
+            let subeUzmanlari = db.psikologlar.filter(p => (p.subeIds || []).map(Number).includes(Number(AKTIF_SUBE_ID)) && p.durum !== 'pasif');
             if (tavsiyeEdilenUzmanId) {
-                subeUzmanlari.sort((a, b) => (a.id === tavsiyeEdilenUzmanId ? -1 : (b.id === tavsiyeEdilenUzmanId ? 1 : 0)));
+                subeUzmanlari.sort((a, b) => (Number(a.id) === Number(tavsiyeEdilenUzmanId) ? -1 : (Number(b.id) === Number(tavsiyeEdilenUzmanId) ? 1 : 0)));
             }
 
             const ug = document.getElementById('uzman-kart-grid');
@@ -1862,12 +1989,40 @@
             subeUzmanlari.forEach(u => {
                 let uygun = true;
                 let red = "";
-                let takipEden = (tavsiyeEdilenUzmanId && u.id === tavsiyeEdilenUzmanId);
+                let takipEden = (tavsiyeEdilenUzmanId && Number(u.id) === Number(tavsiyeEdilenUzmanId));
                 let rozet = takipEden ? `<span class="bg-amber-100 text-amber-900 text-[10px] font-extrabold px-2 py-0.5 rounded-lg mb-1 block">⭐ Takip Eden Uzman</span>` : '';
 
-                if (!(u.alanlar || []).includes(hizmetTuru)) { uygun = false; red = `"${hizmetTuru}" yetkisi yok`; }
-                if (uygun && db.seanslar.some(s => s.tarih === tarih && s.saat === saat && s.uzmanId === u.id && s.durum !== 'iptal')) {
-                    uygun = false; red = "Bu saatte başka seansı var";
+                // 1. Hizmet Türü Yetki Kontrolü
+                if (!(u.alanlar || []).includes(hizmetTuru)) {
+                    uygun = false;
+                    red = `"${hizmetTuru}" yetkisi yok`;
+                }
+
+                // 2. Kurumsal Firma Uzman Anlaşma Kontrolü
+                if (uygun && basvuruTuru === 'firma' && seciliFirmaObj) {
+                    if (!seciliFirmaObj.tumUzmanlar && !(seciliFirmaObj.uzmanIds || []).map(Number).includes(Number(u.id))) {
+                        uygun = false;
+                        red = "Bu kurum anlaşmasında tanımlı değil";
+                    }
+                }
+
+                // 3. Uzman Çalışma Saatleri Kontrolü
+                if (uygun) {
+                    let calismaKey = `${u.id}_${AKTIF_SUBE_ID}`;
+                    let takvim = db.uzmanCalismaSaatleri && db.uzmanCalismaSaatleri[calismaKey];
+                    if (takvim) {
+                        let gunAyar = takvim.find(g => g.gun === sorguGunu);
+                        if (!gunAyar || gunAyar.tatil || !(gunAyar.seciliSaatler || []).includes(saat)) {
+                            uygun = false;
+                            red = `${sorguGunu} ${saat} çalışma saati kapalı`;
+                        }
+                    }
+                }
+
+                // 4. Seans Çakışma Kontrolü
+                if (uygun && db.seanslar.some(s => s.tarih === tarih && s.saat === saat && Number(s.uzmanId) === Number(u.id) && s.durum !== 'iptal')) {
+                    uygun = false;
+                    red = "Bu saatte başka seansı var";
                 }
 
                 let card = document.createElement('div');
@@ -1891,9 +2046,9 @@
 
             const og = document.getElementById('oda-kart-grid');
             og.innerHTML = '';
-            let sube = db.subeler.find(s => s.id === AKTIF_SUBE_ID);
-            (sube.odalar || []).forEach(oda => {
-                let dolu = db.seanslar.some(s => s.subeId === AKTIF_SUBE_ID && s.tarih === tarih && s.saat === saat && s.odaId === oda.id && s.durum !== 'iptal');
+            let sube = db.subeler.find(s => Number(s.id) === Number(AKTIF_SUBE_ID));
+            (sube ? (sube.odalar || []) : []).forEach(oda => {
+                let dolu = db.seanslar.some(s => Number(s.subeId) === Number(AKTIF_SUBE_ID) && s.tarih === tarih && s.saat === saat && String(s.odaId) === String(oda.id) && s.durum !== 'iptal');
                 let card = document.createElement('div');
                 if (!dolu) {
                     card.className = "oda-kart border-2 border-emerald-500 bg-emerald-50/60 p-4 rounded-2xl text-center cursor-pointer hover:bg-emerald-100/70 transition";
@@ -1917,6 +2072,7 @@
         }
 
         function randevuyuTamamla() {
+            if (!secilenUzmanId || !secilenOdaId) return;
             let db = AsistDB.get();
             let danisanId = document.getElementById('secili-danisan-id').value;
             let ad = document.getElementById('input-danisan-ad').value.trim();
@@ -1935,10 +2091,17 @@
             let babaAd = document.getElementById('input-baba-ad').value.trim();
             let babaTel = normalizeTelefon10Hane(document.getElementById('input-baba-tel').value);
 
+            let smsGonderilecekler = {
+                ana: !!document.getElementById('sms-check-ana')?.checked,
+                es: hizmetTuru === 'Çift' ? !!document.getElementById('sms-check-es')?.checked : false,
+                anne: (hizmetTuru === 'Çocuk' || hizmetTuru === 'Ergen') ? !!document.getElementById('sms-check-anne')?.checked : false,
+                baba: (hizmetTuru === 'Çocuk' || hizmetTuru === 'Ergen') ? !!document.getElementById('sms-check-baba')?.checked : false
+            };
+
             let tel = girilenTel || anneTel || babaTel || "";
 
             let mevcut = null;
-            if (danisanId) mevcut = db.danisanlar.find(d => d.id === parseInt(danisanId, 10));
+            if (danisanId) mevcut = db.danisanlar.find(d => Number(d.id) === parseInt(danisanId, 10));
             if (!mevcut && tel) mevcut = db.danisanlar.find(d => normalizeTelefon10Hane(d.tel) === tel);
 
             if (mevcut) {
@@ -1947,6 +2110,7 @@
                 if (anneTel) mevcut.anneTel = anneTel;
                 if (babaAd) mevcut.babaAd = babaAd;
                 if (babaTel) mevcut.babaTel = babaTel;
+                if (firmaId) mevcut.firmaId = firmaId;
             } else {
                 danisanId = Date.now();
                 db.danisanlar.unshift({
@@ -1971,7 +2135,7 @@
                 else varsayilanUcret = numOrDefault(db.fiyatlar.yetiskin, 1500);
             }
 
-            let uz = db.psikologlar.find(p => p.id === secilenUzmanId);
+            let uz = db.psikologlar.find(p => Number(p.id) === Number(secilenUzmanId));
             let ofisOrani = basvuruTuru === 'firma' ? 0 : (basvuruTuru === 'kendi' ? (uz ? numOrDefault(uz.oranKendi, 30) : 30) : (uz ? numOrDefault(uz.oranYonlendirme, 50) : 50));
 
             db.seanslar.push({
@@ -1998,7 +2162,8 @@
                 ikinciDanisanAd: hizmetTuru === 'Çift' ? ikinciDanisanAd : "",
                 ikinciDanisanTel: hizmetTuru === 'Çift' ? ikinciDanisanTel : "",
                 ebeveynGorusmesiMi: ebeveynGorusmesiMi,
-                smsGonderildiZamani: null
+                smsGonderildiZamani: null,
+                smsGonderilecekler: smsGonderilecekler
             });
 
             AsistDB.save(db);
@@ -2006,6 +2171,8 @@
             document.getElementById('sonuc-alani').classList.add('hidden');
             document.getElementById('randevu-on-form').reset();
             document.getElementById('secili-danisan-id').value = '';
+            basvuruTuruDegisti('ofis');
+            asistanHizmetTuruDegisti('Yetişkin');
             takipEdenUzmanUyarisiGoster(null);
             asistanSekmeDegistir('bugun');
         }
@@ -2054,6 +2221,12 @@
                         document.getElementById('input-anne-tel').value = normalizeTelefon10Hane(d.anneTel);
                         document.getElementById('input-baba-ad').value = d.babaAd || '';
                         document.getElementById('input-baba-tel').value = normalizeTelefon10Hane(d.babaTel);
+                    } else if (hizmetTuru === 'Çift' && d.esDanisanId) {
+                        let es = db.danisanlar.find(x => Number(x.id) === Number(d.esDanisanId));
+                        if (es) {
+                            document.getElementById('input-ikinci-danisan-ad').value = es.ad || '';
+                            document.getElementById('input-ikinci-danisan-tel').value = normalizeTelefon10Hane(es.tel);
+                        }
                     }
                     takipEdenUzmanUyarisiGoster(d.id);
                     oneriKutusuAd.classList.add('hidden');
@@ -2066,7 +2239,9 @@
         }
 
         function basvuruTuruDegisti(tur) { 
+            firmaSecenekleriniDoldur();
             document.getElementById('alan-kurumsal-firma').classList.toggle('hidden', tur !== 'firma'); 
+            tarihVeyaSaatDegisti();
         }
 
         function hizliTahsilat(id) {
@@ -2078,9 +2253,11 @@
         function duzenleModalAc(id) {
             aktifSeciliId = id;
             let db = AsistDB.get();
-            let s = db.seanslar.find(x => x.id === id);
+            let s = db.seanslar.find(x => Number(x.id) === Number(id));
             if (!s) return;
             let res = AsistDB.resolveSeans(s, db);
+
+            firmaSecenekleriniDoldur();
 
             document.getElementById('modal-danisan-ad').innerText = res.danisanAdi;
             document.getElementById('modal-seans-detay').innerText = `${s.tarih} ${s.saat} • ${res.uzmanAdi} (${res.odaAdi})`;
@@ -2104,8 +2281,8 @@
 
         function modalBasvuruTuruDegisti(tur, kullaniciDegistirdi = false) {
             let db = AsistDB.get();
-            let s = db.seanslar.find(x => x.id === aktifSeciliId);
-            let uz = s ? db.psikologlar.find(p => p.id === s.uzmanId) : null;
+            let s = db.seanslar.find(x => Number(x.id) === Number(aktifSeciliId));
+            let uz = s ? db.psikologlar.find(p => Number(p.id) === Number(s.uzmanId)) : null;
 
             if (tur === 'firma') {
                 document.getElementById('modal-firma-secim-alani').classList.remove('hidden');
@@ -2154,7 +2331,7 @@
         function seansGuncelle() {
             if (!aktifSeciliId) return;
             let db = AsistDB.get();
-            let s = db.seanslar.find(x => x.id === aktifSeciliId);
+            let s = db.seanslar.find(x => Number(x.id) === Number(aktifSeciliId));
             if (!s) return;
 
             let yeniDurum = document.getElementById('modal-durum').value;
@@ -2190,7 +2367,7 @@
 
         function tarihSaatModalAc(id) {
             aktifSeciliId = id;
-            let s = AsistDB.get().seanslar.find(x => x.id === id);
+            let s = AsistDB.get().seanslar.find(x => Number(x.id) === Number(id));
             if(!s) return;
             let res = AsistDB.resolveSeans(s);
             document.getElementById('ts-danisan-ad').innerText = res.danisanAdi;
@@ -2204,7 +2381,7 @@
         function tarihSaatGuncelleKaydet() {
             if (!aktifSeciliId) return;
             let db = AsistDB.get();
-            let s = db.seanslar.find(x => x.id === aktifSeciliId);
+            let s = db.seanslar.find(x => Number(x.id) === Number(aktifSeciliId));
             if (!s) return;
 
             s.tarih = document.getElementById('ts-yeni-tarih').value;
@@ -2219,13 +2396,13 @@
             let urlParams = new URLSearchParams(window.location.search);
 
             if (AKTIF_OTURUM && AKTIF_OTURUM.rol === 'asistan') {
-                AKTIF_SUBE_ID = AKTIF_OTURUM.subeId || 1;
+                AKTIF_SUBE_ID = Number(AKTIF_OTURUM.subeId) || 1;
             } else if (urlParams.get('subeId')) {
                 AKTIF_SUBE_ID = parseInt(urlParams.get('subeId'), 10);
             }
 
-            let aktifSube = db.subeler.find(s => s.id === AKTIF_SUBE_ID) || db.subeler[0];
-            AKTIF_SUBE_ID = aktifSube.id;
+            let aktifSube = db.subeler.find(s => Number(s.id) === Number(AKTIF_SUBE_ID)) || db.subeler[0];
+            AKTIF_SUBE_ID = Number(aktifSube.id);
 
             document.getElementById('aktif-asistan-subesi').innerText = aktifSube.adi;
             document.getElementById('txt-aktif-sube-gorusmeler').innerText = aktifSube.adi;
@@ -2234,6 +2411,9 @@
 
             if (AKTIF_OTURUM) {
                 document.getElementById('aktif-asistan-ad').innerText = AKTIF_OTURUM.ad;
+                if (document.getElementById('mobil-sheet-kullanici')) {
+                    document.getElementById('mobil-sheet-kullanici').innerText = `${AKTIF_OTURUM.ad} (${aktifSube.adi})`;
+                }
                 if (AKTIF_OTURUM.rol === 'yonetici') {
                     document.getElementById('aktif-asistan-rol').innerText = "Yönetici Gözlem Modu";
                     document.getElementById('yonetici-gozlem-kutusu').classList.remove('hidden');
@@ -2268,17 +2448,6 @@
             if (adKutu && !adKutu.contains(e.target) && e.target.id !== 'input-danisan-ad') adKutu.classList.add('hidden');
             if (telKutu && !telKutu.contains(e.target) && e.target.id !== 'input-danisan-tel') telKutu.classList.add('hidden');
         });
-
-        function firmaSecenekleriniDoldur() {
-            let db = AsistDB.get();
-            const sel1 = document.getElementById('input-kurumsal-firma-id');
-            const sel2 = document.getElementById('modal-firma-id');
-            if(!sel1 || !sel2) return;
-            let subeFirmalari = (db.firmalar || []).filter(f => f.durum === 'aktif' && f.subeIds.includes(AKTIF_SUBE_ID));
-            let html = subeFirmalari.map(f => `<option value="${f.id}">${escapeHTML(f.adi)}</option>`).join('');
-            sel1.innerHTML = html;
-            sel2.innerHTML = html;
-        }
     </script>
 </body>
 </html>

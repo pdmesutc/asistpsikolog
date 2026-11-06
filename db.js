@@ -86,14 +86,15 @@ function asistCiftDanisanSenkronizeEt(db, anaDanisanId, ikinciAd, ikinciTelRaw, 
     let tel10 = asistTel10(ikinciTelRaw);
     if (!adTemiz) return null;
 
-    let anaDanisan = db.danisanlar.find(d => d.id === anaDanisanId);
+    let anaIdNum = Number(anaDanisanId);
+    let anaDanisan = db.danisanlar.find(d => Number(d.id) === anaIdNum);
     let esDanisan = null;
 
     if (tel10.length === 10) {
-        esDanisan = db.danisanlar.find(d => d.id !== anaDanisanId && asistTel10(d.tel) === tel10);
+        esDanisan = db.danisanlar.find(d => Number(d.id) !== anaIdNum && asistTel10(d.tel) === tel10);
     }
     if (!esDanisan && anaDanisan && anaDanisan.esDanisanId) {
-        let mevcutEs = db.danisanlar.find(d => d.id === anaDanisan.esDanisanId);
+        let mevcutEs = db.danisanlar.find(d => Number(d.id) === Number(anaDanisan.esDanisanId));
         if (mevcutEs && (mevcutEs.ad || '').trim().toLowerCase() === adTemiz.toLowerCase()) {
             esDanisan = mevcutEs;
             if (tel10.length === 10 && !esDanisan.tel) esDanisan.tel = tel10;
@@ -105,18 +106,18 @@ function asistCiftDanisanSenkronizeEt(db, anaDanisanId, ikinciAd, ikinciTelRaw, 
             id: yeniId,
             ad: adTemiz,
             tel: tel10.length === 10 ? tel10 : '',
-            subeId: subeId || (anaDanisan ? anaDanisan.subeId : 1),
-            firmaId: firmaId || (anaDanisan ? anaDanisan.firmaId : null),
-            esDanisanId: anaDanisanId,
+            subeId: Number(subeId) || (anaDanisan ? Number(anaDanisan.subeId) : 1),
+            firmaId: firmaId ? Number(firmaId) : (anaDanisan && anaDanisan.firmaId ? Number(anaDanisan.firmaId) : null),
+            esDanisanId: anaIdNum,
             anneAd: "", anneTel: "", babaAd: "", babaTel: ""
         };
         db.danisanlar.unshift(esDanisan);
     } else {
-        esDanisan.esDanisanId = anaDanisanId;
+        esDanisan.esDanisanId = anaIdNum;
     }
 
     if (anaDanisan) {
-        anaDanisan.esDanisanId = esDanisan.id;
+        anaDanisan.esDanisanId = Number(esDanisan.id);
     }
 
     return esDanisan;
@@ -127,14 +128,15 @@ function asistCiftDanisanSenkronizeEt(db, anaDanisanId, ikinciAd, ikinciTelRaw, 
  */
 function asistTakipEdenUzmanBul(danisanId, dbInstance = null) {
     if (!danisanId) return null;
+    let dIdNum = Number(danisanId);
     let db = dbInstance || AsistDB.get();
     let gecmis = (db.seanslar || [])
-        .filter(s => (s.danisanId === danisanId || s.ikinciDanisanId === danisanId) && s.durum !== 'iptal')
-        .sort((a, b) => b.tarih.localeCompare(a.tarih) || b.saat.localeCompare(a.saat));
+        .filter(s => (Number(s.danisanId) === dIdNum || Number(s.ikinciDanisanId) === dIdNum) && s.durum !== 'iptal')
+        .sort((a, b) => String(b.tarih || '').localeCompare(String(a.tarih || '')) || String(b.saat || '').localeCompare(String(a.saat || '')));
 
     if (gecmis.length === 0) return null;
     let sonSeans = gecmis[0];
-    let uz = (db.psikologlar || []).find(p => p.id === sonSeans.uzmanId);
+    let uz = (db.psikologlar || []).find(p => Number(p.id) === Number(sonSeans.uzmanId));
     return uz ? { uzman: uz, seansSayisi: gecmis.length, sonTarih: sonSeans.tarih } : null;
 }
 
@@ -199,11 +201,11 @@ const DEFAULT_ASIST_DB = {
         { id: 6, ad: "Psk. Beyzanur KARATAŞ", tel: "5321110006", telGorunum: "0(532) 111 00 06", mail: "beyzanur@herapsikoloji.com", sifre: "123456", subeIds: [2], alanlar: ["Çocuk", "Ergen"], oranKendi: 30, oranYonlendirme: 50, durum: "aktif", sms: true, telGor: false },
         { id: 7, ad: "Uzm. Psk. Betül MATUR", tel: "5321110007", telGorunum: "0(532) 111 00 07", mail: "betul@herapsikoloji.com", sifre: "123456", subeIds: [2], alanlar: ["Ergen", "Yetişkin"], oranKendi: 30, oranYonlendirme: 50, durum: "aktif", sms: true, telGor: true },
         { id: 8, ad: "Klinik Psk. İshak BÜYÜKYILDIRIM", tel: "5321110008", telGorunum: "0(532) 111 00 08", mail: "ishak@herapsikoloji.com", sifre: "123456", subeIds: [1, 2], alanlar: ["Çocuk", "Ergen", "Yetişkin", "Çift"], oranKendi: 30, oranYonlendirme: 50, durum: "aktif", sms: true, telGor: true },
-        { id: 9, ad: "Klinik Psk. Mesut ÇAKIR", tel: "5321110009", telGorunum: "0(532) 111 00 09", mail: "mesut@herapsikoloji.com", sifre: "123456", subeIds: [2], alanlar: ["Ergen", "Yetişkin", "Çift"], oranKendi: 30, oranYonlendirme: 50, durum: "aktif", sms: true, telGor: true }
+        { id: 9, ad: "Klinik Psk. Mesut ÇAKIR", tel: "5321110009", telGorunum: "0(532) 111 00 09", mail: "mesut@herapsikoloji.com", sifre: "123456", subeIds: [1, 2], alanlar: ["Ergen", "Yetişkin", "Çift"], oranKendi: 30, oranYonlendirme: 50, durum: "aktif", sms: true, telGor: true }
     ],
     firmalar: [
-        { id: 1, adi: "Goodyear Sakarya Fabrikası", subeIds: [1, 2], uzmanIds: [8, 1], tumUzmanlar: false, durum: "aktif" },
-        { id: 2, adi: "Pendik Belediyesi İştirak", subeIds: [1], uzmanIds: [], tumUzmanlar: true, durum: "aktif" }
+        { id: 1, adi: "Goodyear Sakarya Fabrikası", subeIds: [1, 2], uzmanIds: [1, 8, 9], tumUzmanlar: true, durum: "aktif" },
+        { id: 2, adi: "Pendik Belediyesi İştirak", subeIds: [1, 2], uzmanIds: [], tumUzmanlar: true, durum: "aktif" }
     ],
     danisanlar: [
         { id: 8, ad: "Tuğba UYSAL", tel: "5377851727", subeId: 1, firmaId: null, esDanisanId: null, anneAd: "", anneTel: "", babaAd: "", babaTel: "" },
@@ -242,17 +244,7 @@ const DEFAULT_ASIST_DB = {
             ebeveynGorusmesiMi: false, smsGonderildiZamani: null, smsGonderilecekler: { ana: true, es: false, anne: false, baba: false } 
         }
     ],
-    uzmanCalismaSaatleri: {
-        "8_1": [
-            { gun: "Pazartesi", tatil: false, seciliSaatler: ["10:00", "11:00", "12:00", "13:00", "14:00"] },
-            { gun: "Salı", tatil: false, seciliSaatler: ["10:00", "11:00", "14:00", "15:00"] },
-            { gun: "Çarşamba", tatil: false, seciliSaatler: ["10:00", "11:00", "14:00", "15:00", "16:00"] },
-            { gun: "Perşembe", tatil: false, seciliSaatler: ["10:00", "11:00", "14:00", "15:00"] },
-            { gun: "Cuma", tatil: false, seciliSaatler: ["10:00", "11:00", "14:00", "15:00"] },
-            { gun: "Cumartesi", tatil: false, seciliSaatler: ["10:00", "11:00", "12:00", "13:00", "14:00"] },
-            { gun: "Pazar", tatil: true, seciliSaatler: [] }
-        ]
-    }
+    uzmanCalismaSaatleri: {}
 };
 
 function asistNormalizeDb(db) {
@@ -277,6 +269,7 @@ function asistNormalizeDb(db) {
     }
 
     db.subeler.forEach(s => {
+        s.id = Number(s.id);
         if (!Array.isArray(s.odalar)) { s.odalar = []; degisti = true; }
         if (!s.saatBaslangic) { s.saatBaslangic = "09:00"; degisti = true; }
         if (!s.saatBitis) { s.saatBitis = "21:00"; degisti = true; }
@@ -286,16 +279,22 @@ function asistNormalizeDb(db) {
         });
     });
 
+    const tumSubeIdleri = db.subeler.map(s => Number(s.id));
+
     db.asistanlar.forEach(a => {
+        a.id = Number(a.id);
+        a.subeId = Number(a.subeId) || 1;
         if (!a.durum) { a.durum = "aktif"; degisti = true; }
         if (!a.sifre) { a.sifre = "123456"; degisti = true; }
     });
 
     db.psikologlar.forEach(p => {
+        p.id = Number(p.id);
         if (!p.durum) { p.durum = "aktif"; degisti = true; }
         if (!p.sifre) { p.sifre = "123456"; degisti = true; }
-        if (!Array.isArray(p.subeIds)) { p.subeIds = []; degisti = true; }
-        if (!Array.isArray(p.alanlar)) { p.alanlar = []; degisti = true; }
+        if (!Array.isArray(p.subeIds)) { p.subeIds = [1]; degisti = true; }
+        p.subeIds = p.subeIds.map(sid => Number(sid)).filter(Boolean);
+        if (!Array.isArray(p.alanlar)) { p.alanlar = ["Yetişkin"]; degisti = true; }
         p.subeIds.forEach(sid => {
             let key = `${p.id}_${sid}`;
             if (!db.uzmanCalismaSaatleri[key]) {
@@ -306,14 +305,24 @@ function asistNormalizeDb(db) {
     });
 
     db.firmalar.forEach(f => {
+        f.id = Number(f.id);
         if (!f.durum) { f.durum = "aktif"; degisti = true; }
-        if (!Array.isArray(f.subeIds)) { f.subeIds = []; degisti = true; }
+        if (!Array.isArray(f.subeIds) || f.subeIds.length === 0) {
+            f.subeIds = tumSubeIdleri.length > 0 ? tumSubeIdleri.slice() : [1, 2];
+            degisti = true;
+        } else {
+            f.subeIds = f.subeIds.map(sid => Number(sid)).filter(Boolean);
+        }
         if (!Array.isArray(f.uzmanIds)) { f.uzmanIds = []; degisti = true; }
+        f.uzmanIds = f.uzmanIds.map(uid => Number(uid)).filter(Boolean);
         if (typeof f.tumUzmanlar !== 'boolean') { f.tumUzmanlar = true; degisti = true; }
     });
 
     db.danisanlar.forEach(d => {
-        if (d.esDanisanId === undefined) { d.esDanisanId = null; degisti = true; }
+        d.id = Number(d.id);
+        d.subeId = Number(d.subeId) || 1;
+        d.firmaId = d.firmaId ? Number(d.firmaId) : null;
+        d.esDanisanId = d.esDanisanId ? Number(d.esDanisanId) : null;
         if (d.anneAd === undefined) { d.anneAd = ""; degisti = true; }
         if (d.anneTel === undefined) { d.anneTel = ""; degisti = true; }
         if (d.babaAd === undefined) { d.babaAd = ""; degisti = true; }
@@ -321,7 +330,12 @@ function asistNormalizeDb(db) {
     });
 
     db.seanslar.forEach(s => {
-        if (s.ikinciDanisanId === undefined) { s.ikinciDanisanId = null; degisti = true; }
+        s.id = Number(s.id);
+        s.subeId = Number(s.subeId) || 1;
+        s.danisanId = Number(s.danisanId);
+        s.uzmanId = Number(s.uzmanId);
+        s.firmaId = s.firmaId ? Number(s.firmaId) : null;
+        s.ikinciDanisanId = s.ikinciDanisanId ? Number(s.ikinciDanisanId) : null;
         if (s.ikinciDanisanAd === undefined) { s.ikinciDanisanAd = ""; degisti = true; }
         if (s.ikinciDanisanTel === undefined) { s.ikinciDanisanTel = ""; degisti = true; }
         if (typeof s.ebeveynGorusmesiMi !== 'boolean') { s.ebeveynGorusmesiMi = false; degisti = true; }
@@ -338,7 +352,8 @@ function asistNormalizeDb(db) {
     });
 
     db.masraflar.forEach(m => {
-        if (!m.id) { m.id = Date.now() + Math.floor(Math.random() * 1000); degisti = true; }
+        m.id = Number(m.id) || (Date.now() + Math.floor(Math.random() * 1000));
+        m.subeId = Number(m.subeId) || 1;
         if (!m.tarih) { m.tarih = SEED_TARIHI; degisti = true; }
         if (typeof m.tutar !== 'number') { m.tutar = Number(m.tutar) || 0; degisti = true; }
     });
@@ -422,12 +437,12 @@ const AsistDB = {
 
     resolveSeans: function(seans, dbInstance = null) {
         let db = dbInstance || this.get();
-        let sube = db.subeler.find(s => s.id === seans.subeId);
-        let danisan = db.danisanlar.find(d => d.id === seans.danisanId);
-        let ikinciDanisan = seans.ikinciDanisanId ? db.danisanlar.find(d => d.id === seans.ikinciDanisanId) : null;
-        let uzman = db.psikologlar.find(p => p.id === seans.uzmanId);
-        let oda = sube ? sube.odalar.find(o => o.id === seans.odaId) : null;
-        let firma = seans.firmaId ? db.firmalar.find(f => f.id === seans.firmaId) : null;
+        let sube = db.subeler.find(s => Number(s.id) === Number(seans.subeId));
+        let danisan = db.danisanlar.find(d => Number(d.id) === Number(seans.danisanId));
+        let ikinciDanisan = seans.ikinciDanisanId ? db.danisanlar.find(d => Number(d.id) === Number(seans.ikinciDanisanId)) : null;
+        let uzman = db.psikologlar.find(p => Number(p.id) === Number(seans.uzmanId));
+        let oda = sube ? sube.odalar.find(o => String(o.id) === String(seans.odaId)) : null;
+        let firma = seans.firmaId ? db.firmalar.find(f => Number(f.id) === Number(seans.firmaId)) : null;
 
         return {
             ...seans,
@@ -507,12 +522,12 @@ const AsistAuth = {
 
         const session = {
             rol: rol,
-            userId: kullanici.id,
+            userId: Number(kullanici.id),
             ad: kullanici.ad,
             mail: kullanici.mail || '',
             tel: kullanici.tel || '',
-            subeId: kullanici.subeId || null,
-            subeIds: Array.isArray(kullanici.subeIds) ? kullanici.subeIds : (kullanici.subeId ? [kullanici.subeId] : []),
+            subeId: kullanici.subeId ? Number(kullanici.subeId) : null,
+            subeIds: Array.isArray(kullanici.subeIds) ? kullanici.subeIds.map(Number) : (kullanici.subeId ? [Number(kullanici.subeId)] : []),
             girisZamani: new Date().toISOString()
         };
 

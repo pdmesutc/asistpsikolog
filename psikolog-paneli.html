@@ -18,15 +18,22 @@
     <!-- SOL DİKEY MENÜ (Masaüstü ve Tablet) -->
     <aside class="w-full md:w-72 bg-white border-r border-slate-200 flex flex-col justify-between shrink-0 sticky top-0 md:h-screen z-40 shadow-xs">
         <div class="overflow-y-auto">
-            <div class="p-5 flex flex-col justify-center border-b border-slate-100 space-y-2.5">
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-xl bg-[#256839] flex items-center justify-center text-white text-lg shadow-md shrink-0">
-                        <i class="fa-solid fa-user-doctor"></i>
+            <div class="p-4 sm:p-5 flex flex-col justify-center border-b border-slate-100 space-y-2.5">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3 truncate">
+                        <div class="w-10 h-10 rounded-xl bg-[#256839] flex items-center justify-center text-white text-lg shadow-md shrink-0">
+                            <i class="fa-solid fa-user-doctor"></i>
+                        </div>
+                        <div class="truncate">
+                            <span class="text-xl font-black tracking-tight text-slate-900">asist<span class="text-[#256839]">psikolog</span></span>
+                            <span class="block text-[10px] tracking-widest text-slate-500 font-extrabold uppercase">Uzman Çalışma Masası</span>
+                        </div>
                     </div>
-                    <div>
-                        <span class="text-xl font-black tracking-tight text-slate-900">asist<span class="text-[#256839]">psikolog</span></span>
-                        <span class="block text-[10px] tracking-widest text-slate-500 font-extrabold uppercase">Uzman Çalışma Masası</span>
-                    </div>
+
+                    <!-- Mobil Üst Hızlı Menü Butonu -->
+                    <button type="button" onclick="pskMobilDahaFazlaAc()" class="md:hidden w-9 h-9 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 flex items-center justify-center cursor-pointer hover:bg-slate-100 transition shrink-0" title="Tüm Menü">
+                        <i class="fa-solid fa-bars text-sm"></i>
+                    </button>
                 </div>
                 <div>
                     <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Aktif Uzman Profili</label>
@@ -224,25 +231,23 @@
             </div>
         </div>
 
-        <!-- 2. SEANSLARIM (ORİJİNAL FİLTRE VE AKIŞ YAPISI EKSİKSİZ GERİ GETİRİLDİ) -->
+        <!-- 2. SEANSLARIM (FİLTRELİ AKIŞ LİSTESİ) -->
         <div id="psekm-gorusmeler" class="psikolog-sekme hidden space-y-4 sm:space-y-6">
             <div class="bg-white p-4 sm:p-7 rounded-3xl border border-slate-200 shadow-xs space-y-4">
                 
-                <!-- Başlık ve Şube Seçim Filtresi -->
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-3">
                     <div>
                         <h2 class="text-lg sm:text-xl font-extrabold text-slate-900">Seanslarım</h2>
                         <p class="text-[11px] sm:text-xs text-slate-500">Seçili dönemdeki görüşmeleriniz ve seans akışı.</p>
                     </div>
 
-                    <!-- Şube Seçimi -->
                     <div class="flex items-center space-x-2">
                         <span class="text-xs font-bold text-slate-500">Şube Filtresi:</span>
                         <select id="psk-seans-sube-filtre" onchange="pskSeanslariCiz()" class="bg-emerald-50 border border-emerald-200 text-[#256839] rounded-xl px-3 py-1.5 font-extrabold text-xs focus:outline-none cursor-pointer"></select>
                     </div>
                 </div>
 
-                <!-- Seanslarım Tarih Filtresi (Gün, Hafta, Ay, Özel Aralık ve Sayaçlar) -->
+                <!-- Seanslarım Tarih Filtresi -->
                 <div class="bg-slate-50 p-3 sm:p-4 rounded-2xl border border-slate-200 space-y-2.5 text-xs">
                     <div class="grid grid-cols-4 gap-1 bg-white p-1 rounded-xl border border-slate-200 shadow-2xs">
                         <button onclick="pskSeansPeriyotDegistir('gun')" id="psflt-gun" class="psk-seans-periyot-btn py-2 text-center rounded-lg font-bold transition bg-[#256839] text-white shadow-xs cursor-pointer">Gün</button>
@@ -281,7 +286,7 @@
             </div>
         </div>
 
-        <!-- 3. RANDEVU OLUŞTUR -->
+        <!-- 3. RANDEVU OLUŞTUR (SADECE KENDİ DANIŞANI İÇİN) -->
         <div id="psekm-randevu-olustur" class="psikolog-sekme hidden space-y-4 sm:space-y-6">
             <div class="bg-white p-5 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-5">
                 <div class="border-b pb-3">
@@ -585,7 +590,7 @@
     <script>
         const AKTIF_OTURUM = (typeof AsistAuth !== 'undefined') ? AsistAuth.requireAuth(['psikolog', 'yonetici']) : null;
 
-        let AKTIF_UZMAN_ID = (AKTIF_OTURUM && AKTIF_OTURUM.rol === 'psikolog') ? AKTIF_OTURUM.userId : 8;
+        let AKTIF_UZMAN_ID = (AKTIF_OTURUM && AKTIF_OTURUM.rol === 'psikolog') ? Number(AKTIF_OTURUM.userId) : 8;
         let calismaAyarSubeId = 1;
         let pskSecilenOdaId = null;
 
@@ -750,14 +755,14 @@
         // ==========================================
         function pskGenelSubeSecenekleriniDoldur() {
             let db = AsistDB.get();
-            let uz = db.psikologlar.find(p => p.id === AKTIF_UZMAN_ID);
+            let uz = db.psikologlar.find(p => Number(p.id) === Number(AKTIF_UZMAN_ID));
             const sel = document.getElementById('psk-genel-sube-filtre');
             if (!sel || !uz) return;
 
             let mevcut = sel.value || 'hepsi';
             sel.innerHTML = '<option value="hepsi">Tüm Şubelerim (Genel)</option>';
 
-            let subeler = db.subeler.filter(s => (uz.subeIds || []).includes(s.id));
+            let subeler = db.subeler.filter(s => (uz.subeIds || []).map(Number).includes(Number(s.id)));
             subeler.forEach(s => {
                 sel.innerHTML += `<option value="${s.id}">${escapeHtml(s.adi)}</option>`;
             });
@@ -795,8 +800,8 @@
             const seciliSubeVal = document.getElementById('psk-genel-sube-filtre')?.value || 'hepsi';
 
             let seanslar = db.seanslar.filter(s => {
-                let uzUygun = s.uzmanId === AKTIF_UZMAN_ID;
-                let subeUygun = (seciliSubeVal === 'hepsi') || (s.subeId === parseInt(seciliSubeVal, 10));
+                let uzUygun = Number(s.uzmanId) === Number(AKTIF_UZMAN_ID);
+                let subeUygun = (seciliSubeVal === 'hepsi') || (Number(s.subeId) === parseInt(seciliSubeVal, 10));
                 return uzUygun && subeUygun;
             });
 
@@ -808,7 +813,7 @@
                 filtrelenmis = seanslar.filter(s => s.tarih >= aralik.baslangic && s.tarih <= aralik.bitis);
             } else if (pskGenelAktifPeriyot === 'ay') {
                 let ayPrefix = `${pskGenelSeciliTarih.getFullYear()}-${String(pskGenelSeciliTarih.getMonth() + 1).padStart(2, '0')}`;
-                filtrelenmis = seanslar.filter(s => s.tarih.startsWith(ayPrefix));
+                filtrelenmis = seanslar.filter(s => s.tarih && s.tarih.startsWith(ayPrefix));
             } else if (pskGenelAktifPeriyot === 'ozel') {
                 let bas = document.getElementById('psk-genel-ozel-baslangic').value;
                 let bit = document.getElementById('psk-genel-ozel-bitis').value;
@@ -845,14 +850,14 @@
         // ==========================================
         function pskSeansSubeSecenekleriniDoldur() {
             let db = AsistDB.get();
-            let uz = db.psikologlar.find(p => p.id === AKTIF_UZMAN_ID);
+            let uz = db.psikologlar.find(p => Number(p.id) === Number(AKTIF_UZMAN_ID));
             const sel = document.getElementById('psk-seans-sube-filtre');
             if (!sel || !uz) return;
 
             let mevcut = sel.value || 'hepsi';
             sel.innerHTML = '<option value="hepsi">Tüm Şubelerim (Genel)</option>';
 
-            let subeler = db.subeler.filter(s => (uz.subeIds || []).includes(s.id));
+            let subeler = db.subeler.filter(s => (uz.subeIds || []).map(Number).includes(Number(s.id)));
             subeler.forEach(s => {
                 sel.innerHTML += `<option value="${s.id}">${escapeHtml(s.adi)}</option>`;
             });
@@ -891,14 +896,14 @@
             const labelEl = document.getElementById('psk-seans-aktif-tarih-etiket');
             if (labelEl) labelEl.innerText = formatTarihTurkce(pskSeansSeciliTarih);
 
-            let uz = db.psikologlar.find(p => p.id === AKTIF_UZMAN_ID);
+            let uz = db.psikologlar.find(p => Number(p.id) === Number(AKTIF_UZMAN_ID));
             let telGorunur = uz ? uz.telGor !== false : true;
 
             const seciliSubeVal = document.getElementById('psk-seans-sube-filtre')?.value || 'hepsi';
 
             let seanslar = db.seanslar.filter(s => {
-                let uzUygun = s.uzmanId === AKTIF_UZMAN_ID;
-                let subeUygun = (seciliSubeVal === 'hepsi') || (s.subeId === parseInt(seciliSubeVal, 10));
+                let uzUygun = Number(s.uzmanId) === Number(AKTIF_UZMAN_ID);
+                let subeUygun = (seciliSubeVal === 'hepsi') || (Number(s.subeId) === parseInt(seciliSubeVal, 10));
                 return uzUygun && subeUygun;
             });
 
@@ -910,14 +915,14 @@
                 filtrelenmis = seanslar.filter(s => s.tarih >= aralik.baslangic && s.tarih <= aralik.bitis);
             } else if (pskSeansAktifPeriyot === 'ay') {
                 let ayPrefix = `${pskSeansSeciliTarih.getFullYear()}-${String(pskSeansSeciliTarih.getMonth() + 1).padStart(2, '0')}`;
-                filtrelenmis = seanslar.filter(s => s.tarih.startsWith(ayPrefix));
+                filtrelenmis = seanslar.filter(s => s.tarih && s.tarih.startsWith(ayPrefix));
             } else if (pskSeansAktifPeriyot === 'ozel') {
                 let bas = document.getElementById('psk-seans-ozel-baslangic').value;
                 let bit = document.getElementById('psk-seans-ozel-bitis').value;
                 if (bas && bit) filtrelenmis = seanslar.filter(s => s.tarih >= bas && s.tarih <= bit);
             }
 
-            filtrelenmis.sort((a,b) => a.tarih.localeCompare(b.tarih) || a.saat.localeCompare(b.saat));
+            filtrelenmis.sort((a,b) => String(a.tarih || '').localeCompare(String(b.tarih || '')) || String(a.saat || '').localeCompare(String(b.saat || '')));
 
             let tamamlananSayisi = 0;
             let bekleyenSayisi = 0;
@@ -947,6 +952,10 @@
                         durumRozet = `<span class="bg-amber-100 text-amber-800 text-[10px] font-extrabold px-2 py-0.5 rounded-lg">Bekliyor</span>`;
                     }
 
+                    let firmaRozet = s.basvuruTuru === 'firma'
+                        ? `<span class="bg-blue-100 text-blue-900 text-[10px] font-extrabold px-2 py-0.5 rounded-lg border border-blue-200">Firma: ${escapeHtml(s.firmaAdi || 'Kurum')}</span>`
+                        : '';
+
                     let ekstraBilgi = '';
                     if (s.hizmet === 'Çift' && s.ikinciDanisanAd) {
                         ekstraBilgi = `<span class="text-[11px] text-purple-800 font-semibold block">💍 Çift / Eş: ${escapeHtml(s.ikinciDanisanAd)} (${escapeHtml(formatTelefonGorunum(s.ikinciDanisanTel, telGorunur))})</span>`;
@@ -959,8 +968,9 @@
                             <div class="flex items-center space-x-3.5">
                                 <span class="font-black text-slate-900 w-12 text-sm">${escapeHtml(s.saat)}</span>
                                 <div>
-                                    <div class="flex items-center space-x-2">
+                                    <div class="flex flex-wrap items-center gap-1.5">
                                         <h4 class="font-extrabold text-slate-900">${escapeHtml(s.danisanAdi)}</h4>
+                                        ${firmaRozet}
                                         ${durumRozet}
                                     </div>
                                     ${ekstraBilgi}
@@ -979,24 +989,24 @@
         // ==========================================
         function pskTakvimSubeButonlariniCiz() {
             let db = AsistDB.get();
-            let uz = db.psikologlar.find(p => p.id === AKTIF_UZMAN_ID);
+            let uz = db.psikologlar.find(p => Number(p.id) === Number(AKTIF_UZMAN_ID));
             const bar = document.getElementById('psk-takvim-sube-bar');
             if (!bar || !uz) return;
             bar.innerHTML = '';
 
-            let subeler = db.subeler.filter(s => (uz.subeIds || []).includes(s.id));
-            if (subeler.length > 0 && !subeler.some(s => s.id === pskTakvimSeciliSubeId)) {
-                pskTakvimSeciliSubeId = subeler[0].id;
+            let subeler = db.subeler.filter(s => (uz.subeIds || []).map(Number).includes(Number(s.id)));
+            if (subeler.length > 0 && !subeler.some(s => Number(s.id) === Number(pskTakvimSeciliSubeId))) {
+                pskTakvimSeciliSubeId = Number(subeler[0].id);
             }
 
             subeler.forEach(sube => {
-                let aktifMi = pskTakvimSeciliSubeId === sube.id;
+                let aktifMi = Number(pskTakvimSeciliSubeId) === Number(sube.id);
                 let btn = document.createElement('button');
                 btn.type = 'button';
                 btn.className = `px-3.5 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer shrink-0 ${aktifMi ? 'bg-[#256839] text-white shadow-xs' : 'text-slate-600 hover:bg-slate-200'}`;
                 btn.innerText = sube.adi;
                 btn.onclick = function() {
-                    pskTakvimSeciliSubeId = sube.id;
+                    pskTakvimSeciliSubeId = Number(sube.id);
                     pskTakvimSubeButonlariniCiz();
                     pskTakvimMatrisiniCiz();
                 };
@@ -1019,7 +1029,7 @@
             theadTr.innerHTML = '<th class="p-2 w-14 text-center border-r font-extrabold text-slate-700 text-[11px]">Saat</th>';
             tbody.innerHTML = '';
 
-            let seciliSube = db.subeler.find(s => s.id === pskTakvimSeciliSubeId);
+            let seciliSube = db.subeler.find(s => Number(s.id) === Number(pskTakvimSeciliSubeId));
             let odalar = seciliSube ? (seciliSube.odalar || []) : [];
 
             odalar.forEach(oda => {
@@ -1039,12 +1049,12 @@
                 odalar.forEach(oda => {
                     // SADECE GİRİŞ YAPAN UZMANIN KENDİ SEANSLARI BULUNUR (DİĞER UZMANLAR GÖRÜNMEZ)
                     let seans = db.seanslar.find(s => 
-                        s.subeId === pskTakvimSeciliSubeId && 
+                        Number(s.subeId) === Number(pskTakvimSeciliSubeId) && 
                         s.saat === saat && 
-                        s.odaId === oda.id && 
+                        String(s.odaId) === String(oda.id) && 
                         s.durum !== 'iptal' && 
                         s.tarih === seciliISO && 
-                        s.uzmanId === AKTIF_UZMAN_ID
+                        Number(s.uzmanId) === Number(AKTIF_UZMAN_ID)
                     );
 
                     if (seans) {
@@ -1147,7 +1157,7 @@
 
             let seciliId = parseInt(document.getElementById('psk-secili-danisan-id').value, 10);
             let db = seciliId ? AsistDB.get() : null;
-            let d = (db && seciliId) ? db.danisanlar.find(x => x.id === seciliId) : null;
+            let d = (db && seciliId) ? db.danisanlar.find(x => Number(x.id) === seciliId) : null;
 
             if (tur === 'Çocuk') {
                 lblAd.innerText = "3. Danışan Adı Soyadı (Çocuk Adı Soyadı)";
@@ -1181,7 +1191,7 @@
                 document.getElementById('pr-ebeveyn-gorusmesi').checked = false;
                 ikinciKapsayici.classList.remove('hidden');
                 if (d && d.esDanisanId) {
-                    let es = db.danisanlar.find(x => x.id === d.esDanisanId);
+                    let es = db.danisanlar.find(x => Number(x.id) === Number(d.esDanisanId));
                     if (es) {
                         document.getElementById('pr-ikinci-danisan-ad').value = es.ad || '';
                         document.getElementById('pr-ikinci-danisan-tel').value = normalizeTelefon10Hane(es.tel);
@@ -1199,7 +1209,7 @@
 
         function pskCanliDanisanAra(kaynak, deger) {
             let db = AsistDB.get();
-            let uz = db.psikologlar.find(p => p.id === AKTIF_UZMAN_ID);
+            let uz = db.psikologlar.find(p => Number(p.id) === Number(AKTIF_UZMAN_ID));
             let telGorunur = uz ? uz.telGor !== false : true;
 
             let val = deger.trim().toLowerCase();
@@ -1212,14 +1222,14 @@
 
             if (val.length < 2) { hedefKutu.classList.add('hidden'); return; }
             let kendiDanisanIdleri = new Set();
-            db.seanslar.filter(s => s.uzmanId === AKTIF_UZMAN_ID).forEach(s => {
-                if (s.danisanId) kendiDanisanIdleri.add(s.danisanId);
-                if (s.ikinciDanisanId) kendiDanisanIdleri.add(s.ikinciDanisanId);
+            db.seanslar.filter(s => Number(s.uzmanId) === Number(AKTIF_UZMAN_ID)).forEach(s => {
+                if (s.danisanId) kendiDanisanIdleri.add(Number(s.danisanId));
+                if (s.ikinciDanisanId) kendiDanisanIdleri.add(Number(s.ikinciDanisanId));
             });
 
             let rakamlar = val.replace(/\D/g, '').replace(/^0+/, '');
             let eslesenler = db.danisanlar.filter(d => {
-                if (!kendiDanisanIdleri.has(d.id)) return false;
+                if (!kendiDanisanIdleri.has(Number(d.id))) return false;
                 if (kaynak === 'ad') {
                     return (d.ad || '').toLowerCase().includes(val) ||
                            (d.anneAd || '').toLowerCase().includes(val) ||
@@ -1246,6 +1256,12 @@
                         document.getElementById('pr-anne-tel').value = normalizeTelefon10Hane(d.anneTel);
                         document.getElementById('pr-baba-ad').value = d.babaAd || '';
                         document.getElementById('pr-baba-tel').value = normalizeTelefon10Hane(d.babaTel);
+                    } else if (hizmetTuru === 'Çift' && d.esDanisanId) {
+                        let es = db.danisanlar.find(x => Number(x.id) === Number(d.esDanisanId));
+                        if (es) {
+                            document.getElementById('pr-ikinci-danisan-ad').value = es.ad || '';
+                            document.getElementById('pr-ikinci-danisan-tel').value = normalizeTelefon10Hane(es.tel);
+                        }
                     }
                     pskTakipEdenUzmanUyarisiGoster(d.id);
                     oneriKutusuAd.classList.add('hidden');
@@ -1272,8 +1288,8 @@
         }
 
         function pskUygunlukKontrolEt(db, secilenSubeId, tarih, saat, hizmet) {
-            let uz = db.psikologlar.find(p => p.id === AKTIF_UZMAN_ID);
-            let sube = db.subeler.find(s => s.id === secilenSubeId);
+            let uz = db.psikologlar.find(p => Number(p.id) === Number(AKTIF_UZMAN_ID));
+            let sube = db.subeler.find(s => Number(s.id) === Number(secilenSubeId));
 
             if (!tarihGecerliMi(tarih)) return { uygun: false, mesaj: "Lütfen geçerli bir seans tarihi seçiniz." };
             if (gecmisTarihSaatMi(tarih, saat)) return { uygun: false, mesaj: "Geçmiş bir tarih veya geçmiş bir saate randevu oluşturulamaz." };
@@ -1290,7 +1306,7 @@
                 }
             }
 
-            let seansVarMi = db.seanslar.find(s => s.tarih === tarih && s.saat === saat && s.uzmanId === AKTIF_UZMAN_ID && s.durum !== 'iptal');
+            let seansVarMi = db.seanslar.find(s => s.tarih === tarih && s.saat === saat && Number(s.uzmanId) === Number(AKTIF_UZMAN_ID) && s.durum !== 'iptal');
             if (seansVarMi) {
                 return { uygun: false, mesaj: `Saat ${saat}'de başka bir seansınız bulunmaktadır.` };
             }
@@ -1355,11 +1371,11 @@
 
             const grid = document.getElementById('pr-oda-kart-grid');
             grid.innerHTML = '';
-            let sube = db.subeler.find(s => s.id === secilenSubeId);
+            let sube = db.subeler.find(s => Number(s.id) === Number(secilenSubeId));
             let odalar = sube ? (sube.odalar || []) : [];
 
             odalar.forEach(oda => {
-                let dolu = db.seanslar.some(s => s.subeId === secilenSubeId && s.tarih === tarih && s.saat === saat && s.odaId === oda.id && s.durum !== 'iptal');
+                let dolu = db.seanslar.some(s => Number(s.subeId) === Number(secilenSubeId) && s.tarih === tarih && s.saat === saat && String(s.odaId) === String(oda.id) && s.durum !== 'iptal');
                 let card = document.createElement('div');
 
                 if (!dolu && kontrol.uygun) {
@@ -1404,10 +1420,17 @@
             let babaAd = document.getElementById('pr-baba-ad').value.trim();
             let babaTel = normalizeTelefon10Hane(document.getElementById('pr-baba-tel').value);
 
+            let smsGonderilecekler = {
+                ana: !!document.getElementById('psk-sms-check-ana')?.checked,
+                es: hizmet === 'Çift' ? !!document.getElementById('psk-sms-check-es')?.checked : false,
+                anne: (hizmet === 'Çocuk' || hizmet === 'Ergen') ? !!document.getElementById('psk-sms-check-anne')?.checked : false,
+                baba: (hizmet === 'Çocuk' || hizmet === 'Ergen') ? !!document.getElementById('psk-sms-check-baba')?.checked : false
+            };
+
             let tel = girilenTel || anneTel || babaTel || "";
 
             let hedefDanisan = null;
-            if (danisanId) hedefDanisan = db.danisanlar.find(x => x.id === parseInt(danisanId, 10));
+            if (danisanId) hedefDanisan = db.danisanlar.find(x => Number(x.id) === parseInt(danisanId, 10));
             if (!hedefDanisan && tel) hedefDanisan = db.danisanlar.find(x => normalizeTelefon10Hane(x.tel) === tel);
 
             if (hedefDanisan) {
@@ -1432,7 +1455,7 @@
                 }
             }
 
-            let uz = db.psikologlar.find(p => p.id === AKTIF_UZMAN_ID);
+            let uz = db.psikologlar.find(p => Number(p.id) === Number(AKTIF_UZMAN_ID));
             let ofisOrani = (uz && uz.oranKendi !== undefined) ? Number(uz.oranKendi) : 30;
 
             let varsayilanUcret = 1500;
@@ -1467,7 +1490,8 @@
                 ikinciDanisanAd: hizmet === 'Çift' ? ikinciAd : "",
                 ikinciDanisanTel: hizmet === 'Çift' ? ikinciTel : "",
                 ebeveynGorusmesiMi: ebeveynGorusmesiMi,
-                smsGonderildiZamani: null
+                smsGonderildiZamani: null,
+                smsGonderilecekler: smsGonderilecekler
             });
 
             AsistDB.save(db);
@@ -1486,24 +1510,30 @@
             if(!tbody) return;
             tbody.innerHTML = '';
 
-            let uz = db.psikologlar.find(p => p.id === AKTIF_UZMAN_ID);
+            let uz = db.psikologlar.find(p => Number(p.id) === Number(AKTIF_UZMAN_ID));
             let telGorunur = uz ? uz.telGor !== false : true;
             let aramaMetni = document.getElementById('psk-danisan-arama-input') ? document.getElementById('psk-danisan-arama-input').value.trim().toLowerCase() : '';
             let aramaRakam = aramaMetni.replace(/\D/g, '').replace(/^0+/, '');
 
             let uzmaninDanisanIdSet = new Set();
-            db.seanslar.filter(s => s.uzmanId === AKTIF_UZMAN_ID).forEach(s => {
-                if (s.danisanId) uzmaninDanisanIdSet.add(s.danisanId);
-                if (s.ikinciDanisanId) uzmaninDanisanIdSet.add(s.ikinciDanisanId);
+            db.seanslar.filter(s => Number(s.uzmanId) === Number(AKTIF_UZMAN_ID)).forEach(s => {
+                if (s.danisanId) uzmaninDanisanIdSet.add(Number(s.danisanId));
+                if (s.ikinciDanisanId) uzmaninDanisanIdSet.add(Number(s.ikinciDanisanId));
             });
 
             let kendiDanisanlarim = db.danisanlar.filter(d => {
-                if (!uzmaninDanisanIdSet.has(d.id)) return false;
+                if (!uzmaninDanisanIdSet.has(Number(d.id))) return false;
                 if (!aramaMetni) return true;
-                let adUygun = (d.ad || '').toLowerCase().includes(aramaMetni);
+                let adUygun = (d.ad || '').toLowerCase().includes(aramaMetni) ||
+                              (d.anneAd || '').toLowerCase().includes(aramaMetni) ||
+                              (d.babaAd || '').toLowerCase().includes(aramaMetni);
                 let telUygun = telGorunur && (
                     (d.tel && d.tel.includes(aramaMetni)) ||
-                    (aramaRakam.length >= 2 && normalizeTelefon10Hane(d.tel).includes(aramaRakam))
+                    (aramaRakam.length >= 2 && (
+                        normalizeTelefon10Hane(d.tel).includes(aramaRakam) ||
+                        normalizeTelefon10Hane(d.anneTel).includes(aramaRakam) ||
+                        normalizeTelefon10Hane(d.babaTel).includes(aramaRakam)
+                    ))
                 );
                 return adUygun || telUygun;
             });
@@ -1516,7 +1546,7 @@
             }
 
             kendiDanisanlarim.forEach(d => {
-                let sSayisi = db.seanslar.filter(s => (s.danisanId === d.id || s.ikinciDanisanId === d.id) && s.uzmanId === AKTIF_UZMAN_ID && s.durum !== 'iptal').length;
+                let sSayisi = db.seanslar.filter(s => (Number(s.danisanId) === Number(d.id) || Number(s.ikinciDanisanId) === Number(d.id)) && Number(s.uzmanId) === Number(AKTIF_UZMAN_ID) && s.durum !== 'iptal').length;
                 let ebeveynBilgi = (d.anneAd || d.babaAd)
                     ? `<span class="block text-[10px] text-amber-800 font-semibold">Anne: ${escapeHtml(d.anneAd || '-')} • Baba: ${escapeHtml(d.babaAd || '-')}</span>`
                     : '';
@@ -1536,17 +1566,48 @@
 
         function pskDanisanDetayAc(danisanId) {
             let db = AsistDB.get();
-            let d = db.danisanlar.find(x => x.id === danisanId);
+            let d = db.danisanlar.find(x => Number(x.id) === Number(danisanId));
             if (!d) return;
 
+            let uz = db.psikologlar.find(p => Number(p.id) === Number(AKTIF_UZMAN_ID));
+            let telGorunur = uz ? uz.telGor !== false : true;
+
             document.getElementById('pd-baslik').innerText = `${d.ad} - Seans Geçmişim`;
+
+            // Eş Bilgisi Kutusu
+            const esKutu = document.getElementById('pd-es-bilgi-kutusu');
+            if (d.esDanisanId) {
+                let es = db.danisanlar.find(x => Number(x.id) === Number(d.esDanisanId));
+                if (es) {
+                    esKutu.innerHTML = `<span class="font-bold text-purple-950">💍 Eş / Partner: ${escapeHtml(es.ad)}</span><span class="font-mono text-purple-800">${escapeHtml(formatTelefonGorunum(es.tel, telGorunur))}</span>`;
+                    esKutu.classList.remove('hidden');
+                } else {
+                    esKutu.classList.add('hidden');
+                }
+            } else {
+                esKutu.classList.add('hidden');
+            }
+
+            // Ebeveyn Bilgisi Kutusu
+            const ebKutu = document.getElementById('pd-ebeveyn-bilgi-kutusu');
+            if (d.anneAd || d.babaAd || d.anneTel || d.babaTel) {
+                ebKutu.innerHTML = `
+                    <div class="flex flex-col sm:flex-row sm:justify-between gap-1">
+                        <span><strong>👩 Anne:</strong> ${escapeHtml(d.anneAd || '-')} (${escapeHtml(formatTelefonGorunum(d.anneTel, telGorunur))})</span>
+                        <span><strong>👨 Baba:</strong> ${escapeHtml(d.babaAd || '-')} (${escapeHtml(formatTelefonGorunum(d.babaTel, telGorunur))})</span>
+                    </div>
+                `;
+                ebKutu.classList.remove('hidden');
+            } else {
+                ebKutu.classList.add('hidden');
+            }
 
             const container = document.getElementById('pd-seans-listesi');
             container.innerHTML = '';
 
             let seanslar = db.seanslar
-                .filter(s => (s.danisanId === d.id || s.ikinciDanisanId === d.id) && s.uzmanId === AKTIF_UZMAN_ID)
-                .sort((a,b) => a.tarih.localeCompare(b.tarih) || a.saat.localeCompare(b.saat));
+                .filter(s => (Number(s.danisanId) === Number(d.id) || Number(s.ikinciDanisanId) === Number(d.id)) && Number(s.uzmanId) === Number(AKTIF_UZMAN_ID))
+                .sort((a,b) => String(a.tarih || '').localeCompare(String(b.tarih || '')) || String(a.saat || '').localeCompare(String(b.saat || '')));
 
             let sayac = 0;
             let noMap = {};
@@ -1594,24 +1655,24 @@
 
         function subeSecimButonlariniCiz() {
             let db = AsistDB.get();
-            let uz = db.psikologlar.find(p => p.id === AKTIF_UZMAN_ID);
+            let uz = db.psikologlar.find(p => Number(p.id) === Number(AKTIF_UZMAN_ID));
             const bar = document.getElementById('psk-sube-secim-bar');
             if(!bar || !uz) return;
             bar.innerHTML = '';
 
-            let subeler = db.subeler.filter(s => (uz.subeIds || []).includes(s.id));
-            if (subeler.length > 0 && !subeler.some(s => s.id === calismaAyarSubeId)) {
-                calismaAyarSubeId = subeler[0].id;
+            let subeler = db.subeler.filter(s => (uz.subeIds || []).map(Number).includes(Number(s.id)));
+            if (subeler.length > 0 && !subeler.some(s => Number(s.id) === Number(calismaAyarSubeId))) {
+                calismaAyarSubeId = Number(subeler[0].id);
             }
 
             subeler.forEach(sube => {
-                let aktifMi = calismaAyarSubeId === sube.id;
+                let aktifMi = Number(calismaAyarSubeId) === Number(sube.id);
                 let btn = document.createElement('button');
                 btn.type = 'button';
                 btn.className = `px-3.5 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer shrink-0 ${aktifMi ? 'bg-[#256839] text-white shadow-xs' : 'text-slate-600 hover:bg-slate-200'}`;
                 btn.innerText = sube.adi;
                 btn.onclick = function() {
-                    calismaAyarSubeId = sube.id;
+                    calismaAyarSubeId = Number(sube.id);
                     subeSecimButonlariniCiz();
                     calismaSaatleriniCiz();
                 };
@@ -1638,7 +1699,7 @@
             }
 
             let slotlar = db.uzmanCalismaSaatleri[key];
-            let calismaSube = db.subeler.find(s => s.id === calismaAyarSubeId);
+            let calismaSube = db.subeler.find(s => Number(s.id) === Number(calismaAyarSubeId));
             let sBas = (calismaSube && calismaSube.saatBaslangic) || "09:00";
             let sBit = (calismaSube && calismaSube.saatBitis) || "21:00";
             let gosterilecekSaatler = TUM_SAATLER.filter(h => h >= sBas && h < sBit);
@@ -1703,10 +1764,13 @@
 
         function calismaSaatleriniKaydet() {
             let db = AsistDB.get();
-            let sube = db.subeler.find(s => s.id === calismaAyarSubeId);
+            let sube = db.subeler.find(s => Number(s.id) === Number(calismaAyarSubeId));
             alert(`✅ ${sube ? sube.adi : 'Şube'} için çalışma saatleriniz kaydedildi!`);
         }
 
+        // ==========================================
+        // 7. KURUMSAL FİRMA RAPORU (TİP GÜVENLİĞİ VE ÖZEL ARALIK FİLTRESİ EKLENDİ)
+        // ==========================================
         function pskFirmaPeriyotDegistir(p) {
             pskFirmaAktifPeriyot = p;
             document.querySelectorAll('.psk-firma-flt-btn').forEach(b => {
@@ -1740,7 +1804,8 @@
             if(!grid) return;
             grid.innerHTML = '';
 
-            let kurumsalSeanslar = db.seanslar.filter(s => s.uzmanId === AKTIF_UZMAN_ID && s.basvuruTuru === 'firma');
+            let tumKurumsalSeanslarim = db.seanslar.filter(s => Number(s.uzmanId) === Number(AKTIF_UZMAN_ID) && s.basvuruTuru === 'firma');
+            let kurumsalSeanslar = tumKurumsalSeanslarim.slice();
 
             if (pskFirmaAktifPeriyot === 'gun') {
                 kurumsalSeanslar = kurumsalSeanslar.filter(k => k.tarih === formatTarihISO(pskFirmaSeciliTarih));
@@ -1749,16 +1814,29 @@
                 kurumsalSeanslar = kurumsalSeanslar.filter(k => k.tarih >= aralik.baslangic && k.tarih <= aralik.bitis);
             } else if (pskFirmaAktifPeriyot === 'ay') {
                 let ayPrefix = `${pskFirmaSeciliTarih.getFullYear()}-${String(pskFirmaSeciliTarih.getMonth() + 1).padStart(2, '0')}`;
-                kurumsalSeanslar = kurumsalSeanslar.filter(k => k.tarih.startsWith(ayPrefix));
+                kurumsalSeanslar = kurumsalSeanslar.filter(k => k.tarih && k.tarih.startsWith(ayPrefix));
+            } else if (pskFirmaAktifPeriyot === 'ozel') {
+                let bas = document.getElementById('psk-firma-ozel-baslangic').value;
+                let bit = document.getElementById('psk-firma-ozel-bitis').value;
+                if (bas && bit) {
+                    kurumsalSeanslar = kurumsalSeanslar.filter(k => k.tarih >= bas && k.tarih <= bit);
+                }
             }
 
-            let uzmanFirmalari = (db.firmalar || []).filter(f => f.durum === 'aktif' && (f.tumUzmanlar || (f.uzmanIds || []).includes(AKTIF_UZMAN_ID)));
+            // Uzmanın anlaşmalı olduğu VEYA seansı bulunduğu tüm aktif firmaları listele
+            let uzmanFirmalari = (db.firmalar || []).filter(f => 
+                f.durum === 'aktif' && (
+                    f.tumUzmanlar === true || 
+                    (f.uzmanIds || []).map(Number).includes(Number(AKTIF_UZMAN_ID)) ||
+                    tumKurumsalSeanslarim.some(s => Number(s.firmaId) === Number(f.id))
+                )
+            );
 
             document.getElementById('psk-firma-sayac-seans').innerText = `${kurumsalSeanslar.length} Seans`;
             document.getElementById('psk-firma-sayac-kurum').innerText = `${uzmanFirmalari.length} Kurum`;
 
             uzmanFirmalari.forEach(f => {
-                let fSeanslar = kurumsalSeanslar.filter(s => s.firmaId === f.id);
+                let fSeanslar = kurumsalSeanslar.filter(s => Number(s.firmaId) === Number(f.id));
                 let tamamlanan = fSeanslar.filter(s => s.durum === 'odendi').length;
                 let bekleyen = fSeanslar.filter(s => s.durum === 'bekliyor').length;
                 let iptal = fSeanslar.filter(s => s.durum === 'iptal').length;
@@ -1787,7 +1865,7 @@
                                 <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-slate-200">
                                     <div class="truncate pr-2">
                                         <span class="font-bold text-slate-900 block truncate">${escapeHtml(s.danisanAdi)}</span>
-                                        <span class="text-slate-400 text-[10px] block">${escapeHtml(s.tarih)} - ${escapeHtml(s.saat)}</span>
+                                        <span class="text-slate-400 text-[10px] block">${escapeHtml(s.tarih)} - ${escapeHtml(s.saat)} (${escapeHtml(s.subeAdi)})</span>
                                     </div>
                                     <span class="text-[10px] font-extrabold shrink-0 ${s.durum==='odendi'?'text-emerald-700':(s.durum==='iptal'?'text-red-600':'text-amber-700')}">${escapeHtml(s.durum)}</span>
                                 </div>
@@ -1805,17 +1883,21 @@
 
         function pskFirmaExcelIndir(firmaId) {
             let db = AsistDB.get();
-            let f = db.firmalar.find(x => x.id === firmaId);
+            let f = db.firmalar.find(x => Number(x.id) === Number(firmaId));
             if (!f) return;
 
-            let seanslar = db.seanslar.filter(s => s.uzmanId === AKTIF_UZMAN_ID && s.basvuruTuru === 'firma' && s.firmaId === firmaId);
+            let seanslar = db.seanslar.filter(s => Number(s.uzmanId) === Number(AKTIF_UZMAN_ID) && s.basvuruTuru === 'firma' && Number(s.firmaId) === Number(firmaId));
             if (pskFirmaAktifPeriyot === 'gun') seanslar = seanslar.filter(k => k.tarih === formatTarihISO(pskFirmaSeciliTarih));
             else if (pskFirmaAktifPeriyot === 'hafta') {
                 let a = getHaftaAraligi(pskFirmaSeciliTarih);
                 seanslar = seanslar.filter(k => k.tarih >= a.baslangic && k.tarih <= a.bitis);
             } else if (pskFirmaAktifPeriyot === 'ay') {
                 let p = `${pskFirmaSeciliTarih.getFullYear()}-${String(pskFirmaSeciliTarih.getMonth() + 1).padStart(2, '0')}`;
-                seanslar = seanslar.filter(k => k.tarih.startsWith(p));
+                seanslar = seanslar.filter(k => k.tarih && k.tarih.startsWith(p));
+            } else if (pskFirmaAktifPeriyot === 'ozel') {
+                let bas = document.getElementById('psk-firma-ozel-baslangic').value;
+                let bit = document.getElementById('psk-firma-ozel-bitis').value;
+                if (bas && bit) seanslar = seanslar.filter(k => k.tarih >= bas && k.tarih <= bit);
             }
 
             if (seanslar.length === 0) {
@@ -1846,19 +1928,22 @@
             let urlParams = new URLSearchParams(window.location.search);
 
             if (AKTIF_OTURUM && AKTIF_OTURUM.rol === 'psikolog') {
-                AKTIF_UZMAN_ID = AKTIF_OTURUM.userId;
+                AKTIF_UZMAN_ID = Number(AKTIF_OTURUM.userId);
             } else if (urlParams.get('uzmanId')) {
                 AKTIF_UZMAN_ID = parseInt(urlParams.get('uzmanId'), 10);
             }
 
-            let uz = db.psikologlar.find(p => p.id === AKTIF_UZMAN_ID) || db.psikologlar[0];
+            let uz = db.psikologlar.find(p => Number(p.id) === Number(AKTIF_UZMAN_ID)) || db.psikologlar[0];
             if (uz) {
-                AKTIF_UZMAN_ID = uz.id;
-                calismaAyarSubeId = (uz.subeIds && uz.subeIds.length > 0) ? uz.subeIds[0] : 1;
+                AKTIF_UZMAN_ID = Number(uz.id);
+                calismaAyarSubeId = (uz.subeIds && uz.subeIds.length > 0) ? Number(uz.subeIds[0]) : 1;
                 pskTakvimSeciliSubeId = calismaAyarSubeId;
                 document.getElementById('uzman-profil-ad').innerText = uz.ad;
                 if (document.getElementById('aktif-uzman-footer-ad')) {
                     document.getElementById('aktif-uzman-footer-ad').innerText = uz.ad;
+                }
+                if (document.getElementById('psk-mobil-sheet-kullanici')) {
+                    document.getElementById('psk-mobil-sheet-kullanici').innerText = uz.ad;
                 }
                 pskHizmetTurleriniDoldur(uz);
             }
@@ -1885,7 +1970,6 @@
             pskSeansSubeSecenekleriniDoldur();
             pskKontrolOnayButon();
             
-            // İlk açılış: Genel özet ve seanslar hesaplanır
             pskGenelHesapla();
             pskSeanslariCiz();
             pskRehberiCiz();
@@ -1929,13 +2013,13 @@
 
         function pskRandevuSubeSecenekleriniDoldur() {
             let db = AsistDB.get();
-            let uz = db.psikologlar.find(p => p.id === AKTIF_UZMAN_ID);
+            let uz = db.psikologlar.find(p => Number(p.id) === Number(AKTIF_UZMAN_ID));
             const sel = document.getElementById('pr-sube-id');
             if(!sel || !uz) return;
             let mevcutDeger = sel.value;
             sel.innerHTML = '';
 
-            let subeler = db.subeler.filter(s => (uz.subeIds || []).includes(s.id));
+            let subeler = db.subeler.filter(s => s.durum === 'aktif' && (uz.subeIds || []).map(Number).includes(Number(s.id)));
             subeler.forEach(s => {
                 let opt = document.createElement('option');
                 opt.value = s.id;
@@ -1986,12 +2070,18 @@
             if (AKTIF_OTURUM && AKTIF_OTURUM.rol === 'psikolog') return;
             let db = AsistDB.get();
             AKTIF_UZMAN_ID = parseInt(yeniId, 10);
-            let uz = db.psikologlar.find(p => p.id === AKTIF_UZMAN_ID) || db.psikologlar[0];
+            let uz = db.psikologlar.find(p => Number(p.id) === Number(AKTIF_UZMAN_ID)) || db.psikologlar[0];
             if (uz) {
-                AKTIF_UZMAN_ID = uz.id;
-                calismaAyarSubeId = (uz.subeIds && uz.subeIds.length > 0) ? uz.subeIds[0] : 1;
+                AKTIF_UZMAN_ID = Number(uz.id);
+                calismaAyarSubeId = (uz.subeIds && uz.subeIds.length > 0) ? Number(uz.subeIds[0]) : (db.subeler[0] ? Number(db.subeler[0].id) : 1);
                 pskTakvimSeciliSubeId = calismaAyarSubeId;
                 document.getElementById('uzman-profil-ad').innerText = uz.ad;
+                if (document.getElementById('aktif-uzman-footer-ad')) {
+                    document.getElementById('aktif-uzman-footer-ad').innerText = uz.ad;
+                }
+                if (document.getElementById('psk-mobil-sheet-kullanici')) {
+                    document.getElementById('psk-mobil-sheet-kullanici').innerText = uz.ad;
+                }
                 pskHizmetTurleriniDoldur(uz);
             }
             pskFormSubeDegisti();
