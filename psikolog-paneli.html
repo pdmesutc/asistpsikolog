@@ -43,10 +43,14 @@
 
             <!-- Masaüstü Navigasyon Butonları -->
             <nav class="p-4 space-y-1.5 hidden md:block text-xs font-bold">
-                <button onclick="psikologSekmeDegistir('gorusmeler')" id="pbtn-gorusmeler" class="psikolog-nav-btn w-full py-3 px-4 rounded-xl transition flex items-center space-x-3 bg-[#256839] text-white shadow-xs cursor-pointer">
+                <button onclick="psikologSekmeDegistir('genel')" id="pbtn-genel" class="psikolog-nav-btn w-full py-3 px-4 rounded-xl transition flex items-center space-x-3 bg-[#256839] text-white shadow-xs cursor-pointer">
                     <i class="fa-solid fa-chart-pie w-5 text-center"></i>
-                    <span>Seanslarım & Kazanç</span>
-                    <span id="badge-psk-seans" class="ml-auto bg-white/20 text-white text-[10px] px-2 py-0.5 rounded-full">0</span>
+                    <span>Genel Bakış & Özet</span>
+                </button>
+                <button onclick="psikologSekmeDegistir('gorusmeler')" id="pbtn-gorusmeler" class="psikolog-nav-btn w-full py-3 px-4 rounded-xl transition flex items-center space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer">
+                    <i class="fa-solid fa-calendar-day w-5 text-center"></i>
+                    <span>Seanslarım</span>
+                    <span id="badge-psk-seans" class="ml-auto bg-slate-200 text-slate-700 text-[10px] px-2 py-0.5 rounded-full">0</span>
                 </button>
                 <button onclick="psikologSekmeDegistir('randevu-olustur')" id="pbtn-randevu-olustur" class="psikolog-nav-btn w-full py-3 px-4 rounded-xl transition flex items-center space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer">
                     <i class="fa-solid fa-calendar-plus w-5 text-center text-[#256839]"></i>
@@ -85,39 +89,42 @@
         </div>
     </aside>
 
-    <!-- MOBİL ALT MENÜ BARI: Seanslar -> Randevu -> Oda/Saat -> Rehber -> Menü -->
+    <!-- MOBİL ALT MENÜ BARI: Genel -> Seanslar -> Randevu -> Oda/Saat -> Menü -->
     <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 z-40 flex items-center justify-around py-2 px-1 text-[10px] font-extrabold shadow-lg">
-        <button onclick="psikologSekmeDegistir('gorusmeler')" id="pmbtn-gorusmeler" class="psk-mobile-nav-btn flex flex-col items-center py-1 px-1.5 rounded-xl transition text-[#256839] font-black cursor-pointer">
-            <i class="fa-solid fa-chart-pie text-base mb-0.5"></i><span>Seanslar</span>
+        <button onclick="psikologSekmeDegistir('genel')" id="pmbtn-genel" class="psk-mobile-nav-btn flex flex-col items-center py-1 px-1.5 rounded-xl transition text-[#256839] font-black cursor-pointer">
+            <i class="fa-solid fa-chart-pie text-base mb-0.5"></i><span>Genel</span>
+        </button>
+        <button onclick="psikologSekmeDegistir('gorusmeler')" id="pmbtn-gorusmeler" class="psk-mobile-nav-btn flex flex-col items-center py-1 px-1.5 rounded-xl transition text-slate-400 font-bold cursor-pointer">
+            <i class="fa-solid fa-calendar-day text-base mb-0.5"></i><span>Seanslar</span>
         </button>
         <button onclick="psikologSekmeDegistir('randevu-olustur')" id="pmbtn-randevu-olustur" class="psk-mobile-nav-btn flex flex-col items-center py-1 px-1.5 rounded-xl transition text-slate-400 font-bold cursor-pointer">
-            <i class="fa-solid fa-calendar-plus text-base mb-0.5"></i><span>+ Randevu</span>
+            <i class="fa-solid fa-calendar-plus text-base mb-0.5"></i><span>Randevu</span>
         </button>
         <button onclick="psikologSekmeDegistir('takvim')" id="pmbtn-takvim" class="psk-mobile-nav-btn flex flex-col items-center py-1 px-1.5 rounded-xl transition text-slate-400 font-bold cursor-pointer">
             <i class="fa-solid fa-table-cells text-base mb-0.5"></i><span>Oda/Saat</span>
-        </button>
-        <button onclick="psikologSekmeDegistir('danisanlar')" id="pmbtn-danisanlar" class="psk-mobile-nav-btn flex flex-col items-center py-1 px-1.5 rounded-xl transition text-slate-400 font-bold cursor-pointer">
-            <i class="fa-solid fa-address-book text-base mb-0.5"></i><span>Danışanlar</span>
         </button>
         <button onclick="pskMobilDahaFazlaAc()" id="pmbtn-daha-fazla" class="psk-mobile-nav-btn flex flex-col items-center py-1 px-1.5 rounded-xl transition text-slate-400 font-bold cursor-pointer">
             <i class="fa-solid fa-bars text-base mb-0.5"></i><span>Menü</span>
         </button>
     </nav>
 
-    <!-- MOBİL "MENÜ / DİĞER MODÜLLER" BOTTOM SHEET -->
+    <!-- MOBİL "MENÜ / DİĞER MODÜLLER" BOTTOM SHEET (Danışanlar, Saatler, Kurumsal) -->
     <div id="psk-mobil-daha-fazla-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-end justify-center md:hidden">
         <div class="bg-white w-full rounded-t-3xl p-5 space-y-3.5 shadow-2xl animate-in slide-in-from-bottom duration-200">
             <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-1"></div>
             <div class="flex items-center justify-between pb-2 border-b border-slate-100">
-                <span class="font-extrabold text-slate-900 text-sm">Diğer Modüller & İşlemler</span>
+                <span class="font-extrabold text-slate-900 text-sm">Diğer Modüller</span>
                 <button onclick="pskMobilDahaFazlaKapat()" class="text-slate-400 p-1 font-bold cursor-pointer"><i class="fa-solid fa-xmark text-base"></i></button>
             </div>
             <div class="grid grid-cols-2 gap-2 text-xs font-bold">
-                <button onclick="pskMobilModulSec('calisma-saatleri')" class="p-3.5 bg-slate-50 hover:bg-emerald-50 rounded-2xl border border-slate-200 flex items-center space-x-2.5 text-slate-800">
-                    <i class="fa-solid fa-clock text-[#256839] text-base"></i><span>Çalışma Saatlerim</span>
+                <button onclick="pskMobilModulSec('danisanlar')" class="p-3.5 bg-slate-50 hover:bg-emerald-50 rounded-2xl border border-slate-200 flex items-center space-x-2.5 text-slate-800">
+                    <i class="fa-solid fa-address-book text-[#256839] text-base"></i><span>Danışan Rehberi</span>
                 </button>
-                <button onclick="pskMobilModulSec('firma-rapor')" class="p-3.5 bg-slate-50 hover:bg-emerald-50 rounded-2xl border border-slate-200 flex items-center space-x-2.5 text-slate-800">
-                    <i class="fa-solid fa-building-user text-blue-700 text-base"></i><span>Kurumsal Rapor</span>
+                <button onclick="pskMobilModulSec('calisma-saatleri')" class="p-3.5 bg-slate-50 hover:bg-emerald-50 rounded-2xl border border-slate-200 flex items-center space-x-2.5 text-slate-800">
+                    <i class="fa-solid fa-clock text-amber-700 text-base"></i><span>Çalışma Saatlerim</span>
+                </button>
+                <button onclick="pskMobilModulSec('firma-rapor')" class="p-3.5 bg-slate-50 hover:bg-emerald-50 rounded-2xl border border-slate-200 flex items-center space-x-2.5 text-slate-800 col-span-2">
+                    <i class="fa-solid fa-building-user text-blue-700 text-base"></i><span>Kurumsal Firma Raporu</span>
                 </button>
             </div>
             <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
@@ -132,88 +139,111 @@
     <!-- SAĞ ANA GÖVDE -->
     <main class="flex-grow p-4 sm:p-6 md:p-10 max-w-7xl w-full mx-auto overflow-y-auto space-y-6">
 
-        <!-- 1. İLK SAYFA: SEANSLARIM VE KAZANÇ (KASA & FİNANS MODÜLÜ ENTEGRELİ) -->
-        <div id="psekm-gorusmeler" class="psikolog-sekme space-y-4 sm:space-y-6">
+        <!-- 1. GENEL BAKIŞ & FİNANSAL ÖZET (İLK AÇILIŞ SAYFASI - YALNIZCA FİLTRE VE 4 METRİK KARTI) -->
+        <div id="psekm-genel" class="psikolog-sekme space-y-4 sm:space-y-6">
             <div class="bg-white p-4 sm:p-7 rounded-3xl border border-slate-200 shadow-xs space-y-5">
                 
                 <!-- Başlık ve Şube Seçim Filtresi -->
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-3">
                     <div>
-                        <h2 class="text-lg sm:text-xl font-extrabold text-slate-900">Seanslarım & Finansal Durum</h2>
-                        <p class="text-[11px] sm:text-xs text-slate-500">Dönem kazancınız, tamamlanan seanslar ve akış.</p>
+                        <h2 class="text-lg sm:text-xl font-extrabold text-slate-900">Genel Bakış & Özet</h2>
+                        <p class="text-[11px] sm:text-xs text-slate-500">Seçili dönemdeki görüşme performansı ve net kazanç durumu.</p>
                     </div>
 
-                    <!-- Şube Seçimi Kriteri (Tümü + Şubeler) -->
+                    <!-- Şube Seçimi Kriteri (Tüm Şubeler + Şubelerim) -->
                     <div class="flex items-center space-x-2">
-                        <span class="text-xs font-bold text-slate-500">Şube Filtresi:</span>
-                        <select id="psk-kazanc-sube-filtre" onchange="pskSeanslariVeKazanciHesapla()" class="bg-emerald-50 border border-emerald-200 text-[#256839] rounded-xl px-3 py-1.5 font-extrabold text-xs focus:outline-none cursor-pointer"></select>
+                        <span class="text-xs font-bold text-slate-500">Şube:</span>
+                        <select id="psk-genel-sube-filtre" onchange="pskGenelHesapla()" class="bg-emerald-50 border border-emerald-200 text-[#256839] rounded-xl px-3 py-1.5 font-extrabold text-xs focus:outline-none cursor-pointer"></select>
                     </div>
                 </div>
 
-                <!-- Dengeli Tarih Şeridi (Gün, Hafta, Ay, Özel Aralık ve Kaydırıcı) -->
+                <!-- Dengeli Tarih Şeridi (İlk Açılış: Gün / Bugün) -->
                 <div class="bg-slate-50 p-3 sm:p-4 rounded-2xl border border-slate-200 space-y-2.5 text-xs">
                     <div class="grid grid-cols-4 gap-1 bg-white p-1 rounded-xl border border-slate-200 shadow-2xs">
-                        <button onclick="pskSeansPeriyotDegistir('gun')" id="psflt-gun" class="psk-seans-periyot-btn py-2 text-center rounded-lg font-bold transition bg-[#256839] text-white shadow-xs cursor-pointer">Gün</button>
-                        <button onclick="pskSeansPeriyotDegistir('hafta')" id="psflt-hafta" class="psk-seans-periyot-btn py-2 text-center rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Hafta</button>
-                        <button onclick="pskSeansPeriyotDegistir('ay')" id="psflt-ay" class="psk-seans-periyot-btn py-2 text-center rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Ay</button>
-                        <button onclick="pskSeansPeriyotDegistir('ozel')" id="psflt-ozel" class="psk-seans-periyot-btn py-2 text-center rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Özel</button>
+                        <button onclick="pskGenelPeriyotDegistir('gun')" id="pgflt-gun" class="psk-genel-periyot-btn py-2 text-center rounded-lg font-bold transition bg-[#256839] text-white shadow-xs cursor-pointer">Gün</button>
+                        <button onclick="pskGenelPeriyotDegistir('hafta')" id="pgflt-hafta" class="psk-genel-periyot-btn py-2 text-center rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Hafta</button>
+                        <button onclick="pskGenelPeriyotDegistir('ay')" id="pgflt-ay" class="psk-genel-periyot-btn py-2 text-center rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Ay</button>
+                        <button onclick="pskGenelPeriyotDegistir('ozel')" id="pgflt-ozel" class="psk-genel-periyot-btn py-2 text-center rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Özel</button>
                     </div>
 
-                    <div id="psk-seans-standart-nav" class="flex items-center justify-between bg-white p-1 rounded-xl border border-slate-200 shadow-2xs">
-                        <button onclick="pskSeansTarihKaydir(-1)" class="w-10 h-9 rounded-lg hover:bg-slate-100 text-slate-700 flex items-center justify-center font-bold cursor-pointer transition">
+                    <div id="psk-genel-standart-nav" class="flex items-center justify-between bg-white p-1 rounded-xl border border-slate-200 shadow-2xs">
+                        <button onclick="pskGenelTarihKaydir(-1)" class="w-10 h-9 rounded-lg hover:bg-slate-100 text-slate-700 flex items-center justify-center font-bold cursor-pointer transition">
                             <i class="fa-solid fa-chevron-left text-xs"></i>
                         </button>
-                        <div class="px-2 font-extrabold text-slate-900 text-xs text-center truncate flex-1" id="psk-seans-aktif-tarih-etiket"></div>
-                        <button onclick="pskSeansTarihKaydir(1)" class="w-10 h-9 rounded-lg hover:bg-slate-100 text-slate-700 flex items-center justify-center font-bold cursor-pointer transition">
+                        <div class="px-2 font-extrabold text-slate-900 text-xs text-center truncate flex-1" id="psk-genel-aktif-tarih-etiket"></div>
+                        <button onclick="pskGenelTarihKaydir(1)" class="w-10 h-9 rounded-lg hover:bg-slate-100 text-slate-700 flex items-center justify-center font-bold cursor-pointer transition">
                             <i class="fa-solid fa-chevron-right text-xs"></i>
                         </button>
                     </div>
 
-                    <div id="psk-seans-ozel-tarih-alani" class="hidden flex items-center space-x-2 bg-white p-1.5 rounded-xl border border-slate-200 shadow-2xs">
-                        <input type="date" id="psk-seans-ozel-baslangic" class="w-1/2 bg-slate-50 border border-slate-200 p-2 rounded-lg font-bold text-slate-700 text-xs">
+                    <div id="psk-genel-ozel-tarih-alani" class="hidden flex items-center space-x-2 bg-white p-1.5 rounded-xl border border-slate-200 shadow-2xs">
+                        <input type="date" id="psk-genel-ozel-baslangic" class="w-1/2 bg-slate-50 border border-slate-200 p-2 rounded-lg font-bold text-slate-700 text-xs">
                         <span class="text-slate-400 font-bold">-</span>
-                        <input type="date" id="psk-seans-ozel-bitis" class="w-1/2 bg-slate-50 border border-slate-200 p-2 rounded-lg font-bold text-slate-700 text-xs">
-                        <button onclick="pskSeanslariVeKazanciHesapla()" class="bg-[#256839] hover:bg-[#12612d] text-white px-3 py-2 rounded-lg font-bold cursor-pointer transition">Uygula</button>
-                    </div>
-
-                    <!-- Sayaç Rozetleri -->
-                    <div class="grid grid-cols-3 gap-1.5 text-center text-[11px]">
-                        <span class="font-bold text-emerald-700 bg-emerald-50/90 py-1.5 px-1 rounded-xl border border-emerald-200 truncate" id="psk-sayac-odenen">0 Tamamlandı</span>
-                        <span class="font-bold text-amber-700 bg-amber-50/90 py-1.5 px-1 rounded-xl border border-amber-200 truncate" id="psk-sayac-bekleyen">0 Bekliyor</span>
-                        <span class="font-bold text-red-700 bg-red-50/90 py-1.5 px-1 rounded-xl border border-red-200 truncate" id="psk-sayac-iptal">0 İptal</span>
+                        <input type="date" id="psk-genel-ozel-bitis" class="w-1/2 bg-slate-50 border border-slate-200 p-2 rounded-lg font-bold text-slate-700 text-xs">
+                        <button onclick="pskGenelHesapla()" class="bg-[#256839] hover:bg-[#12612d] text-white px-3 py-2 rounded-lg font-bold cursor-pointer transition">Uygula</button>
                     </div>
                 </div>
 
-                <!-- 2 ANA KAZANÇ VE GÖRÜŞME METRİK KARTI -->
-                <div class="grid grid-cols-2 gap-3 sm:gap-4">
-                    <div class="bg-emerald-50/80 p-4 sm:p-5 rounded-2xl border border-emerald-200 flex flex-col justify-between">
-                        <div class="flex items-center space-x-2 text-emerald-800">
-                            <i class="fa-solid fa-wallet text-sm sm:text-base"></i>
-                            <span class="text-[10px] sm:text-xs font-extrabold uppercase tracking-wider">Toplam Kazanç</span>
-                        </div>
-                        <h3 id="psk-stat-kazanc" class="text-2xl sm:text-3xl font-black text-[#256839] my-1">₺0</h3>
-                        <span class="text-[10px] text-emerald-700 font-semibold truncate">Hak Ediş Tutarı</span>
-                    </div>
-
+                <!-- İSTENEN 4 METRİK KARTI (Görüşme Sayısı, Tamamlanan, İptal Edilen, Toplam Kazanç) -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                    <!-- KART 1: GÖRÜŞME SAYISI -->
                     <div class="bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-200 flex flex-col justify-between">
                         <div class="flex items-center space-x-2 text-slate-600">
-                            <i class="fa-solid fa-user-check text-sm sm:text-base"></i>
-                            <span class="text-[10px] sm:text-xs font-extrabold uppercase tracking-wider">Görüşme Sayısı</span>
+                            <i class="fa-solid fa-calendar-check text-sm sm:text-base"></i>
+                            <span class="text-[10px] sm:text-xs font-extrabold uppercase tracking-wider truncate">Görüşme Sayısı</span>
                         </div>
-                        <h3 id="psk-stat-seans-sayisi" class="text-2xl sm:text-3xl font-black text-slate-900 my-1">0 Seans</h3>
-                        <span class="text-[10px] text-slate-400 font-semibold truncate">Tamamlanan Görüşmeler</span>
+                        <h3 id="gstat-toplam-gorusme" class="text-2xl sm:text-3xl font-black text-slate-900 my-1.5">0</h3>
+                        <span class="text-[10px] text-slate-400 font-semibold truncate">Toplam Randevu</span>
+                    </div>
+
+                    <!-- KART 2: TAMAMLANAN GÖRÜŞME SAYISI -->
+                    <div class="bg-emerald-50/70 p-4 sm:p-5 rounded-2xl border border-emerald-200 flex flex-col justify-between">
+                        <div class="flex items-center space-x-2 text-emerald-800">
+                            <i class="fa-solid fa-circle-check text-sm sm:text-base"></i>
+                            <span class="text-[10px] sm:text-xs font-extrabold uppercase tracking-wider truncate">Tamamlanan</span>
+                        </div>
+                        <h3 id="gstat-tamamlanan-gorusme" class="text-2xl sm:text-3xl font-black text-[#256839] my-1.5">0</h3>
+                        <span class="text-[10px] text-emerald-700 font-semibold truncate">Gerçekleşen Seanslar</span>
+                    </div>
+
+                    <!-- KART 3: İPTAL EDİLEN GÖRÜŞME SAYISI -->
+                    <div class="bg-red-50/70 p-4 sm:p-5 rounded-2xl border border-red-200 flex flex-col justify-between">
+                        <div class="flex items-center space-x-2 text-red-700">
+                            <i class="fa-solid fa-circle-xmark text-sm sm:text-base"></i>
+                            <span class="text-[10px] sm:text-xs font-extrabold uppercase tracking-wider truncate">İptal Edilen</span>
+                        </div>
+                        <h3 id="gstat-iptal-gorusme" class="text-2xl sm:text-3xl font-black text-red-700 my-1.5">0</h3>
+                        <span class="text-[10px] text-red-600 font-semibold truncate">İptal / Gelmedi</span>
+                    </div>
+
+                    <!-- KART 4: TOPLAM KAZANÇ -->
+                    <div class="bg-emerald-50/90 p-4 sm:p-5 rounded-2xl border-2 border-emerald-500/40 flex flex-col justify-between shadow-2xs">
+                        <div class="flex items-center space-x-2 text-emerald-900">
+                            <i class="fa-solid fa-wallet text-sm sm:text-base text-[#256839]"></i>
+                            <span class="text-[10px] sm:text-xs font-black uppercase tracking-wider truncate text-[#256839]">Toplam Kazanç</span>
+                        </div>
+                        <h3 id="gstat-toplam-kazanc" class="text-2xl sm:text-3xl font-black text-[#256839] my-1.5">₺0</h3>
+                        <span class="text-[10px] text-emerald-800 font-bold truncate">Net Hak Ediş</span>
                     </div>
                 </div>
 
-                <!-- Görüşmeler Akış Listesi -->
-                <div class="space-y-3 pt-2">
-                    <h3 class="text-xs font-extrabold text-slate-800">Dönem Seans Akışı</h3>
-                    <div id="psikolog-seans-listesi" class="space-y-3"></div>
-                </div>
             </div>
         </div>
 
-        <!-- 2. RANDEVU OLUŞTUR -->
+        <!-- 2. SEANSLARIM (SEANS AKIŞ LİSTESİ) -->
+        <div id="psekm-gorusmeler" class="psikolog-sekme hidden space-y-4 sm:space-y-6">
+            <div class="bg-white p-4 sm:p-7 rounded-3xl border border-slate-200 shadow-xs space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-3">
+                    <div>
+                        <h2 class="text-lg sm:text-xl font-extrabold text-slate-900">Seanslarım</h2>
+                        <p class="text-[11px] sm:text-xs text-slate-500">Planlanmış randevularınız ve seans akışı.</p>
+                    </div>
+                </div>
+                <div id="psikolog-seans-listesi" class="space-y-3"></div>
+            </div>
+        </div>
+
+        <!-- 3. RANDEVU OLUŞTUR -->
         <div id="psekm-randevu-olustur" class="psikolog-sekme hidden space-y-4 sm:space-y-6">
             <div class="bg-white p-5 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-5">
                 <div class="border-b pb-3">
@@ -382,14 +412,14 @@
             </div>
         </div>
 
-        <!-- 3. ODA / SAAT TAKVİMİ (ŞUBE SEÇİMLİ VE TAŞMA ENGELLİ) -->
+        <!-- 4. ODA / SAAT TAKVİMİ (SADECE KENDİSİNE AİT SEANSLAR - DİĞER UZMANLAR GÖRÜNMEZ) -->
         <div id="psekm-takvim" class="psikolog-sekme hidden space-y-4 sm:space-y-6">
             <div class="bg-white p-4 sm:p-7 rounded-3xl border border-slate-200 shadow-xs space-y-4">
                 
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-3">
                     <div>
                         <h2 class="text-lg sm:text-xl font-extrabold text-slate-900">Oda & Saat Takvimi</h2>
-                        <p class="text-[11px] sm:text-xs text-slate-500">Şube bazlı odaların anlık doluluk ve seans durumu.</p>
+                        <p class="text-[11px] sm:text-xs text-slate-500">Bu şubedeki size ait randevu yerleşimi.</p>
                     </div>
 
                     <!-- Takvim Şube Seçimi -->
@@ -403,7 +433,7 @@
                     <button onclick="pskTakvimTarihKaydir(1)" class="w-10 h-9 rounded-xl bg-white border border-slate-200 text-slate-700 flex items-center justify-center cursor-pointer hover:bg-slate-100 transition"><i class="fa-solid fa-chevron-right text-xs"></i></button>
                 </div>
 
-                <!-- Matris Tablosu (Saat w-14, Hücreler Taşmayan) -->
+                <!-- Matris Tablosu (Sadece Kendi Seansları Listelenir) -->
                 <div class="overflow-x-auto border border-slate-200 rounded-2xl shadow-2xs">
                     <table class="w-full table-fixed text-left border-collapse text-xs">
                         <thead><tr id="psk-takvim-tablo-basliklari" class="bg-slate-50 border-b font-extrabold"></tr></thead>
@@ -413,7 +443,7 @@
             </div>
         </div>
 
-        <!-- 4. DANIŞAN REHBERİ -->
+        <!-- 5. DANIŞAN REHBERİ (MENÜ MODÜLÜ İÇİNDEN AÇILIR) -->
         <div id="psekm-danisanlar" class="psikolog-sekme hidden space-y-4 sm:space-y-6">
             <div class="bg-white p-5 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-4">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-3">
@@ -439,7 +469,7 @@
             </div>
         </div>
 
-        <!-- 5. ÇALIŞMA SAATLERİ -->
+        <!-- 6. ÇALIŞMA SAATLERİ (MENÜ İÇİNDEN AÇILIR) -->
         <div id="psekm-calisma-saatleri" class="psikolog-sekme hidden space-y-4 sm:space-y-6">
             <div class="bg-white p-5 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-6">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-100 gap-3">
@@ -458,7 +488,7 @@
             </div>
         </div>
 
-        <!-- 6. KURUMSAL FİRMA RAPORU -->
+        <!-- 7. KURUMSAL FİRMA RAPORU (MENÜ İÇİNDEN AÇILIR) -->
         <div id="psekm-firma-rapor" class="psikolog-sekme hidden space-y-4 sm:space-y-6">
             <div class="bg-white p-5 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-5">
                 <div class="flex items-center justify-between pb-3 border-b border-slate-100">
@@ -468,7 +498,6 @@
                     </div>
                 </div>
 
-                <!-- Şerit Filtresi -->
                 <div class="bg-slate-50 p-3 sm:p-4 rounded-2xl border border-slate-200 space-y-2.5 text-xs">
                     <div class="grid grid-cols-4 gap-1 bg-white p-1 rounded-xl border border-slate-200 shadow-2xs">
                         <button onclick="pskFirmaPeriyotDegistir('gun')" id="pfflt-gun" class="psk-firma-flt-btn py-2 text-center rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Gün</button>
@@ -523,15 +552,15 @@
         let calismaAyarSubeId = 1;
         let pskSecilenOdaId = null;
 
-        // Seanslar & Kazanç Sekmesi Durum Değişkenleri
-        let pskSeansSeciliTarih = new Date();
-        let pskSeansAktifPeriyot = 'gun';
+        // 1. GENEL BAKIŞ & ÖZET (İLK AÇILIŞ: GÜN / BUGÜN)
+        let pskGenelSeciliTarih = new Date();
+        let pskGenelAktifPeriyot = 'gun';
 
-        // Takvim Sekmesi Durum Değişkenleri
+        // 2. ODA / SAAT TAKVİMİ
         let pskTakvimSeciliTarih = new Date();
         let pskTakvimSeciliSubeId = 1;
 
-        // Kurumsal Rapor Durum Değişkenleri
+        // 3. KURUMSAL RAPOR
         let pskFirmaSeciliTarih = new Date();
         let pskFirmaAktifPeriyot = 'ay';
 
@@ -676,12 +705,12 @@
         }
 
         // ==========================================
-        // İLK SAYFA: SEANSLAR & KAZANÇ (KASA MOTORU)
+        // 1. GENEL BAKIŞ & FİNANSAL ÖZET (KASA MOTORU VE 4 METRİK KARTI)
         // ==========================================
-        function pskKazancSubeSecenekleriniDoldur() {
+        function pskGenelSubeSecenekleriniDoldur() {
             let db = AsistDB.get();
             let uz = db.psikologlar.find(p => p.id === AKTIF_UZMAN_ID);
-            const sel = document.getElementById('psk-kazanc-sube-filtre');
+            const sel = document.getElementById('psk-genel-sube-filtre');
             if (!sel || !uz) return;
 
             let mevcut = sel.value || 'hepsi';
@@ -694,38 +723,35 @@
             sel.value = mevcut;
         }
 
-        function pskSeansPeriyotDegistir(p) {
-            pskSeansAktifPeriyot = p;
-            document.querySelectorAll('.psk-seans-periyot-btn').forEach(b => {
+        function pskGenelPeriyotDegistir(p) {
+            pskGenelAktifPeriyot = p;
+            document.querySelectorAll('.psk-genel-periyot-btn').forEach(b => {
                 b.classList.remove('bg-[#256839]', 'text-white', 'shadow-xs');
                 b.classList.add('text-slate-600');
             });
-            const aktifBtn = document.getElementById('psflt-' + p);
+            const aktifBtn = document.getElementById('pgflt-' + p);
             if(aktifBtn) {
                 aktifBtn.classList.add('bg-[#256839]', 'text-white', 'shadow-xs');
                 aktifBtn.classList.remove('text-slate-600');
             }
-            document.getElementById('psk-seans-ozel-tarih-alani').classList.toggle('hidden', p !== 'ozel');
-            document.getElementById('psk-seans-standart-nav').classList.toggle('hidden', p === 'ozel');
-            pskSeanslariVeKazanciHesapla();
+            document.getElementById('psk-genel-ozel-tarih-alani').classList.toggle('hidden', p !== 'ozel');
+            document.getElementById('psk-genel-standart-nav').classList.toggle('hidden', p === 'ozel');
+            pskGenelHesapla();
         }
 
-        function pskSeansTarihKaydir(y) {
-            if (pskSeansAktifPeriyot === 'ay') pskSeansSeciliTarih.setMonth(pskSeansSeciliTarih.getMonth() + y);
-            else if (pskSeansAktifPeriyot === 'hafta') pskSeansSeciliTarih.setDate(pskSeansSeciliTarih.getDate() + (y * 7));
-            else pskSeansSeciliTarih.setDate(pskSeansSeciliTarih.getDate() + y);
-            pskSeanslariVeKazanciHesapla();
+        function pskGenelTarihKaydir(y) {
+            if (pskGenelAktifPeriyot === 'ay') pskGenelSeciliTarih.setMonth(pskGenelSeciliTarih.getMonth() + y);
+            else if (pskGenelAktifPeriyot === 'hafta') pskGenelSeciliTarih.setDate(pskGenelSeciliTarih.getDate() + (y * 7));
+            else pskGenelSeciliTarih.setDate(pskGenelSeciliTarih.getDate() + y);
+            pskGenelHesapla();
         }
 
-        function pskSeanslariVeKazanciHesapla() {
+        function pskGenelHesapla() {
             let db = AsistDB.get();
-            const labelEl = document.getElementById('psk-seans-aktif-tarih-etiket');
-            if (labelEl) labelEl.innerText = formatTarihTurkce(pskSeansSeciliTarih);
+            const labelEl = document.getElementById('psk-genel-aktif-tarih-etiket');
+            if (labelEl) labelEl.innerText = formatTarihTurkce(pskGenelSeciliTarih);
 
-            let uz = db.psikologlar.find(p => p.id === AKTIF_UZMAN_ID);
-            let telGorunur = uz ? uz.telGor !== false : true;
-
-            const seciliSubeVal = document.getElementById('psk-kazanc-sube-filtre')?.value || 'hepsi';
+            const seciliSubeVal = document.getElementById('psk-genel-sube-filtre')?.value || 'hepsi';
 
             // Uzmana ve seçili şubeye ait seanslar
             let seanslar = db.seanslar.filter(s => {
@@ -736,62 +762,69 @@
 
             // Tarih Aralığı Filtresi
             let filtrelenmis = [];
-            if (pskSeansAktifPeriyot === 'gun') {
-                let iso = formatTarihISO(pskSeansSeciliTarih);
+            if (pskGenelAktifPeriyot === 'gun') {
+                let iso = formatTarihISO(pskGenelSeciliTarih);
                 filtrelenmis = seanslar.filter(s => s.tarih === iso);
-            } else if (pskSeansAktifPeriyot === 'hafta') {
-                let aralik = getHaftaAraligi(pskSeansSeciliTarih);
+            } else if (pskGenelAktifPeriyot === 'hafta') {
+                let aralik = getHaftaAraligi(pskGenelSeciliTarih);
                 filtrelenmis = seanslar.filter(s => s.tarih >= aralik.baslangic && s.tarih <= aralik.bitis);
-            } else if (pskSeansAktifPeriyot === 'ay') {
-                let ayPrefix = `${pskSeansSeciliTarih.getFullYear()}-${String(pskSeansSeciliTarih.getMonth() + 1).padStart(2, '0')}`;
+            } else if (pskGenelAktifPeriyot === 'ay') {
+                let ayPrefix = `${pskGenelSeciliTarih.getFullYear()}-${String(pskGenelSeciliTarih.getMonth() + 1).padStart(2, '0')}`;
                 filtrelenmis = seanslar.filter(s => s.tarih.startsWith(ayPrefix));
-            } else if (pskSeansAktifPeriyot === 'ozel') {
-                let bas = document.getElementById('psk-seans-ozel-baslangic').value;
-                let bit = document.getElementById('psk-seans-ozel-bitis').value;
+            } else if (pskGenelAktifPeriyot === 'ozel') {
+                let bas = document.getElementById('psk-genel-ozel-baslangic').value;
+                let bit = document.getElementById('psk-genel-ozel-bitis').value;
                 if (bas && bit) filtrelenmis = seanslar.filter(s => s.tarih >= bas && s.tarih <= bit);
             }
 
-            filtrelenmis.sort((a,b) => a.tarih.localeCompare(b.tarih) || a.saat.localeCompare(b.saat));
-
-            // Finans ve Sayaç Hesaplamaları
+            // İstenen 4 Metrik Kartının Hesaplanması
+            let toplamGorusme = filtrelenmis.length;
+            let tamamlananGorusme = 0;
+            let iptalGorusme = 0;
             let toplamKazanc = 0;
-            let tamamlananSayisi = 0;
-            let bekleyenSayisi = 0;
-            let iptalSayisi = 0;
 
             filtrelenmis.forEach(s => {
                 if (s.durum === 'odendi') {
-                    tamamlananSayisi++;
+                    tamamlananGorusme++;
                     if (s.basvuruTuru !== 'firma') {
                         let f = seansFinansHesapla(s);
                         toplamKazanc += f.uzmanPay;
                     }
-                } else if (s.durum === 'bekliyor') {
-                    bekleyenSayisi++;
                 } else if (s.durum === 'iptal') {
-                    iptalSayisi++;
+                    iptalGorusme++;
                 }
             });
 
-            // 2 Temel Metrik Kartını Güncelle
-            document.getElementById('psk-stat-kazanc').innerText = '₺' + toplamKazanc.toLocaleString('tr-TR');
-            document.getElementById('psk-stat-seans-sayisi').innerText = tamamlananSayisi + " Seans";
+            // Kartlara Yazdırma
+            document.getElementById('gstat-toplam-gorusme').innerText = toplamGorusme;
+            document.getElementById('gstat-tamamlanan-gorusme').innerText = tamamlananGorusme;
+            document.getElementById('gstat-iptal-gorusme').innerText = iptalGorusme;
+            document.getElementById('gstat-toplam-kazanc').innerText = '₺' + toplamKazanc.toLocaleString('tr-TR');
 
-            // Sayaç Rozetleri
-            document.getElementById('psk-sayac-odenen').innerText = tamamlananSayisi + " Tamamlandı";
-            document.getElementById('psk-sayac-bekleyen').innerText = bekleyenSayisi + " Bekliyor";
-            document.getElementById('psk-sayac-iptal').innerText = iptalSayisi + " İptal";
-            document.getElementById('badge-psk-seans').innerText = filtrelenmis.filter(x => x.durum !== 'iptal').length;
+            // Seanslar sekmesi badge güncelleme
+            document.getElementById('badge-psk-seans').innerText = seanslar.filter(x => x.durum !== 'iptal').length;
+        }
 
-            // Seans Listesini Çiz
+        // ==========================================
+        // 2. SEANSLARIM (GÖRÜŞME AKIŞ LİSTESİ)
+        // ==========================================
+        function pskSeanslariCiz() {
+            let db = AsistDB.get();
             const list = document.getElementById('psikolog-seans-listesi');
             if (!list) return;
             list.innerHTML = '';
 
-            if (filtrelenmis.length === 0) {
-                list.innerHTML = `<div class="p-8 text-center bg-slate-50 rounded-2xl border text-xs font-bold text-slate-400">Seçilen dönemde kayıtlı seans bulunmuyor.</div>`;
+            let uz = db.psikologlar.find(p => p.id === AKTIF_UZMAN_ID);
+            let telGorunur = uz ? uz.telGor !== false : true;
+
+            let seanslar = db.seanslar
+                .filter(s => s.uzmanId === AKTIF_UZMAN_ID)
+                .sort((a,b) => a.tarih.localeCompare(b.tarih) || a.saat.localeCompare(b.saat));
+
+            if (seanslar.length === 0) {
+                list.innerHTML = `<div class="p-8 text-center bg-slate-50 rounded-2xl border text-xs font-bold text-slate-400">Planlanmış seansınız bulunmuyor.</div>`;
             } else {
-                filtrelenmis.forEach(rawS => {
+                seanslar.forEach(rawS => {
                     let s = AsistDB.resolveSeans(rawS, db);
                     let durumRozet = '';
                     if (s.durum === 'odendi') {
@@ -830,7 +863,7 @@
         }
 
         // ==========================================
-        // ODA / SAAT TAKVİMİ (PSİKOLOGLAR İÇİN ŞUBE SEÇİMLİ)
+        // 4. ODA / SAAT TAKVİMİ (SADECE KENDİSİNE AİT SEANSLAR - GİZLİLİK SAĞLANDI)
         // ==========================================
         function pskTakvimSubeButonlariniCiz() {
             let db = AsistDB.get();
@@ -872,7 +905,6 @@
 
             document.getElementById('psk-takvim-aktif-tarih-etiket').innerText = formatTarihTurkce(pskTakvimSeciliTarih);
             
-            // Saat sütunu w-14 daraltıldı
             theadTr.innerHTML = '<th class="p-2 w-14 text-center border-r font-extrabold text-slate-700 text-[11px]">Saat</th>';
             tbody.innerHTML = '';
 
@@ -894,16 +926,23 @@
                 let html = `<td class="p-2 text-center font-bold bg-slate-50 border-r border-slate-200 text-[11px] text-slate-700 w-14">${saat}</td>`;
                 
                 odalar.forEach(oda => {
-                    let seans = db.seanslar.find(s => s.subeId === pskTakvimSeciliSubeId && s.saat === saat && s.odaId === oda.id && s.durum !== 'iptal' && s.tarih === seciliISO);
+                    // SADECE GİRİŞ YAPAN UZMANIN KENDİ SEANSLARI BULUNUR
+                    let seans = db.seanslar.find(s => 
+                        s.subeId === pskTakvimSeciliSubeId && 
+                        s.saat === saat && 
+                        s.odaId === oda.id && 
+                        s.durum !== 'iptal' && 
+                        s.tarih === seciliISO && 
+                        s.uzmanId === AKTIF_UZMAN_ID
+                    );
+
                     if (seans) {
                         let res = AsistDB.resolveSeans(seans, db);
-                        let benimSeansimMi = seans.uzmanId === AKTIF_UZMAN_ID;
-
                         html += `
                             <td class="p-1 sm:p-1.5 border-r border-slate-200 align-top overflow-hidden">
-                                <div class="${benimSeansimMi ? 'bg-emerald-100 border border-emerald-300' : 'bg-slate-100 border border-slate-200'} p-1 sm:p-1.5 rounded-xl text-center overflow-hidden">
+                                <div class="bg-emerald-100 border border-emerald-300 p-1 sm:p-1.5 rounded-xl text-center overflow-hidden">
                                     <span class="font-extrabold text-slate-900 block text-[10px] sm:text-xs truncate" title="${escapeHtml(res.danisanAdi)}">${escapeHtml(res.danisanAdi)}</span>
-                                    <span class="text-[9px] sm:text-[10px] ${benimSeansimMi ? 'text-[#256839] font-black' : 'text-slate-500 font-bold'} block truncate" title="${escapeHtml(res.uzmanAdi)}">${escapeHtml(res.uzmanAdi)}</span>
+                                    <span class="text-[9px] sm:text-[10px] text-[#256839] font-black block truncate" title="${escapeHtml(res.hizmet || 'Seans')}">${escapeHtml(res.hizmet || 'Seans')}</span>
                                 </div>
                             </td>
                         `;
@@ -921,7 +960,7 @@
         }
 
         // ==========================================
-        // DİĞER MODÜL VE YÖNETİMLER
+        // DİĞER MODÜLLER & GEZİNTİ
         // ==========================================
         function pskMobilDahaFazlaAc() {
             document.getElementById('psk-mobil-daha-fazla-modal').classList.remove('hidden');
@@ -949,13 +988,13 @@
                 aktifBtn.classList.add('bg-[#256839]', 'text-white', 'shadow-xs');
             }
 
-            // Mobil Alt Menü Aktif Renk Güncellemesi: Seanslar, Randevu, Takvim (Oda/Saat), Danışanlar, Menü
+            // Mobil Alt Menü Butonları: Genel, Seanslar, Randevu, Takvim (Oda/Saat), Menü
             document.querySelectorAll('.psk-mobile-nav-btn').forEach(mbtn => {
                 mbtn.classList.remove('text-[#256839]', 'font-black');
                 mbtn.classList.add('text-slate-400', 'font-bold');
             });
 
-            if (['calisma-saatleri', 'firma-rapor'].includes(sekmeAdi)) {
+            if (['danisanlar', 'calisma-saatleri', 'firma-rapor'].includes(sekmeAdi)) {
                 const mDiger = document.getElementById('pmbtn-daha-fazla');
                 if (mDiger) {
                     mDiger.classList.remove('text-slate-400', 'font-bold');
@@ -969,7 +1008,8 @@
                 }
             }
 
-            if(sekmeAdi === 'gorusmeler') pskSeanslariVeKazanciHesapla();
+            if(sekmeAdi === 'genel') pskGenelHesapla();
+            if(sekmeAdi === 'gorusmeler') pskSeanslariCiz();
             if(sekmeAdi === 'randevu-olustur') varsayilanTarihiAyarla();
             if(sekmeAdi === 'takvim') { pskTakvimSubeButonlariniCiz(); pskTakvimMatrisiniCiz(); }
             if(sekmeAdi === 'danisanlar') pskRehberiCiz();
@@ -1327,7 +1367,7 @@
             document.getElementById('psk-secili-danisan-id').value = '';
             pskTakipEdenUzmanUyarisiGoster(null);
             varsayilanTarihiAyarla();
-            psikologSekmeDegistir('gorusmeler');
+            psikologSekmeDegistir('genel');
         }
 
         function pskRehberiCiz() {
@@ -1721,17 +1761,20 @@
 
             let bugunISO = formatTarihISO(new Date());
             let ayBasiISO = `${pskFirmaSeciliTarih.getFullYear()}-${String(pskFirmaSeciliTarih.getMonth() + 1).padStart(2, '0')}-01`;
-            if (document.getElementById('psk-seans-ozel-baslangic')) document.getElementById('psk-seans-ozel-baslangic').value = ayBasiISO;
-            if (document.getElementById('psk-seans-ozel-bitis')) document.getElementById('psk-seans-ozel-bitis').value = bugunISO;
+            if (document.getElementById('psk-genel-ozel-baslangic')) document.getElementById('psk-genel-ozel-baslangic').value = ayBasiISO;
+            if (document.getElementById('psk-genel-ozel-bitis')) document.getElementById('psk-genel-ozel-bitis').value = bugunISO;
             if (document.getElementById('psk-firma-ozel-baslangic')) document.getElementById('psk-firma-ozel-baslangic').value = ayBasiISO;
             if (document.getElementById('psk-firma-ozel-bitis')) document.getElementById('psk-firma-ozel-bitis').value = bugunISO;
 
             uzmanSeciciyiDoldur(db);
             varsayilanTarihiAyarla();
             pskRandevuSubeSecenekleriniDoldur();
-            pskKazancSubeSecenekleriniDoldur();
+            pskGenelSubeSecenekleriniDoldur();
             pskKontrolOnayButon();
-            pskSeanslariVeKazanciHesapla();
+            
+            // İlk açılışta Genel modülü hesaplanır
+            pskGenelHesapla();
+            pskSeanslariCiz();
             pskRehberiCiz();
             pskTakvimSubeButonlariniCiz();
             subeSecimButonlariniCiz();
@@ -1740,7 +1783,8 @@
         };
 
         window.addEventListener('asist-db-updated', function() {
-            pskSeanslariVeKazanciHesapla();
+            pskGenelHesapla();
+            pskSeanslariCiz();
             pskRehberiCiz();
             pskTakvimMatrisiniCiz();
             subeSecimButonlariniCiz();
@@ -1751,8 +1795,9 @@
         window.addEventListener('storage', function(e) {
             if (!e.key || e.key.startsWith('ASIST_PSIKOLOG_CENTRAL_DB')) {
                 pskRandevuSubeSecenekleriniDoldur();
-                pskKazancSubeSecenekleriniDoldur();
-                pskSeanslariVeKazanciHesapla();
+                pskGenelSubeSecenekleriniDoldur();
+                pskGenelHesapla();
+                pskSeanslariCiz();
                 pskRehberiCiz();
                 pskTakvimMatrisiniCiz();
                 subeSecimButonlariniCiz();
@@ -1837,8 +1882,9 @@
             }
             pskFormSubeDegisti();
             pskRandevuSubeSecenekleriniDoldur();
-            pskKazancSubeSecenekleriniDoldur();
-            pskSeanslariVeKazanciHesapla();
+            pskGenelSubeSecenekleriniDoldur();
+            pskGenelHesapla();
+            pskSeanslariCiz();
             pskRehberiCiz();
             pskTakvimSubeButonlariniCiz();
             subeSecimButonlariniCiz();
