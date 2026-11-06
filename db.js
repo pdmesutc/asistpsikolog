@@ -1,6 +1,6 @@
 /**
- * AsistPsikolog - Merkezi Veritabanı, Yetkilendirme ve Senkronizasyon Motoru (db.js)
- * Şube, Oda, Uzman, Firma, Fiyatlandırma, Masraflar, SMS Şablonları, KDV Motoru, 
+ * AsistPsikolog - Merkezi Veritabanı, Yetkilendirme, NetGSM SMS ve Senkronizasyon Motoru (db.js)
+ * Şube, Oda, Uzman, Firma, Fiyatlandırma, Masraflar, SMS Şablonları, NetGSM API, KDV Motoru, 
  * Çocuk/Ergen Ebeveyn, Çift/Bireysel Eşleştirme ve Takip Eden Uzman Mimarisi
  */
 
@@ -42,7 +42,6 @@ function asistTelGorunum(tel10) {
 
 /**
  * KDV ve Hak Ediş Hesaplama Motoru
- * kdvDahil true ise: Brüt ücretten iç yüzde ile KDV ayrılır, kalan Matrah üzerinden Ofis ve Uzman payı hesaplanır.
  */
 function asistHesaplaFinans(ucret, ofisOranYuzde, kdvDahil = false, kdvOrani = 20) {
     let brut = Number(ucret);
@@ -124,7 +123,7 @@ function asistCiftDanisanSenkronizeEt(db, anaDanisanId, ikinciAd, ikinciTelRaw, 
 }
 
 /**
- * Danışanı Takip Eden Uzmanı (En Son Seans Yaptığı Uzmanı) Bulan Merkezi Motor
+ * Danışanı Takip Eden Uzmanı Bulan Merkezi Motor
  */
 function asistTakipEdenUzmanBul(danisanId, dbInstance = null) {
     if (!danisanId) return null;
@@ -149,9 +148,23 @@ const DEFAULT_ASIST_DB = {
         ergen: 1500,
         cift: 2500
     },
+    netgsm: {
+        usercode: "8503098249",
+        password: "D.aY75sk",
+        msgheader: "8503098249",
+        apiUrl: "netgsm-api.php",
+        aktif: true,
+        otoRandevuSms: true
+    },
     smsSablonlari: {
-        hatirlatma: "Sayın [Danışan Adi], [Tarih] saat [Saat]'de [Uzman Adi] ile randevunuz bulunmaktadır. Sağlıklı günler dileriz. - Hera Psikoloji",
-        bilgi: "Sayın [Danışan Adi], merkeze hoş geldiniz. Seans detaylarınız için asistanımızla görüşebilirsiniz. - Hera Psikoloji"
+        danisanYeni: "Sayın [Danışan Adi], [Sube Adi] şubemizde [Tarih] saat [Saat]'de [Uzman Adi] ile randevunuz oluşturulmuştur. Konum/Harita: [Maps Linki] - Hera Psikoloji",
+        danisanIptal: "Sayın [Danışan Adi], [Tarih] saat [Saat]'deki randevunuz iptal edilmiştir. Sağlıklı günler dileriz. - Hera Psikoloji",
+        danisanDegisiklik: "Sayın [Danışan Adi], randevu tarihiniz [Tarih] saat [Saat] olarak güncellenmiştir. Konum: [Maps Linki] - Hera Psikoloji",
+        danisanHatirlatma: "Sayın [Danışan Adi], [Tarih] saat [Saat]'de [Uzman Adi] ile randevunuzu hatırlatırız. Konum: [Maps Linki] - Hera Psikoloji",
+        psikologYeni: "Sayın [Uzman Adi], [Danışan Adi] için [Tarih] saat [Saat] ([Sube Adi]) seansı planlanmıştır.",
+        psikologIptal: "Sayın [Uzman Adi], [Tarih] saat [Saat] seansı iptal edilmiştir.",
+        psikologDegisiklik: "Sayın [Uzman Adi], [Danışan Adi] seansı [Tarih] saat [Saat] olarak güncellenmiştir.",
+        psikologHatirlatma: "Sayın [Uzman Adi], bugün saat [Saat]'de [Danışan Adi] seansınız bulunmaktadır."
     },
     masraflar: [
         { id: 1, subeId: 1, ad: "Ofis Elektrik Faturası", tutar: 2150, tarih: SEED_TARIHI },
@@ -166,6 +179,7 @@ const DEFAULT_ASIST_DB = {
             id: 1, 
             adi: "Pendik Şube", 
             adres: "Batı Mah. Erol Kaya Cad. No: 12", 
+            mapsLink: "https://maps.app.goo.gl/pendikornek",
             saatBaslangic: "09:00", 
             saatBitis: "21:00", 
             durum: "aktif", 
@@ -179,6 +193,7 @@ const DEFAULT_ASIST_DB = {
             id: 2, 
             adi: "Kartal Şube", 
             adres: "Merkez Mah. Ankara Cad.", 
+            mapsLink: "https://maps.app.goo.gl/kartalornek",
             saatBaslangic: "09:00", 
             saatBitis: "20:00", 
             durum: "aktif", 
@@ -260,9 +275,27 @@ function asistNormalizeDb(db) {
         db.fiyatlar = JSON.parse(JSON.stringify(DEFAULT_ASIST_DB.fiyatlar));
         degisti = true;
     }
+    if (!db.netgsm || typeof db.netgsm !== 'object') {
+        db.netgsm = JSON.parse(JSON.stringify(DEFAULT_ASIST_DB.netgsm));
+        degisti = true;
+    } else {
+        if (!db.netgsm.usercode) { db.netgsm.usercode = "8503098249"; degisti = true; }
+        if (!db.netgsm.password) { db.netgsm.password = "D.aY75sk"; degisti = true; }
+        if (!db.netgsm.msgheader) { db.netgsm.msgheader = "8503098249"; degisti = true; }
+        if (!db.netgsm.apiUrl) { db.netgsm.apiUrl = "netgsm-api.php"; degisti = true; }
+        if (typeof db.netgsm.aktif !== 'boolean') { db.netgsm.aktif = true; degisti = true; }
+        if (typeof db.netgsm.otoRandevuSms !== 'boolean') { db.netgsm.otoRandevuSms = true; degisti = true; }
+    }
     if (!db.smsSablonlari || typeof db.smsSablonlari !== 'object') {
         db.smsSablonlari = JSON.parse(JSON.stringify(DEFAULT_ASIST_DB.smsSablonlari));
         degisti = true;
+    } else {
+        ['danisanYeni', 'danisanIptal', 'danisanDegisiklik', 'danisanHatirlatma', 'psikologYeni', 'psikologIptal', 'psikologDegisiklik', 'psikologHatirlatma'].forEach(sk => {
+            if (!db.smsSablonlari[sk]) {
+                db.smsSablonlari[sk] = DEFAULT_ASIST_DB.smsSablonlari[sk];
+                degisti = true;
+            }
+        });
     }
     if (!db.uzmanCalismaSaatleri || typeof db.uzmanCalismaSaatleri !== 'object') {
         db.uzmanCalismaSaatleri = {}; degisti = true;
@@ -270,6 +303,7 @@ function asistNormalizeDb(db) {
 
     db.subeler.forEach(s => {
         s.id = Number(s.id);
+        if (!s.mapsLink) { s.mapsLink = ""; degisti = true; }
         if (!Array.isArray(s.odalar)) { s.odalar = []; degisti = true; }
         if (!s.saatBaslangic) { s.saatBaslangic = "09:00"; degisti = true; }
         if (!s.saatBitis) { s.saatBitis = "21:00"; degisti = true; }
@@ -446,7 +480,8 @@ const AsistDB = {
 
         return {
             ...seans,
-            subeAdi: sube ? sube.adi : "Silinmiş Şube",
+            subeAdi: sube ? sube.adi : "Merkez Şube",
+            subeMaps: sube ? (sube.mapsLink || "") : "",
             danisanAdi: danisan ? danisan.ad : "Silinmiş Danışan",
             danisanTel: danisan ? (danisan.tel || danisan.anneTel || danisan.babaTel || "") : "",
             anneAd: danisan ? (danisan.anneAd || "") : "",
@@ -454,6 +489,7 @@ const AsistDB = {
             babaAd: danisan ? (danisan.babaAd || "") : "",
             babaTel: danisan ? (danisan.babaTel || "") : "",
             uzmanAdi: uzman ? uzman.ad : "Silinmiş Uzman",
+            uzmanTel: uzman ? (uzman.tel || "") : "",
             odaAdi: oda ? oda.adi : "Silinmiş Oda",
             firmaAdi: firma ? firma.adi : "",
             ikinciDanisanAd: ikinciDanisan ? ikinciDanisan.ad : (seans.ikinciDanisanAd || ""),
@@ -464,19 +500,128 @@ const AsistDB = {
     }
 };
 
+/**
+ * AsistSMS - Gerçek Zamanlı NetGSM SMS Gönderim ve Otomatik Tetikleme Motoru
+ */
+const AsistSMS = {
+    sablonDoldur: function(sablonMetni, cozulmusSeans, aliciAdi = null) {
+        let metin = String(sablonMetni || '');
+        let hedefIsim = aliciAdi || cozulmusSeans.danisanAdi || 'Danışanımız';
+        return metin
+            .replace(/\[Danışan Adi\]|\[Danisan Adi\]|\[Danışan Adı\]/gi, hedefIsim)
+            .replace(/\[Tarih\]/gi, cozulmusSeans.tarih || '')
+            .replace(/\[Saat\]/gi, cozulmusSeans.saat || '')
+            .replace(/\[Uzman Adi\]|\[Uzman Adı\]/gi, cozulmusSeans.uzmanAdi || '')
+            .replace(/\[Şube Adi\]|\[Sube Adi\]|\[Şube Adı\]/gi, cozulmusSeans.subeAdi || '')
+            .replace(/\[Maps Linki\]|\[Harita Linki\]/gi, cozulmusSeans.subeMaps || '');
+    },
+
+    seansAlicilariniBul: function(rawSeans, db) {
+        let s = AsistDB.resolveSeans(rawSeans, db);
+        let d = db.danisanlar.find(x => Number(x.id) === Number(rawSeans.danisanId));
+        let tercihler = rawSeans.smsGonderilecekler || { ana: true, es: false, anne: false, baba: false };
+        let alicilar = [];
+        let eklenenNumaralar = new Set();
+
+        function ekle(telRaw, isim) {
+            let t10 = asistTel10(telRaw);
+            if (t10.length === 10 && !eklenenNumaralar.has(t10)) {
+                eklenenNumaralar.add(t10);
+                alicilar.push({ tel: t10, ad: isim || s.danisanAdi });
+            }
+        }
+
+        if (tercihler.ana && d && d.tel) ekle(d.tel, d.ad);
+        if (tercihler.es && s.ikinciDanisanTel) ekle(s.ikinciDanisanTel, s.ikinciDanisanAd || s.danisanAdi);
+        if (tercihler.anne && d && d.anneTel) ekle(d.anneTel, d.anneAd || s.danisanAdi);
+        if (tercihler.baba && d && d.babaTel) ekle(d.babaTel, d.babaAd || s.danisanAdi);
+
+        if (alicilar.length === 0) {
+            if (d && d.tel) ekle(d.tel, d.ad);
+            else if (d && d.anneTel) ekle(d.anneTel, d.anneAd || s.danisanAdi);
+            else if (d && d.babaTel) ekle(d.babaTel, d.babaAd || s.danisanAdi);
+            else if (s.danisanTel) ekle(s.danisanTel, s.danisanAdi);
+        }
+
+        return alicilar;
+    },
+
+    gonder: async function(messagesArray) {
+        let db = AsistDB.get();
+        let ayar = db.netgsm || DEFAULT_ASIST_DB.netgsm;
+        try {
+            let resp = await fetch(ayar.apiUrl || 'netgsm-api.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: 'send_sms', usercode: ayar.usercode, password: ayar.password,
+                    msgheader: ayar.msgheader, messages: messagesArray
+                })
+            });
+            return await resp.json();
+        } catch (err) {
+            return { basarili: false, kod: 'NET_ERR', mesaj: 'NetGSM API bağlantı hatası.' };
+        }
+    },
+
+    basliklariSorgula: async function(usercode, password, apiUrl = 'netgsm-api.php') {
+        try {
+            let resp = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'get_headers', usercode, password })
+            });
+            return await resp.json();
+        } catch (err) {
+            return { basarili: false, basliklar: [], mesaj: `Bağlantı hatası: ${err.message}` };
+        }
+    },
+
+    /**
+     * Otomatik SMS Tetikleyici (Yeni Randevu, İptal, Tarih/Saat Değişikliği)
+     * Tip: 'Yeni', 'Iptal', 'Degisiklik'
+     */
+    tetikle: async function(seansObj, tip) {
+        let db = AsistDB.get();
+        if (!db.netgsm || !db.netgsm.aktif || !db.netgsm.otoRandevuSms) return;
+
+        let s = AsistDB.resolveSeans(seansObj, db);
+        let sablonlar = db.smsSablonlari || DEFAULT_ASIST_DB.smsSablonlari;
+        let mesajlar = [];
+
+        // 1. Danışan Mesajı
+        let danisanAlicilar = this.seansAlicilariniBul(seansObj, db);
+        let dSablon = sablonlar['danisan' + tip];
+        if (dSablon && danisanAlicilar.length > 0) {
+            danisanAlicilar.forEach(a => {
+                mesajlar.push({ tel: a.tel, msg: this.sablonDoldur(dSablon, s, a.ad) });
+            });
+        }
+
+        // 2. Psikolog Bildirim Mesajı
+        let p = db.psikologlar.find(x => Number(x.id) === Number(s.uzmanId));
+        let pSablon = sablonlar['psikolog' + tip];
+        if (p && p.sms !== false && p.tel && pSablon) {
+            let pTel10 = asistTel10(p.tel);
+            if (pTel10.length === 10) {
+                mesajlar.push({ tel: pTel10, msg: this.sablonDoldur(pSablon, s, s.danisanAdi) });
+            }
+        }
+
+        if (mesajlar.length > 0) {
+            await this.gonder(mesajlar);
+        }
+    }
+};
+
 const AsistAuth = {
     getSession: function() {
         try {
             const raw = localStorage.getItem(ASIST_SESSION_KEY);
             if (!raw) return null;
-            const sess = JSON.parse(raw);
-            if (!sess || !sess.rol || !sess.userId) return null;
-            return sess;
-        } catch (e) {
-            return null;
-        }
+            return JSON.parse(raw);
+        } catch (e) { return null; }
     },
-
     hedefSayfa: function(session) {
         if (!session) return 'giris.html';
         if (session.rol === 'yonetici') return 'yonetici-paneli.html';
@@ -484,84 +629,37 @@ const AsistAuth = {
         if (session.rol === 'psikolog') return `psikolog-paneli.html?uzmanId=${session.userId}`;
         return 'index.html';
     },
-
     login: function(kimlik, sifre, rol) {
         const db = AsistDB.get();
         const kTemiz = String(kimlik || '').trim().toLowerCase();
         const kTel = asistTel10(kimlik);
         const sTemiz = String(sifre || '').trim();
 
-        if (!kTemiz || !sTemiz) {
-            return { basarili: false, mesaj: "Lütfen kullanıcı bilgisi (e-posta/telefon) ve şifrenizi giriniz." };
+        let liste = rol === 'yonetici' ? (db.yoneticiler || []) : (rol === 'asistan' ? (db.asistanlar || []) : (db.psikologlar || []));
+        const kullanici = liste.find(u => (u.mail && String(u.mail).trim().toLowerCase() === kTemiz) || (kTel.length === 10 && asistTel10(u.tel) === kTel));
+
+        if (!kullanici || String(kullanici.sifre || '123456') !== sTemiz) {
+            return { basarili: false, mesaj: "Kullanıcı adı veya şifre hatalı." };
         }
-
-        let liste = [];
-        if (rol === 'yonetici') liste = db.yoneticiler || [];
-        else if (rol === 'asistan') liste = db.asistanlar || [];
-        else if (rol === 'psikolog') liste = db.psikologlar || [];
-        else return { basarili: false, mesaj: "Geçersiz giriş rolü seçildi." };
-
-        const kullanici = liste.find(u => {
-            const mailEslesme = u.mail && String(u.mail).trim().toLowerCase() === kTemiz;
-            const telEslesme = kTel.length === 10 && asistTel10(u.tel) === kTel;
-            return mailEslesme || telEslesme;
-        });
-
-        if (!kullanici) {
-            return { basarili: false, mesaj: "Bu rol için girilen e-posta veya telefon numarasıyla kayıtlı kullanıcı bulunamadı." };
-        }
-
         if (kullanici.durum === 'pasif') {
-            return { basarili: false, mesaj: "Bu kullanıcı hesabı pasif (arşiv) durumdadır. Lütfen yönetici ile iletişime geçiniz." };
-        }
-
-        const kayitliSifre = String(kullanici.sifre || '123456');
-        if (kayitliSifre !== sTemiz) {
-            return { basarili: false, mesaj: "Girdiğiniz şifre hatalıdır. Lütfen kontrol edip tekrar deneyiniz." };
+            return { basarili: false, mesaj: "Bu hesap pasif durumdadır." };
         }
 
         const session = {
-            rol: rol,
-            userId: Number(kullanici.id),
-            ad: kullanici.ad,
-            mail: kullanici.mail || '',
-            tel: kullanici.tel || '',
-            subeId: kullanici.subeId ? Number(kullanici.subeId) : null,
-            subeIds: Array.isArray(kullanici.subeIds) ? kullanici.subeIds.map(Number) : (kullanici.subeId ? [Number(kullanici.subeId)] : []),
-            girisZamani: new Date().toISOString()
+            rol: rol, userId: Number(kullanici.id), ad: kullanici.ad,
+            subeId: kullanici.subeId ? Number(kullanici.subeId) : null
         };
-
-        try {
-            localStorage.setItem(ASIST_SESSION_KEY, JSON.stringify(session));
-        } catch (e) {
-            return { basarili: false, mesaj: "Oturum kaydedilemedi (Tarayıcı depolama alanı kapalı)." };
-        }
-
-        return {
-            basarili: true,
-            session: session,
-            hedefUrl: this.hedefSayfa(session)
-        };
+        try { localStorage.setItem(ASIST_SESSION_KEY, JSON.stringify(session)); } catch (e) {}
+        return { basarili: true, hedefUrl: this.hedefSayfa(session) };
     },
-
-    logout: function(yonlendirUrl = 'giris.html') {
-        try {
-            localStorage.removeItem(ASIST_SESSION_KEY);
-        } catch (e) {}
-        if (yonlendirUrl) {
-            window.location.href = yonlendirUrl;
-        }
+    logout: function(url = 'giris.html') {
+        try { localStorage.removeItem(ASIST_SESSION_KEY); } catch (e) {}
+        if (url) window.location.href = url;
     },
-
-    requireAuth: function(izinliRoller = []) {
+    requireAuth: function(roller = []) {
         const sess = this.getSession();
-        if (!sess) {
-            const istenenRol = izinliRoller.length === 1 ? izinliRoller[0] : (izinliRoller.find(r => r !== 'yonetici') || 'asistan');
-            window.location.replace(`giris.html?rol=${istenenRol}`);
-            return null;
-        }
-        if (Array.isArray(izinliRoller) && izinliRoller.length > 0 && !izinliRoller.includes(sess.rol)) {
-            window.location.replace(this.hedefSayfa(sess));
+        if (!sess || (roller.length > 0 && !roller.includes(sess.rol))) {
+            window.location.replace('giris.html');
             return null;
         }
         return sess;
