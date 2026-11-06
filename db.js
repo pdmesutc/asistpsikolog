@@ -162,7 +162,7 @@ const DEFAULT_ASIST_DB = {
     subeler: [
         { 
             id: 1, 
-            adi: "Pendik Merkez Şube", 
+            adi: "Pendik Şube", 
             adres: "Batı Mah. Erol Kaya Cad. No: 12", 
             saatBaslangic: "09:00", 
             saatBitis: "21:00", 
