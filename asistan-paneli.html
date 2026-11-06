@@ -41,32 +41,32 @@
             </div>
 
             <nav class="p-4 space-y-1.5 hidden md:block text-xs font-bold">
-                <button onclick="asistanSekmeDegistir('bugun')" id="abtn-bugun" class="asistan-nav-btn w-full py-3 px-4 rounded-xl transition flex items-center space-x-3 bg-[#256839] text-white shadow-xs cursor-pointer">
+                <button type="button" onclick="asistanSekmeDegistir('bugun')" id="abtn-bugun" class="asistan-nav-btn w-full py-3 px-4 rounded-xl transition flex items-center space-x-3 bg-[#256839] text-white shadow-xs cursor-pointer">
                     <i class="fa-solid fa-calendar-day w-5 text-center"></i>
                     <span>Görüşmeler</span>
                     <span id="badge-bugun-sayi" class="ml-auto bg-white/20 text-white text-[10px] px-2 py-0.5 rounded-full">0</span>
                 </button>
-                <button onclick="asistanSekmeDegistir('randevu-olustur')" id="abtn-randevu-olustur" class="asistan-nav-btn w-full py-3 px-4 rounded-xl transition flex items-center space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer">
+                <button type="button" onclick="asistanSekmeDegistir('randevu-olustur')" id="abtn-randevu-olustur" class="asistan-nav-btn w-full py-3 px-4 rounded-xl transition flex items-center space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer">
                     <i class="fa-solid fa-calendar-plus w-5 text-center text-[#256839]"></i>
                     <span>Randevu Oluştur</span>
                 </button>
-                <button onclick="asistanSekmeDegistir('takvim')" id="abtn-takvim" class="asistan-nav-btn w-full py-3 px-4 rounded-xl transition flex items-center space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer">
+                <button type="button" onclick="asistanSekmeDegistir('takvim')" id="abtn-takvim" class="asistan-nav-btn w-full py-3 px-4 rounded-xl transition flex items-center space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer">
                     <i class="fa-solid fa-table-cells w-5 text-center"></i>
                     <span>Oda / Saat Takvimi</span>
                 </button>
-                <button onclick="asistanSekmeDegistir('danisanlar')" id="abtn-danisanlar" class="asistan-nav-btn w-full py-3 px-4 rounded-xl transition flex items-center space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer">
+                <button type="button" onclick="asistanSekmeDegistir('danisanlar')" id="abtn-danisanlar" class="asistan-nav-btn w-full py-3 px-4 rounded-xl transition flex items-center space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer">
                     <i class="fa-solid fa-address-book w-5 text-center"></i>
                     <span>Danışan Rehberi</span>
                 </button>
-                <button onclick="asistanSekmeDegistir('kasa')" id="abtn-kasa" class="asistan-nav-btn w-full py-3 px-4 rounded-xl transition flex items-center space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer">
+                <button type="button" onclick="asistanSekmeDegistir('kasa')" id="abtn-kasa" class="asistan-nav-btn w-full py-3 px-4 rounded-xl transition flex items-center space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer">
                     <i class="fa-solid fa-cash-register w-5 text-center"></i>
                     <span>Kasa & Ödemeler</span>
                 </button>
-                <button onclick="asistanSekmeDegistir('masraflar')" id="abtn-masraflar" class="asistan-nav-btn w-full py-3 px-4 rounded-xl transition flex items-center space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer">
+                <button type="button" onclick="asistanSekmeDegistir('masraflar')" id="abtn-masraflar" class="asistan-nav-btn w-full py-3 px-4 rounded-xl transition flex items-center space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer">
                     <i class="fa-solid fa-receipt w-5 text-center text-amber-700"></i>
                     <span>Ofis Masrafları</span>
                 </button>
-                <button onclick="asistanSekmeDegistir('firma-rapor')" id="abtn-firma-rapor" class="asistan-nav-btn w-full py-3 px-4 rounded-xl transition flex items-center space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer">
+                <button type="button" onclick="asistanSekmeDegistir('firma-rapor')" id="abtn-firma-rapor" class="asistan-nav-btn w-full py-3 px-4 rounded-xl transition flex items-center space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer">
                     <i class="fa-solid fa-building-user w-5 text-center"></i>
                     <span>Kurumsal Rapor</span>
                 </button>
@@ -79,7 +79,7 @@
                     <p class="text-xs font-extrabold text-slate-800 truncate" id="aktif-asistan-ad">Ofis Asistanı</p>
                     <p class="text-[10px] text-emerald-700 font-bold" id="aktif-asistan-rol">Asistan Oturumu</p>
                 </div>
-                <button onclick="asistanCikisYap()" class="bg-white hover:bg-red-50 text-red-600 border border-slate-200 hover:border-red-200 px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer flex items-center space-x-1 shrink-0" title="Oturumu Kapat">
+                <button type="button" onclick="asistanCikisYap()" class="bg-white hover:bg-red-50 text-red-600 border border-slate-200 hover:border-red-200 px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer flex items-center space-x-1 shrink-0" title="Oturumu Kapat">
                     <i class="fa-solid fa-right-from-bracket"></i>
                     <span>Çıkış</span>
                 </button>
@@ -87,47 +87,47 @@
         </div>
     </aside>
 
-    <!-- MOBİL ALT MENÜ BARI: Görüşme -> Randevu -> Oda/Saat -> Rehber -> Menü -->
+    <!-- MOBİL ALT MENÜ BARI -->
     <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 z-40 flex items-center justify-around py-2 px-1 text-[10px] font-extrabold shadow-lg">
-        <button onclick="asistanSekmeDegistir('bugun')" id="mbtn-bugun" class="mobile-nav-btn flex flex-col items-center py-1 px-1.5 rounded-xl transition text-[#256839] font-black cursor-pointer">
+        <button type="button" onclick="asistanSekmeDegistir('bugun')" id="mbtn-bugun" class="mobile-nav-btn flex flex-col items-center py-1 px-1.5 rounded-xl transition text-[#256839] font-black cursor-pointer">
             <i class="fa-solid fa-calendar-day text-base mb-0.5"></i><span>Görüşme</span>
         </button>
-        <button onclick="asistanSekmeDegistir('randevu-olustur')" id="mbtn-randevu-olustur" class="mobile-nav-btn flex flex-col items-center py-1 px-1.5 rounded-xl transition text-slate-400 font-bold cursor-pointer">
+        <button type="button" onclick="asistanSekmeDegistir('randevu-olustur')" id="mbtn-randevu-olustur" class="mobile-nav-btn flex flex-col items-center py-1 px-1.5 rounded-xl transition text-slate-400 font-bold cursor-pointer">
             <i class="fa-solid fa-calendar-plus text-base mb-0.5"></i><span>Randevu</span>
         </button>
-        <button onclick="asistanSekmeDegistir('takvim')" id="mbtn-takvim" class="mobile-nav-btn flex flex-col items-center py-1 px-1.5 rounded-xl transition text-slate-400 font-bold cursor-pointer">
+        <button type="button" onclick="asistanSekmeDegistir('takvim')" id="mbtn-takvim" class="mobile-nav-btn flex flex-col items-center py-1 px-1.5 rounded-xl transition text-slate-400 font-bold cursor-pointer">
             <i class="fa-solid fa-table-cells text-base mb-0.5"></i><span>Oda/Saat</span>
         </button>
-        <button onclick="asistanSekmeDegistir('danisanlar')" id="mbtn-danisanlar" class="mobile-nav-btn flex flex-col items-center py-1 px-1.5 rounded-xl transition text-slate-400 font-bold cursor-pointer">
+        <button type="button" onclick="asistanSekmeDegistir('danisanlar')" id="mbtn-danisanlar" class="mobile-nav-btn flex flex-col items-center py-1 px-1.5 rounded-xl transition text-slate-400 font-bold cursor-pointer">
             <i class="fa-solid fa-address-book text-base mb-0.5"></i><span>Rehber</span>
         </button>
-        <button onclick="mobilDahaFazlaAc()" id="mbtn-daha-fazla" class="mobile-nav-btn flex flex-col items-center py-1 px-1.5 rounded-xl transition text-slate-400 font-bold cursor-pointer">
+        <button type="button" onclick="mobilDahaFazlaAc()" id="mbtn-daha-fazla" class="mobile-nav-btn flex flex-col items-center py-1 px-1.5 rounded-xl transition text-slate-400 font-bold cursor-pointer">
             <i class="fa-solid fa-bars text-base mb-0.5"></i><span>Menü</span>
         </button>
     </nav>
 
-    <!-- MOBİL "MENÜ / DİĞER MODÜLLER" BOTTOM SHEET -->
+    <!-- MOBİL "MENÜ" BOTTOM SHEET -->
     <div id="mobil-daha-fazla-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-end justify-center md:hidden">
         <div class="bg-white w-full rounded-t-3xl p-5 space-y-3.5 shadow-2xl animate-in slide-in-from-bottom duration-200">
             <div class="w-12 h-1.5 bg-slate-200 rounded-full mx-auto mb-1"></div>
             <div class="flex items-center justify-between pb-2 border-b border-slate-100">
                 <span class="font-extrabold text-slate-900 text-sm">Diğer Modüller & İşlemler</span>
-                <button onclick="mobilDahaFazlaKapat()" class="text-slate-400 p-1 font-bold cursor-pointer"><i class="fa-solid fa-xmark text-base"></i></button>
+                <button type="button" onclick="mobilDahaFazlaKapat()" class="text-slate-400 p-1 font-bold cursor-pointer"><i class="fa-solid fa-xmark text-base"></i></button>
             </div>
             <div class="grid grid-cols-2 gap-2 text-xs font-bold">
-                <button onclick="mobilModulSec('kasa')" class="p-3.5 bg-slate-50 hover:bg-emerald-50 rounded-2xl border border-slate-200 flex items-center space-x-2.5 text-slate-800">
+                <button type="button" onclick="mobilModulSec('kasa')" class="p-3.5 bg-slate-50 hover:bg-emerald-50 rounded-2xl border border-slate-200 flex items-center space-x-2.5 text-slate-800">
                     <i class="fa-solid fa-cash-register text-emerald-800 text-base"></i><span>Kasa & Ödemeler</span>
                 </button>
-                <button onclick="mobilModulSec('masraflar')" class="p-3.5 bg-slate-50 hover:bg-emerald-50 rounded-2xl border border-slate-200 flex items-center space-x-2.5 text-slate-800">
+                <button type="button" onclick="mobilModulSec('masraflar')" class="p-3.5 bg-slate-50 hover:bg-emerald-50 rounded-2xl border border-slate-200 flex items-center space-x-2.5 text-slate-800">
                     <i class="fa-solid fa-receipt text-amber-700 text-base"></i><span>Ofis Masrafları</span>
                 </button>
-                <button onclick="mobilModulSec('firma-rapor')" class="p-3.5 bg-slate-50 hover:bg-emerald-50 rounded-2xl border border-slate-200 flex items-center space-x-2.5 text-slate-800 col-span-2">
+                <button type="button" onclick="mobilModulSec('firma-rapor')" class="p-3.5 bg-slate-50 hover:bg-emerald-50 rounded-2xl border border-slate-200 flex items-center space-x-2.5 text-slate-800 col-span-2">
                     <i class="fa-solid fa-building-user text-blue-700 text-base"></i><span>Kurumsal Firma Raporu</span>
                 </button>
             </div>
             <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
                 <span class="text-[11px] text-slate-500 font-semibold" id="mobil-sheet-kullanici">Ofis Asistanı</span>
-                <button onclick="asistanCikisYap()" class="text-xs font-extrabold text-red-600 bg-red-50 hover:bg-red-100 px-3.5 py-1.5 rounded-xl flex items-center space-x-1.5 cursor-pointer">
+                <button type="button" onclick="asistanCikisYap()" class="text-xs font-extrabold text-red-600 bg-red-50 hover:bg-red-100 px-3.5 py-1.5 rounded-xl flex items-center space-x-1.5 cursor-pointer">
                     <i class="fa-solid fa-right-from-bracket"></i><span>Çıkış Yap</span>
                 </button>
             </div>
@@ -147,21 +147,20 @@
                     </div>
                 </div>
 
-                <!-- Dengeli Tarih Filtresi -->
                 <div class="bg-slate-50 p-3 sm:p-4 rounded-2xl border border-slate-200 space-y-2.5 text-xs">
                     <div class="grid grid-cols-4 gap-1 bg-white p-1 rounded-xl border border-slate-200 shadow-2xs">
-                        <button onclick="seansPeriyotDegistir('gun')" id="sflt-gun" class="seans-periyot-btn py-2 text-center rounded-lg font-bold transition bg-[#256839] text-white shadow-xs cursor-pointer">Gün</button>
-                        <button onclick="seansPeriyotDegistir('hafta')" id="sflt-hafta" class="seans-periyot-btn py-2 text-center rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Hafta</button>
-                        <button onclick="seansPeriyotDegistir('ay')" id="sflt-ay" class="seans-periyot-btn py-2 text-center rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Ay</button>
-                        <button onclick="seansPeriyotDegistir('ozel')" id="sflt-ozel" class="seans-periyot-btn py-2 text-center rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Özel</button>
+                        <button type="button" onclick="seansPeriyotDegistir('gun')" id="sflt-gun" class="seans-periyot-btn py-2 text-center rounded-lg font-bold transition bg-[#256839] text-white shadow-xs cursor-pointer">Gün</button>
+                        <button type="button" onclick="seansPeriyotDegistir('hafta')" id="sflt-hafta" class="seans-periyot-btn py-2 text-center rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Hafta</button>
+                        <button type="button" onclick="seansPeriyotDegistir('ay')" id="sflt-ay" class="seans-periyot-btn py-2 text-center rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Ay</button>
+                        <button type="button" onclick="seansPeriyotDegistir('ozel')" id="sflt-ozel" class="seans-periyot-btn py-2 text-center rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Özel</button>
                     </div>
 
                     <div id="seans-standart-nav" class="flex items-center justify-between bg-white p-1 rounded-xl border border-slate-200 shadow-2xs">
-                        <button onclick="seansTarihKaydir(-1)" class="w-10 h-9 rounded-lg hover:bg-slate-100 text-slate-700 flex items-center justify-center font-bold cursor-pointer transition">
+                        <button type="button" onclick="seansTarihKaydir(-1)" class="w-10 h-9 rounded-lg hover:bg-slate-100 text-slate-700 flex items-center justify-center font-bold cursor-pointer transition">
                             <i class="fa-solid fa-chevron-left text-xs"></i>
                         </button>
                         <div class="px-2 font-extrabold text-slate-900 text-xs text-center truncate flex-1" id="seans-aktif-tarih-etiket"></div>
-                        <button onclick="seansTarihKaydir(1)" class="w-10 h-9 rounded-lg hover:bg-slate-100 text-slate-700 flex items-center justify-center font-bold cursor-pointer transition">
+                        <button type="button" onclick="seansTarihKaydir(1)" class="w-10 h-9 rounded-lg hover:bg-slate-100 text-slate-700 flex items-center justify-center font-bold cursor-pointer transition">
                             <i class="fa-solid fa-chevron-right text-xs"></i>
                         </button>
                     </div>
@@ -170,7 +169,7 @@
                         <input type="date" id="seans-ozel-baslangic" class="w-1/2 bg-slate-50 border border-slate-200 p-2 rounded-lg font-bold text-slate-700 text-xs">
                         <span class="text-slate-400 font-bold">-</span>
                         <input type="date" id="seans-ozel-bitis" class="w-1/2 bg-slate-50 border border-slate-200 p-2 rounded-lg font-bold text-slate-700 text-xs">
-                        <button onclick="seanslarTablosunuYenile()" class="bg-[#256839] hover:bg-[#12612d] text-white px-3 py-2 rounded-lg font-bold cursor-pointer transition">Uygula</button>
+                        <button type="button" onclick="seanslarTablosunuYenile()" class="bg-[#256839] hover:bg-[#12612d] text-white px-3 py-2 rounded-lg font-bold cursor-pointer transition">Uygula</button>
                     </div>
 
                     <div class="grid grid-cols-3 gap-1.5 text-center text-[11px]">
@@ -180,17 +179,14 @@
                     </div>
                 </div>
 
-                <!-- Seans Listesi -->
                 <div id="bugunun-seans-listesi" class="space-y-3"></div>
 
-                <!-- SMS Seçim Modu Butonu -->
                 <div class="pt-2">
                     <button type="button" id="btn-sms-modu-ac" onclick="smsModuAc()" class="w-full py-3 bg-emerald-50 hover:bg-emerald-100 text-[#256839] border border-emerald-200 rounded-2xl font-extrabold text-xs flex items-center justify-center space-x-2 shadow-2xs transition cursor-pointer">
                         <i class="fa-solid fa-paper-plane"></i><span>Hatırlatma SMS'i Gönder (Seçim Yap)</span>
                     </button>
                 </div>
 
-                <!-- SMS Eylem Çubuğu -->
                 <div id="sms-eylem-bari" class="hidden sticky bottom-16 md:bottom-4 z-30 bg-slate-900 text-white p-3 rounded-2xl shadow-xl flex items-center justify-between gap-2 text-xs">
                     <div class="flex items-center space-x-2">
                         <button type="button" onclick="tumSeanslariSecToggle()" class="bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-xl font-bold cursor-pointer">Tümünü Seç</button>
@@ -239,7 +235,6 @@
                         </div>
                     </div>
 
-                    <!-- Takip Eden Uzman Tavsiye Uyarısı -->
                     <div id="takip-eden-uzman-kutu" class="hidden bg-emerald-50/90 border border-emerald-300 p-3.5 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                         <div class="flex items-start space-x-2.5">
                             <i class="fa-solid fa-user-check text-[#256839] text-base mt-0.5"></i>
@@ -271,7 +266,6 @@
                         </div>
                     </div>
 
-                    <!-- Çift Seansı İkinci Danışan -->
                     <div id="asistan-ikinci-danisan-kapsayici" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-4 bg-purple-50/70 p-4 rounded-2xl border border-purple-200">
                         <div>
                             <label class="block font-bold text-purple-950 mb-1">İkinci Danışan (Eş) Adı Soyadı</label>
@@ -289,7 +283,6 @@
                         </div>
                     </div>
 
-                    <!-- Çocuk ve Ergen Ebeveyn -->
                     <div id="asistan-ebeveyn-kapsayici" class="hidden space-y-3 bg-amber-50/70 p-4 rounded-2xl border border-amber-200">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-amber-200">
                             <span class="font-extrabold text-amber-950 text-xs"><i class="fa-solid fa-people-roof mr-1.5 text-[#256839]"></i>Anne & Baba İletişim Bilgileri</span>
@@ -351,7 +344,6 @@
                 </form>
             </div>
 
-            <!-- Sonuç Alanı -->
             <div id="sonuc-alani" class="hidden space-y-4">
                 <div class="bg-emerald-50 border border-emerald-200 p-3.5 rounded-2xl flex items-center justify-between text-xs">
                     <span class="text-slate-700"><strong id="ozet-tarih-saat" class="text-emerald-900 font-extrabold"></strong> için sorgulandı:</span>
@@ -372,14 +364,14 @@
                         <p class="font-bold">Uzman: <span id="secim-uzman-yazi" class="text-slate-400 italic">Seçilmedi</span></p>
                         <p class="font-bold">Oda: <span id="secim-oda-yazi" class="text-slate-400 italic">Seçilmedi</span></p>
                     </div>
-                    <button onclick="randevuyuTamamla()" id="btn-onayla" disabled class="opacity-50 cursor-not-allowed bg-[#256839] text-white px-8 py-3 rounded-xl font-extrabold text-xs w-full sm:w-auto shadow-sm transition">
+                    <button type="button" onclick="randevuyuTamamla()" id="btn-onayla" disabled class="opacity-50 cursor-not-allowed bg-[#256839] text-white px-8 py-3 rounded-xl font-extrabold text-xs w-full sm:w-auto shadow-sm transition">
                         Randevuyu Kesinleştir (Uzman ve Oda Seçiniz)
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- 3. TAKVİM (Masaüstü ve Alt Bardaki Oda/Saat Butonundan Açılır) -->
+        <!-- 3. TAKVİM -->
         <div id="asekm-takvim" class="asistan-sekme hidden space-y-4 sm:space-y-6">
             <div class="bg-white p-4 sm:p-7 rounded-3xl border border-slate-200 shadow-xs space-y-4">
                 <div class="flex items-center justify-between pb-3 border-b border-slate-100">
@@ -389,14 +381,12 @@
                     </div>
                 </div>
 
-                <!-- Tarih Gezgini -->
                 <div class="bg-slate-50 p-2 rounded-2xl border border-slate-200 flex items-center justify-between text-xs">
-                    <button onclick="takvimTarihKaydir(-1)" class="w-10 h-9 rounded-xl bg-white border border-slate-200 text-slate-700 flex items-center justify-center cursor-pointer hover:bg-slate-100 transition"><i class="fa-solid fa-chevron-left text-xs"></i></button>
+                    <button type="button" onclick="takvimTarihKaydir(-1)" class="w-10 h-9 rounded-xl bg-white border border-slate-200 text-slate-700 flex items-center justify-center cursor-pointer hover:bg-slate-100 transition"><i class="fa-solid fa-chevron-left text-xs"></i></button>
                     <div class="px-2 font-extrabold text-slate-900 text-xs text-center truncate flex-1" id="takvim-aktif-tarih-etiket"></div>
-                    <button onclick="takvimTarihKaydir(1)" class="w-10 h-9 rounded-xl bg-white border border-slate-200 text-slate-700 flex items-center justify-center cursor-pointer hover:bg-slate-100 transition"><i class="fa-solid fa-chevron-right text-xs"></i></button>
+                    <button type="button" onclick="takvimTarihKaydir(1)" class="w-10 h-9 rounded-xl bg-white border border-slate-200 text-slate-700 flex items-center justify-center cursor-pointer hover:bg-slate-100 transition"><i class="fa-solid fa-chevron-right text-xs"></i></button>
                 </div>
 
-                <!-- MATRİS TABLOSU: SAAT SÜTUNU DARALTILDI, TAŞMA ENGELLENDİ -->
                 <div class="overflow-x-auto border border-slate-200 rounded-2xl shadow-2xs">
                     <table class="w-full table-fixed text-left border-collapse text-xs">
                         <thead><tr id="takvim-tablo-basliklari" class="bg-slate-50 border-b font-extrabold"></tr></thead>
@@ -433,7 +423,7 @@
             </div>
         </div>
 
-        <!-- 5. KASA & ÖDEMELER (MASRAF ENTEGRASYONLU VE DENGELİ MOBİL KARTLI) -->
+        <!-- 5. KASA & ÖDEMELER -->
         <div id="asekm-kasa" class="asistan-sekme hidden space-y-4 sm:space-y-6">
             <div class="bg-white p-5 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-5">
                 
@@ -442,7 +432,7 @@
                         <i class="fa-solid fa-triangle-exclamation text-amber-600 text-base shrink-0"></i>
                         <span id="kasa-bekleyen-uyari-yazi">Bugün tamamlanan ancak tahsilatı girilmemiş seanslar var.</span>
                     </div>
-                    <button onclick="asistanSekmeDegistir('bugun')" class="bg-amber-600 hover:bg-amber-700 text-white text-xs font-extrabold px-3 py-1.5 rounded-xl cursor-pointer transition self-end sm:self-center">Görüşmelere Git</button>
+                    <button type="button" onclick="asistanSekmeDegistir('bugun')" class="bg-amber-600 hover:bg-amber-700 text-white text-xs font-extrabold px-3 py-1.5 rounded-xl cursor-pointer transition self-end sm:self-center">Görüşmelere Git</button>
                 </div>
 
                 <div class="flex items-center justify-between pb-3 border-b border-slate-100">
@@ -452,26 +442,25 @@
                     </div>
                 </div>
 
-                <!-- Tarih Şeridi -->
                 <div class="bg-slate-50 p-3 sm:p-4 rounded-2xl border border-slate-200 space-y-2.5 text-xs">
                     <div class="grid grid-cols-4 gap-1 bg-white p-1 rounded-xl border border-slate-200 shadow-2xs">
-                        <button onclick="kasaPeriyotDegistir('gun')" id="kflt-gun" class="kasa-periyot-btn py-2 text-center rounded-lg font-bold transition bg-[#256839] text-white shadow-xs cursor-pointer">Gün</button>
-                        <button onclick="kasaPeriyotDegistir('hafta')" id="kflt-hafta" class="kasa-periyot-btn py-2 text-center rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Hafta</button>
-                        <button onclick="kasaPeriyotDegistir('ay')" id="kflt-ay" class="kasa-periyot-btn py-2 text-center rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Ay</button>
-                        <button onclick="kasaPeriyotDegistir('ozel')" id="kflt-ozel" class="kasa-periyot-btn py-2 text-center rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Özel</button>
+                        <button type="button" onclick="kasaPeriyotDegistir('gun')" id="kflt-gun" class="kasa-periyot-btn py-2 text-center rounded-lg font-bold transition bg-[#256839] text-white shadow-xs cursor-pointer">Gün</button>
+                        <button type="button" onclick="kasaPeriyotDegistir('hafta')" id="kflt-hafta" class="kasa-periyot-btn py-2 text-center rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Hafta</button>
+                        <button type="button" onclick="kasaPeriyotDegistir('ay')" id="kflt-ay" class="kasa-periyot-btn py-2 text-center rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Ay</button>
+                        <button type="button" onclick="kasaPeriyotDegistir('ozel')" id="kflt-ozel" class="kasa-periyot-btn py-2 text-center rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Özel</button>
                     </div>
 
                     <div id="kasa-standart-nav" class="flex items-center justify-between bg-white p-1 rounded-xl border border-slate-200 shadow-2xs">
-                        <button onclick="kasaTarihKaydir(-1)" class="w-10 h-9 rounded-lg hover:bg-slate-100 text-slate-700 flex items-center justify-center font-bold cursor-pointer transition"><i class="fa-solid fa-chevron-left text-xs"></i></button>
+                        <button type="button" onclick="kasaTarihKaydir(-1)" class="w-10 h-9 rounded-lg hover:bg-slate-100 text-slate-700 flex items-center justify-center font-bold cursor-pointer transition"><i class="fa-solid fa-chevron-left text-xs"></i></button>
                         <div class="px-2 font-extrabold text-slate-900 text-xs text-center truncate flex-1" id="kasa-aktif-tarih-etiket"></div>
-                        <button onclick="kasaTarihKaydir(1)" class="w-10 h-9 rounded-lg hover:bg-slate-100 text-slate-700 flex items-center justify-center font-bold cursor-pointer transition"><i class="fa-solid fa-chevron-right text-xs"></i></button>
+                        <button type="button" onclick="kasaTarihKaydir(1)" class="w-10 h-9 rounded-lg hover:bg-slate-100 text-slate-700 flex items-center justify-center font-bold cursor-pointer transition"><i class="fa-solid fa-chevron-right text-xs"></i></button>
                     </div>
 
                     <div id="kasa-ozel-tarih-alani" class="hidden flex items-center space-x-2 bg-white p-1.5 rounded-xl border border-slate-200 shadow-2xs">
                         <input type="date" id="kasa-ozel-baslangic" class="w-1/2 bg-slate-50 border border-slate-200 p-2 rounded-lg font-bold text-slate-700 text-xs">
                         <span class="text-slate-400 font-bold">-</span>
                         <input type="date" id="kasa-ozel-bitis" class="w-1/2 bg-slate-50 border border-slate-200 p-2 rounded-lg font-bold text-slate-700 text-xs">
-                        <button onclick="kasaHesapla()" class="bg-[#256839] hover:bg-[#12612d] text-white px-3 py-2 rounded-lg font-bold cursor-pointer transition">Uygula</button>
+                        <button type="button" onclick="kasaHesapla()" class="bg-[#256839] hover:bg-[#12612d] text-white px-3 py-2 rounded-lg font-bold cursor-pointer transition">Uygula</button>
                     </div>
 
                     <div class="flex items-center justify-between text-[11px] px-1">
@@ -480,7 +469,6 @@
                     </div>
                 </div>
 
-                <!-- 5 KASA METRİĞİ (DENGELİ MOBİL YERLEŞİM: 1-2 Yan Yana, 3-4 Yan Yana, 5 Alta) -->
                 <div class="grid grid-cols-2 lg:grid-cols-5 gap-3">
                     <div class="bg-emerald-50/70 p-4 rounded-2xl border border-emerald-200 flex flex-col justify-between">
                         <span class="text-[10px] font-bold text-emerald-800 block uppercase truncate">1. Ofis Net Saf Kâr</span>
@@ -509,7 +497,6 @@
                     </div>
                 </div>
 
-                <!-- BU DÖNEME AİT OFİS MASRAFLARI ÖZETİ (KASAYA ANINDA YANSIYAN GİDERLER) -->
                 <div class="border border-amber-200 bg-amber-50/40 rounded-2xl overflow-hidden shadow-2xs">
                     <div class="px-4 py-2.5 bg-amber-100/70 border-b border-amber-200 flex items-center justify-between text-xs">
                         <span class="font-extrabold text-amber-950 flex items-center">
@@ -517,13 +504,12 @@
                         </span>
                         <div class="flex items-center space-x-2">
                             <strong id="kasa-donem-masraf-toplam" class="text-amber-950 font-black text-sm">₺0</strong>
-                            <button onclick="asistanSekmeDegistir('masraflar')" class="text-[10px] font-extrabold text-amber-800 bg-white px-2 py-0.5 rounded-lg border border-amber-200 hover:bg-amber-50 cursor-pointer">+ Ekle</button>
+                            <button type="button" onclick="asistanSekmeDegistir('masraflar')" class="text-[10px] font-extrabold text-amber-800 bg-white px-2 py-0.5 rounded-lg border border-amber-200 hover:bg-amber-50 cursor-pointer">+ Ekle</button>
                         </div>
                     </div>
                     <div id="kasa-masraf-ozet-listesi" class="divide-y divide-amber-100 text-xs"></div>
                 </div>
 
-                <!-- Uzman Dağıtım Listesi -->
                 <div class="border border-slate-200 rounded-2xl overflow-hidden shadow-2xs">
                     <div class="bg-slate-50 px-4 py-3 border-b border-slate-200 font-extrabold text-xs text-slate-800 flex items-center justify-between">
                         <span>Uzmanlara Dağıtılacak Hak Ediş Listesi</span>
@@ -542,7 +528,7 @@
                         <h2 class="text-xl font-extrabold text-slate-900">Ofis Genel Masrafları</h2>
                         <p class="text-xs text-slate-500">Elektrik, su, kırtasiye, mutfak ve ofis harcamalarını kaydedin.</p>
                     </div>
-                    <button onclick="masrafFormunuAc()" class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-2 shadow-sm cursor-pointer w-full sm:w-auto">
+                    <button type="button" onclick="masrafFormunuAc()" class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-2 shadow-sm cursor-pointer w-full sm:w-auto">
                         <i class="fa-solid fa-plus"></i><span>Yeni Masraf Ekle</span>
                     </button>
                 </div>
@@ -598,23 +584,23 @@
 
                 <div class="bg-slate-50 p-3 sm:p-4 rounded-2xl border border-slate-200 space-y-2.5 text-xs">
                     <div class="grid grid-cols-4 gap-1 bg-white p-1 rounded-xl border border-slate-200 shadow-2xs">
-                        <button onclick="firmaZamanFiltrele('gun')" id="fflt-gun" class="firma-flt-btn py-2 text-center rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Gün</button>
-                        <button onclick="firmaZamanFiltrele('hafta')" id="fflt-hafta" class="firma-flt-btn py-2 text-center rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Hafta</button>
-                        <button onclick="firmaZamanFiltrele('ay')" id="fflt-ay" class="firma-flt-btn py-2 text-center rounded-lg font-bold transition bg-[#256839] text-white shadow-xs cursor-pointer">Ay</button>
-                        <button onclick="firmaZamanFiltrele('ozel')" id="fflt-ozel" class="firma-flt-btn py-2 text-center rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Özel</button>
+                        <button type="button" onclick="firmaZamanFiltrele('gun')" id="fflt-gun" class="firma-flt-btn py-2 text-center rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Gün</button>
+                        <button type="button" onclick="firmaZamanFiltrele('hafta')" id="fflt-hafta" class="firma-flt-btn py-2 text-center rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Hafta</button>
+                        <button type="button" onclick="firmaZamanFiltrele('ay')" id="fflt-ay" class="firma-flt-btn py-2 text-center rounded-lg font-bold transition bg-[#256839] text-white shadow-xs cursor-pointer">Ay</button>
+                        <button type="button" onclick="firmaZamanFiltrele('ozel')" id="fflt-ozel" class="firma-flt-btn py-2 text-center rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Özel</button>
                     </div>
 
                     <div id="firma-standart-nav" class="flex items-center justify-between bg-white p-1 rounded-xl border border-slate-200 shadow-2xs">
-                        <button onclick="firmaTarihKaydir(-1)" class="w-10 h-9 rounded-lg hover:bg-slate-100 text-slate-700 flex items-center justify-center font-bold cursor-pointer transition"><i class="fa-solid fa-chevron-left text-xs"></i></button>
+                        <button type="button" onclick="firmaTarihKaydir(-1)" class="w-10 h-9 rounded-lg hover:bg-slate-100 text-slate-700 flex items-center justify-center font-bold cursor-pointer transition"><i class="fa-solid fa-chevron-left text-xs"></i></button>
                         <div class="px-2 font-extrabold text-slate-900 text-xs text-center truncate flex-1" id="firma-aktif-tarih-etiket"></div>
-                        <button onclick="firmaTarihKaydir(1)" class="w-10 h-9 rounded-lg hover:bg-slate-100 text-slate-700 flex items-center justify-center font-bold cursor-pointer transition"><i class="fa-solid fa-chevron-right text-xs"></i></button>
+                        <button type="button" onclick="firmaTarihKaydir(1)" class="w-10 h-9 rounded-lg hover:bg-slate-100 text-slate-700 flex items-center justify-center font-bold cursor-pointer transition"><i class="fa-solid fa-chevron-right text-xs"></i></button>
                     </div>
 
                     <div id="firma-ozel-tarih-alani" class="hidden flex items-center space-x-2 bg-white p-1.5 rounded-xl border border-slate-200 shadow-2xs">
                         <input type="date" id="firma-ozel-baslangic" class="w-1/2 bg-slate-50 border border-slate-200 p-2 rounded-lg font-bold text-slate-700 text-xs">
                         <span class="text-slate-400 font-bold">-</span>
                         <input type="date" id="firma-ozel-bitis" class="w-1/2 bg-slate-50 border border-slate-200 p-2 rounded-lg font-bold text-slate-700 text-xs">
-                        <button onclick="firmaRaporlariniCiz()" class="bg-[#256839] hover:bg-[#12612d] text-white px-3 py-2 rounded-lg font-bold cursor-pointer transition">Uygula</button>
+                        <button type="button" onclick="firmaRaporlariniCiz()" class="bg-[#256839] hover:bg-[#12612d] text-white px-3 py-2 rounded-lg font-bold cursor-pointer transition">Uygula</button>
                     </div>
 
                     <div class="flex items-center justify-between text-[11px] px-1">
@@ -634,7 +620,7 @@
         <div class="bg-white max-w-lg w-full p-5 sm:p-6 rounded-3xl shadow-2xl space-y-4 text-xs max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between pb-3 border-b">
                 <h3 id="detay-modal-baslik" class="font-extrabold text-slate-900 text-sm"></h3>
-                <button onclick="danisanDetayModalKapat()" class="text-slate-400 font-bold p-1 cursor-pointer"><i class="fa-solid fa-xmark text-base"></i></button>
+                <button type="button" onclick="danisanDetayModalKapat()" class="text-slate-400 font-bold p-1 cursor-pointer"><i class="fa-solid fa-xmark text-base"></i></button>
             </div>
             <div id="detay-es-bilgi-kutusu" class="hidden bg-purple-50 border border-purple-200 p-3 rounded-2xl flex items-center justify-between"></div>
             <div id="detay-ebeveyn-bilgi-kutusu" class="hidden bg-amber-50 border border-amber-200 p-3 rounded-2xl text-[11px] text-amber-950 font-medium"></div>
@@ -647,7 +633,7 @@
         <div class="bg-white max-w-md w-full p-5 sm:p-6 rounded-3xl shadow-2xl space-y-4 text-xs">
             <div class="flex items-center justify-between pb-2 border-b">
                 <h3 class="font-extrabold text-slate-900 text-sm">Danışan Bilgilerini Düzenle</h3>
-                <button onclick="document.getElementById('danisan-duzenle-modal').classList.add('hidden')" class="text-slate-400 font-bold p-1 cursor-pointer"><i class="fa-solid fa-xmark text-base"></i></button>
+                <button type="button" onclick="document.getElementById('danisan-duzenle-modal').classList.add('hidden')" class="text-slate-400 font-bold p-1 cursor-pointer"><i class="fa-solid fa-xmark text-base"></i></button>
             </div>
             <form onsubmit="danisanBilgiKaydet(event)" class="space-y-3">
                 <input type="hidden" id="edit-danisan-id">
@@ -695,7 +681,7 @@
         <div class="bg-white max-w-md w-full p-5 sm:p-6 rounded-3xl shadow-2xl space-y-4 text-xs">
             <div class="flex items-center justify-between pb-2 border-b">
                 <h3 class="font-extrabold text-slate-900 text-sm">Toplu Hatırlatma SMS'i</h3>
-                <button onclick="document.getElementById('sms-onizleme-modal').classList.add('hidden')" class="text-slate-400 font-bold p-1 cursor-pointer"><i class="fa-solid fa-xmark text-base"></i></button>
+                <button type="button" onclick="document.getElementById('sms-onizleme-modal').classList.add('hidden')" class="text-slate-400 font-bold p-1 cursor-pointer"><i class="fa-solid fa-xmark text-base"></i></button>
             </div>
             <div class="bg-slate-50 p-3 rounded-2xl border text-slate-700">
                 <p class="font-bold mb-1">Seçilen <span id="sms-secili-sayi" class="text-[#256839]">0</span> danışana şu şablonla SMS iletilecektir:</p>
@@ -713,7 +699,7 @@
         <div class="bg-white max-w-md w-full p-5 sm:p-6 rounded-3xl shadow-2xl space-y-4 text-xs max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between pb-2 border-b">
                 <h3 class="font-extrabold text-slate-900 text-sm">Seansı Düzenle & Ödeme</h3>
-                <button onclick="modalKapat()" class="text-slate-400 font-bold p-1 cursor-pointer"><i class="fa-solid fa-xmark text-base"></i></button>
+                <button type="button" onclick="modalKapat()" class="text-slate-400 font-bold p-1 cursor-pointer"><i class="fa-solid fa-xmark text-base"></i></button>
             </div>
             
             <div class="bg-slate-50 p-2.5 rounded-xl border">
@@ -797,18 +783,24 @@
         </div>
     </div>
 
-    <!-- TARİH SAAT MODALI -->
+    <!-- TARİH SAAT MODALI (ASİSTAN TARİH/SAAT DEĞİŞTİRME) -->
     <div id="tarih-saat-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
         <div class="bg-white max-w-sm w-full p-5 rounded-3xl shadow-2xl space-y-4 text-xs">
             <h3 class="font-extrabold text-slate-900 text-sm">Seans Tarihi & Saati Değiştir</h3>
             <p id="ts-danisan-ad" class="font-extrabold text-slate-900"></p>
-            <input type="date" id="ts-yeni-tarih" required class="w-full bg-slate-50 p-2.5 rounded-xl border border-slate-200 font-bold">
-            <select id="ts-yeni-saat" class="w-full bg-slate-50 p-2.5 rounded-xl border border-slate-200 font-bold">
-                <option value="09:00">09:00</option><option value="10:00">10:00</option><option value="11:00">11:00</option><option value="12:00">12:00</option><option value="13:00">13:00</option><option value="14:00">14:00</option><option value="15:00">15:00</option><option value="16:00">16:00</option><option value="17:00">17:00</option><option value="18:00">18:00</option><option value="19:00">19:00</option><option value="20:00">20:00</option>
-            </select>
+            <div>
+                <label class="block font-bold text-slate-700 mb-1">Yeni Tarih</label>
+                <input type="date" id="ts-yeni-tarih" required class="w-full bg-slate-50 p-2.5 rounded-xl border border-slate-200 font-bold">
+            </div>
+            <div>
+                <label class="block font-bold text-slate-700 mb-1">Yeni Saat</label>
+                <select id="ts-yeni-saat" class="w-full bg-slate-50 p-2.5 rounded-xl border border-slate-200 font-bold">
+                    <option value="09:00">09:00</option><option value="10:00">10:00</option><option value="11:00">11:00</option><option value="12:00">12:00</option><option value="13:00">13:00</option><option value="14:00">14:00</option><option value="15:00">15:00</option><option value="16:00">16:00</option><option value="17:00">17:00</option><option value="18:00">18:00</option><option value="19:00">19:00</option><option value="20:00">20:00</option>
+                </select>
+            </div>
             <div class="flex space-x-2 pt-2">
                 <button type="button" onclick="tarihSaatModalKapat()" class="w-1/3 bg-slate-100 text-slate-700 py-2.5 rounded-xl font-bold cursor-pointer">Vazgeç</button>
-                <button type="button" onclick="tarihSaatGuncelleKaydet()" class="w-2/3 bg-[#256839] text-white py-2.5 rounded-xl font-bold cursor-pointer">Güncelle</button>
+                <button type="button" onclick="tarihSaatGuncelleKaydet()" class="w-2/3 bg-[#256839] text-white py-2.5 rounded-xl font-bold cursor-pointer">Güncelle & SMS Gönder</button>
             </div>
         </div>
     </div>
@@ -942,7 +934,6 @@
                 btn.disabled = true;
                 btn.classList.add('opacity-50', 'cursor-not-allowed');
                 btn.classList.remove('hover:bg-[#12612d]', 'cursor-pointer', 'shadow-md', 'active:scale-95');
-                
                 let eksik = [];
                 if (!secilenUzmanId) eksik.push("Uzman");
                 if (!secilenOdaId) eksik.push("Oda");
@@ -959,7 +950,6 @@
                 else if (s.hizmet === 'Çift') varsayilanFiyat = numOrDefault(db.fiyatlar.cift, 2500);
                 else varsayilanFiyat = numOrDefault(db.fiyatlar.yetiskin, 1500);
             }
-
             let ucret = (s.ucret !== undefined && s.ucret !== null) ? numOrDefault(s.ucret, varsayilanFiyat) : varsayilanFiyat;
             let oran = numOrDefault(s.ofisOranSnapshot, 50);
             let kdvDahil = !!s.kdvDahil;
@@ -1004,7 +994,6 @@
             document.getElementById('sonuc-alani').classList.add('hidden');
         }
 
-        // MERKEZİ YENİLEME FONKSİYONU (EKSİK OLAN FONKSİYON EKLENDİ)
         function tumGorunumleriYenile() {
             firmaSecenekleriniDoldur();
             seanslarTablosunuYenile();
@@ -1072,28 +1061,71 @@
                 return;
             }
             let db = AsistDB.get();
-            let sablon = (db.smsSablonlari && db.smsSablonlari.hatirlatma) || "Sayın [Danışan Adi], [Tarih] saat [Saat]'de [Uzman Adi] ile randevunuzu hatırlatırız. Hera Psikoloji";
-            document.getElementById('sms-secili-sayi').innerText = seciliIds.length;
-            document.getElementById('sms-onizleme-metin').innerText = sablon;
+            let sablon = (db.smsSablonlari && db.smsSablonlari.danisanHatirlatma) || "Sayın [Danışan Adi], [Tarih] saat [Saat]'de [Uzman Adi] ile randevunuz bulunmaktadır.";
+
+            let onizlemeSatirlari = [];
+            let toplamAlici = 0;
+
+            seciliIds.forEach(id => {
+                let rawS = db.seanslar.find(x => Number(x.id) === Number(id));
+                if (!rawS) return;
+                let s = AsistDB.resolveSeans(rawS, db);
+                let alicilar = AsistSMS.seansAlicilariniBul(rawS, db);
+                alicilar.forEach(a => {
+                    toplamAlici++;
+                    onizlemeSatirlari.push(`📱 0(${a.tel.slice(0,3)}) ${a.tel.slice(3,6)} ${a.tel.slice(6,8)} ${a.tel.slice(8,10)} (${a.ad}):\n"${AsistSMS.sablonDoldur(sablon, s, a.ad)}"`);
+                });
+            });
+
+            document.getElementById('sms-secili-sayi').innerText = `${seciliIds.length} Seans (${toplamAlici} Numara)`;
+            document.getElementById('sms-onizleme-metin').innerText = onizlemeSatirlari.join('\n\n') || sablon;
             document.getElementById('sms-onizleme-modal').classList.remove('hidden');
         }
 
         function secilenlereSmsGonderSimule() {
             let seciliIds = Array.from(document.querySelectorAll('.seans-toplu-sms-check:checked')).map(c => parseInt(c.value, 10));
-            let db = AsistDB.get();
-            let simdiSaat = new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+            if (seciliIds.length === 0) return;
 
-            db.seanslar.forEach(s => {
-                if (seciliIds.includes(Number(s.id))) {
-                    s.smsGonderildiZamani = simdiSaat;
-                }
+            let db = AsistDB.get();
+            let sablon = (db.smsSablonlari && db.smsSablonlari.danisanHatirlatma) || "Sayın [Danışan Adi], [Tarih] saat [Saat]'de [Uzman Adi] ile randevunuz bulunmaktadır.";
+            let mesajPaketi = [];
+
+            seciliIds.forEach(id => {
+                let rawS = db.seanslar.find(x => Number(x.id) === Number(id));
+                if (!rawS) return;
+                let s = AsistDB.resolveSeans(rawS, db);
+                let alicilar = AsistSMS.seansAlicilariniBul(rawS, db);
+                alicilar.forEach(a => {
+                    mesajPaketi.push({
+                        tel: a.tel,
+                        msg: AsistSMS.sablonDoldur(sablon, s, a.ad)
+                    });
+                });
             });
 
-            AsistDB.save(db);
-            document.getElementById('sms-onizleme-modal').classList.add('hidden');
-            smsModuKapat();
-            seanslarTablosunuYenile();
-            alert(`✅ Seçilen ${seciliIds.length} danışana hatırlatma SMS'i başarıyla gönderildi!`);
+            if (mesajPaketi.length === 0) {
+                alert("⚠️ Seçilen danışanların geçerli (10 haneli) telefon numarası bulunamadı!");
+                return;
+            }
+
+            AsistSMS.gonder(mesajPaketi).then(sonuc => {
+                if (sonuc.basarili) {
+                    let simdiSaat = new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+                    let guncelDb = AsistDB.get();
+                    guncelDb.seanslar.forEach(s => {
+                        if (seciliIds.includes(Number(s.id))) {
+                            s.smsGonderildiZamani = simdiSaat;
+                        }
+                    });
+                    AsistDB.save(guncelDb);
+                    document.getElementById('sms-onizleme-modal').classList.add('hidden');
+                    smsModuKapat();
+                    seanslarTablosunuYenile();
+                    alert(`✅ NetGSM üzerinden ${mesajPaketi.length} adet hatırlatma SMS'i başarıyla gönderildi!`);
+                } else {
+                    alert(`❌ NetGSM Gönderim Hatası (${sonuc.kod}):\n${sonuc.mesaj}`);
+                }
+            });
         }
 
         function mobilDahaFazlaAc() {
@@ -1109,9 +1141,6 @@
             asistanSekmeDegistir(sekmeAdi);
         }
 
-        // ==========================================
-        // DÜZELTİLMİŞ SEKME VE ALT MENÜ BUTON YÖNETİMİ
-        // ==========================================
         function asistanSekmeDegistir(sekmeAdi) {
             document.querySelectorAll('.asistan-sekme').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.asistan-nav-btn').forEach(btn => {
@@ -1125,7 +1154,6 @@
                 aktifBtn.classList.add('bg-[#256839]', 'text-white', 'shadow-xs');
             }
 
-            // Alt Bar Butonları: Görüşme, Randevu, Takvim (Oda/Saat), Danışanlar (Rehber), Menü
             document.querySelectorAll('.mobile-nav-btn').forEach(mbtn => {
                 mbtn.classList.remove('text-[#256839]', 'font-black');
                 mbtn.classList.add('text-slate-400', 'font-bold');
@@ -1245,9 +1273,10 @@
                                 </div>
                             </div>
                             <div class="flex items-center space-x-1.5 justify-end pt-1 sm:pt-0">
-                                ${s.durum === 'bekliyor' ? `<button onclick="hizliTahsilat(${s.id})" class="bg-[#256839] hover:bg-[#12612d] text-white px-3 py-1.5 rounded-xl font-bold cursor-pointer transition">${s.basvuruTuru === 'firma' ? 'Tamamla' : 'Ödeme Al'}</button>` : ''}
-                                <button onclick="duzenleModalAc(${s.id})" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-xl font-bold transition cursor-pointer">Düzenle</button>
-                                <button onclick="danisanDetayAc(${s.danisanId})" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-3 py-1.5 rounded-xl font-bold transition cursor-pointer">Detay</button>
+                                ${s.durum === 'bekliyor' ? `<button type="button" onclick="hizliTahsilat(${s.id})" class="bg-[#256839] hover:bg-[#12612d] text-white px-3 py-1.5 rounded-xl font-bold cursor-pointer transition">${s.basvuruTuru === 'firma' ? 'Tamamla' : 'Ödeme Al'}</button>` : ''}
+                                <button type="button" onclick="tarihSaatModalAc(${s.id})" class="bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 px-3 py-1.5 rounded-xl font-bold transition cursor-pointer" title="Tarih veya Saati Değiştir">Tarih/Saat</button>
+                                <button type="button" onclick="duzenleModalAc(${s.id})" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-xl font-bold transition cursor-pointer">Düzenle</button>
+                                <button type="button" onclick="danisanDetayAc(${s.danisanId})" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 px-3 py-1.5 rounded-xl font-bold transition cursor-pointer">Detay</button>
                             </div>
                         </div>
                     `;
@@ -1268,7 +1297,7 @@
         }
 
         // ==========================================
-        // KASA & ÖDEMELER (MASRAF DÜŞÜMLÜ VE GİDER DÖKÜMLÜ HESAPLAMA)
+        // KASA & ÖDEMELER
         // ==========================================
         function kasaPeriyotDegistir(p) {
             kasaAktifPeriyot = p;
@@ -1357,29 +1386,22 @@
                 map[uzKey].ofis += f.ofisPay;
             });
 
-            // MASRAFLARI DÜŞ VE SAF NET KÂRI HESAPLA
             let donemMasrafToplam = filtrelenmisMasraflar.reduce((acc, m) => acc + numOrDefault(m.tutar, 0), 0);
             let ofisNetSafKar = ofisNetBrut - donemMasrafToplam;
 
-            // 1. Ofis Net Saf Kâr
             document.getElementById('kasa-ofis-payi').innerText = '₺' + ofisNetSafKar.toLocaleString('tr-TR');
             document.getElementById('kasa-ofis-masraf-detay').innerText = donemMasrafToplam > 0
                 ? `Brüt: ₺${ofisNetBrut.toLocaleString('tr-TR')} • Gider: -₺${donemMasrafToplam.toLocaleString('tr-TR')}`
                 : 'Gider Yok • Net Kâr';
 
-            // 2. KDV
             document.getElementById('kasa-kdv-toplam').innerText = '₺' + toplamKdv.toLocaleString('tr-TR');
-            // 3. Uzman Payı
             document.getElementById('kasa-uzman-odemesi').innerText = '₺' + uzmanPayiToplam.toLocaleString('tr-TR');
-            // 4. Nakit / Havale
             document.getElementById('kasa-nakit-havale-ozet').innerText = `₺${nakit.toLocaleString('tr-TR')} / ₺${havale.toLocaleString('tr-TR')}`;
-            // 5. Fiziki Kasa
             document.getElementById('kasa-toplam-tahsilat').innerText = '₺' + toplamCiro.toLocaleString('tr-TR');
 
             document.getElementById('kasa-sayac-seans').innerText = `${filtrelenmis.length} Tahsil Edildi`;
             document.getElementById('kasa-sayac-uzman').innerText = `${Object.keys(map).length} Uzman`;
 
-            // Bu Dönemki Masraflar Kutusu
             document.getElementById('kasa-donem-masraf-toplam').innerText = '₺' + donemMasrafToplam.toLocaleString('tr-TR');
             const masrafOzetList = document.getElementById('kasa-masraf-ozet-listesi');
             if (masrafOzetList) {
@@ -1401,7 +1423,6 @@
                 }
             }
 
-            // Uzman Dağıtım Listesi
             const container = document.getElementById('kasa-uzman-dagitim-listesi');
             if(!container) return;
             container.innerHTML = '';
@@ -1469,8 +1490,8 @@
                         <td class="p-3.5">${kategori}</td>
                         <td class="p-3.5 text-center font-black">${seanslar.length} Seans</td>
                         <td class="p-3.5 text-center space-x-1">
-                            <button onclick="danisanDuzenleModalAc(${d.id})" class="bg-white hover:bg-slate-100 text-slate-700 border px-2.5 py-1 rounded-lg font-bold cursor-pointer transition">Düzenle</button>
-                            <button onclick="danisanDetayAc(${d.id})" class="bg-emerald-50 text-[#256839] px-2.5 py-1 rounded-lg font-bold border border-emerald-200 cursor-pointer">Detay</button>
+                            <button type="button" onclick="danisanDuzenleModalAc(${d.id})" class="bg-white hover:bg-slate-100 text-slate-700 border px-2.5 py-1 rounded-lg font-bold cursor-pointer transition">Düzenle</button>
+                            <button type="button" onclick="danisanDetayAc(${d.id})" class="bg-emerald-50 text-[#256839] px-2.5 py-1 rounded-lg font-bold border border-emerald-200 cursor-pointer">Detay</button>
                         </td>
                     </tr>
                 `;
@@ -1535,7 +1556,6 @@
 
             document.getElementById('detay-modal-baslik').innerText = `${d.ad} - Seans Geçmişi`;
 
-            // Eş Bilgisi Kutusu
             const esKutu = document.getElementById('detay-es-bilgi-kutusu');
             if (d.esDanisanId) {
                 let es = db.danisanlar.find(x => Number(x.id) === Number(d.esDanisanId));
@@ -1549,7 +1569,6 @@
                 esKutu.classList.add('hidden');
             }
 
-            // Anne & Baba Bilgisi Kutusu
             const ebKutu = document.getElementById('detay-ebeveyn-bilgi-kutusu');
             if (d.anneAd || d.babaAd || d.anneTel || d.babaTel) {
                 ebKutu.innerHTML = `
@@ -1652,7 +1671,7 @@
                         <td class="p-3.5 font-extrabold text-slate-900">${escapeHTML(m.ad)}</td>
                         <td class="p-3.5 text-right font-black text-amber-900">₺${numOrDefault(m.tutar, 0).toLocaleString('tr-TR')}</td>
                         <td class="p-3.5 text-center">
-                            <button onclick="masrafSil(${m.id})" class="text-red-600 hover:bg-red-50 px-2.5 py-1 rounded-lg font-bold cursor-pointer transition"><i class="fa-solid fa-trash"></i></button>
+                            <button type="button" onclick="masrafSil(${m.id})" class="text-red-600 hover:bg-red-50 px-2.5 py-1 rounded-lg font-bold cursor-pointer transition"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
                 `;
@@ -1668,9 +1687,6 @@
             kasaHesapla();
         }
 
-        // ==========================================
-        // KURUMSAL FİRMA RAPORU (ÖZEL TARİH ARALIĞI EKLENDİ)
-        // ==========================================
         function firmaZamanFiltrele(p) {
             firmaAktifPeriyot = p;
             document.querySelectorAll('.firma-flt-btn').forEach(b => {
@@ -1738,7 +1754,7 @@
                         <h4 class="font-extrabold text-slate-900 text-sm truncate">${escapeHTML(f.adi)}</h4>
                         <div class="flex items-center space-x-1.5 shrink-0">
                             <span class="bg-blue-100 text-blue-900 px-2 py-0.5 rounded-lg text-xs font-black">${fSeanslar.length} Seans</span>
-                            <button onclick="firmaSeansExcelIndir(${f.id})" class="bg-white hover:bg-emerald-50 text-emerald-800 border border-emerald-300 px-2.5 py-1 rounded-xl text-xs font-bold cursor-pointer transition flex items-center space-x-1" title="Excel İndir">
+                            <button type="button" onclick="firmaSeansExcelIndir(${f.id})" class="bg-white hover:bg-emerald-50 text-emerald-800 border border-emerald-300 px-2.5 py-1 rounded-xl text-xs font-bold cursor-pointer transition flex items-center space-x-1" title="Excel İndir">
                                 <i class="fa-solid fa-file-excel text-[#256839]"></i><span>İndir</span>
                             </button>
                         </div>
@@ -1755,7 +1771,7 @@
                                 <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-slate-200">
                                     <div class="truncate pr-2">
                                         <span class="font-bold text-slate-900 block truncate">${escapeHTML(s.danisanAdi)}</span>
-                                        <span class="text-slate-400 text-[10px] block">${escapeHTML(s.tarih)} - ${escapeHTML(s.saat)} (${escapeHTML(s.uzmanAdi)})</span>
+                                        <span class="text-slate-400 text-[10px] block">${escapeHTML(s.tarih)} - ${escapeHTML(s.saat)}</span>
                                     </div>
                                     <span class="text-[10px] font-extrabold shrink-0 ${s.durum==='odendi'?'text-emerald-700':(s.durum==='iptal'?'text-red-600':'text-amber-700')}">${escapeHTML(s.durum)}</span>
                                 </div>
@@ -1811,7 +1827,7 @@
         }
 
         // ==========================================
-        // DÜZELTİLMİŞ ODA VE SAAT TAKVİM MATRİSİ (DARALTILMIŞ SAAT, TAŞMAYAN HÜCRELER)
+        // ODA VE SAAT TAKVİMİ
         // ==========================================
         function takvimTarihKaydir(yon) { takvimSeciliTarih.setDate(takvimSeciliTarih.getDate() + yon); takvimMatrisiniCiz(); }
 
@@ -1867,7 +1883,7 @@
         }
 
         // ==========================================
-        // RANDEVU OLUŞTURMA VE FİRMA/ÇALIŞMA SAATİ KONTROLLERİ
+        // RANDEVU OLUŞTURMA VE TARİH/SAAT DEĞİŞTİRME MODALLARI
         // ==========================================
         function asistanHizmetTuruDegisti(tur) {
             tarihVeyaSaatDegisti();
@@ -1992,37 +2008,26 @@
                 let takipEden = (tavsiyeEdilenUzmanId && Number(u.id) === Number(tavsiyeEdilenUzmanId));
                 let rozet = takipEden ? `<span class="bg-amber-100 text-amber-900 text-[10px] font-extrabold px-2 py-0.5 rounded-lg mb-1 block">⭐ Takip Eden Uzman</span>` : '';
 
-                // 1. Hizmet Türü Yetki Kontrolü
                 if (!(u.alanlar || []).includes(hizmetTuru)) {
-                    uygun = false;
-                    red = `"${hizmetTuru}" yetkisi yok`;
+                    uygun = false; red = `"${hizmetTuru}" yetkisi yok`;
                 }
-
-                // 2. Kurumsal Firma Uzman Anlaşma Kontrolü
                 if (uygun && basvuruTuru === 'firma' && seciliFirmaObj) {
                     if (!seciliFirmaObj.tumUzmanlar && !(seciliFirmaObj.uzmanIds || []).map(Number).includes(Number(u.id))) {
-                        uygun = false;
-                        red = "Bu kurum anlaşmasında tanımlı değil";
+                        uygun = false; red = "Bu kurum anlaşmasında tanımlı değil";
                     }
                 }
-
-                // 3. Uzman Çalışma Saatleri Kontrolü
                 if (uygun) {
                     let calismaKey = `${u.id}_${AKTIF_SUBE_ID}`;
                     let takvim = db.uzmanCalismaSaatleri && db.uzmanCalismaSaatleri[calismaKey];
                     if (takvim) {
                         let gunAyar = takvim.find(g => g.gun === sorguGunu);
                         if (!gunAyar || gunAyar.tatil || !(gunAyar.seciliSaatler || []).includes(saat)) {
-                            uygun = false;
-                            red = `${sorguGunu} ${saat} çalışma saati kapalı`;
+                            uygun = false; red = `${sorguGunu} ${saat} çalışma saati kapalı`;
                         }
                     }
                 }
-
-                // 4. Seans Çakışma Kontrolü
                 if (uygun && db.seanslar.some(s => s.tarih === tarih && s.saat === saat && Number(s.uzmanId) === Number(u.id) && s.durum !== 'iptal')) {
-                    uygun = false;
-                    red = "Bu saatte başka seansı var";
+                    uygun = false; red = "Bu saatte başka seansı var";
                 }
 
                 let card = document.createElement('div');
@@ -2138,7 +2143,7 @@
             let uz = db.psikologlar.find(p => Number(p.id) === Number(secilenUzmanId));
             let ofisOrani = basvuruTuru === 'firma' ? 0 : (basvuruTuru === 'kendi' ? (uz ? numOrDefault(uz.oranKendi, 30) : 30) : (uz ? numOrDefault(uz.oranYonlendirme, 50) : 50));
 
-            db.seanslar.push({
+            let yeniSeansKaydi = {
                 id: Date.now() + Math.floor(Math.random() * 1000),
                 subeId: AKTIF_SUBE_ID,
                 tarih: tarih,
@@ -2164,9 +2169,15 @@
                 ebeveynGorusmesiMi: ebeveynGorusmesiMi,
                 smsGonderildiZamani: null,
                 smsGonderilecekler: smsGonderilecekler
-            });
+            };
 
+            db.seanslar.push(yeniSeansKaydi);
             AsistDB.save(db);
+
+            if (typeof AsistSMS !== 'undefined' && typeof AsistSMS.tetikle === 'function') {
+                AsistSMS.tetikle(yeniSeansKaydi, 'Yeni');
+            }
+
             alert("🎉 Randevu başarıyla oluşturuldu!");
             document.getElementById('sonuc-alani').classList.add('hidden');
             document.getElementById('randevu-on-form').reset();
@@ -2175,6 +2186,46 @@
             asistanHizmetTuruDegisti('Yetişkin');
             takipEdenUzmanUyarisiGoster(null);
             asistanSekmeDegistir('bugun');
+        }
+
+        function tarihSaatModalAc(id) {
+            aktifSeciliId = id;
+            let s = AsistDB.get().seanslar.find(x => Number(x.id) === Number(id));
+            if(!s) return;
+            let res = AsistDB.resolveSeans(s);
+            document.getElementById('ts-danisan-ad').innerText = res.danisanAdi + " (" + res.uzmanAdi + ")";
+            document.getElementById('ts-yeni-tarih').value = s.tarih;
+            document.getElementById('ts-yeni-saat').value = s.saat;
+            document.getElementById('tarih-saat-modal').classList.remove('hidden');
+        }
+
+        function tarihSaatModalKapat() { document.getElementById('tarih-saat-modal').classList.add('hidden'); aktifSeciliId = null; }
+
+        function tarihSaatGuncelleKaydet() {
+            if (!aktifSeciliId) return;
+            let db = AsistDB.get();
+            let s = db.seanslar.find(x => Number(x.id) === Number(aktifSeciliId));
+            if (!s) return;
+
+            let yeniTarih = document.getElementById('ts-yeni-tarih').value;
+            let yeniSaat = document.getElementById('ts-yeni-saat').value;
+
+            if (!tarihGecerliMi(yeniTarih) || gecmisTarihSaatMi(yeniTarih, yeniSaat)) {
+                alert("Lütfen geçerli ve ileri bir tarih/saat seçiniz!");
+                return;
+            }
+
+            s.tarih = yeniTarih;
+            s.saat = yeniSaat;
+            AsistDB.save(db);
+
+            if (typeof AsistSMS !== 'undefined' && typeof AsistSMS.tetikle === 'function') {
+                AsistSMS.tetikle(s, 'Degisiklik');
+            }
+
+            tarihSaatModalKapat();
+            tumGorunumleriYenile();
+            alert("✅ Seans tarihi güncellendi ve SMS gönderildi!");
         }
 
         function canliDanisanAra(kaynak, deger) {
@@ -2334,6 +2385,7 @@
             let s = db.seanslar.find(x => Number(x.id) === Number(aktifSeciliId));
             if (!s) return;
 
+            let eskiDurum = s.durum;
             let yeniDurum = document.getElementById('modal-durum').value;
             let secilenBasvuruTuru = document.getElementById('modal-basvuru-turu').value;
             let seciliFirmaId = secilenBasvuruTuru === 'firma' ? parseInt(document.getElementById('modal-firma-id').value, 10) : null;
@@ -2358,36 +2410,15 @@
                 }
             }
 
-            if (yeniDurum === 'iptal') s.iptalSebebi = document.getElementById('modal-iptal-sebebi').value.trim() || "Belirtilmedi";
+            if (yeniDurum === 'iptal') {
+                s.iptalSebebi = document.getElementById('modal-iptal-sebebi').value.trim() || "Belirtilmedi";
+                if (typeof AsistSMS !== 'undefined' && typeof AsistSMS.tetikle === 'function') {
+                    AsistSMS.tetikle(s, 'Iptal');
+                }
+            }
 
             AsistDB.save(db);
             modalKapat();
-            tumGorunumleriYenile();
-        }
-
-        function tarihSaatModalAc(id) {
-            aktifSeciliId = id;
-            let s = AsistDB.get().seanslar.find(x => Number(x.id) === Number(id));
-            if(!s) return;
-            let res = AsistDB.resolveSeans(s);
-            document.getElementById('ts-danisan-ad').innerText = res.danisanAdi;
-            document.getElementById('ts-yeni-tarih').value = s.tarih;
-            document.getElementById('ts-yeni-saat').value = s.saat;
-            document.getElementById('tarih-saat-modal').classList.remove('hidden');
-        }
-
-        function tarihSaatModalKapat() { document.getElementById('tarih-saat-modal').classList.add('hidden'); aktifSeciliId = null; }
-
-        function tarihSaatGuncelleKaydet() {
-            if (!aktifSeciliId) return;
-            let db = AsistDB.get();
-            let s = db.seanslar.find(x => Number(x.id) === Number(aktifSeciliId));
-            if (!s) return;
-
-            s.tarih = document.getElementById('ts-yeni-tarih').value;
-            s.saat = document.getElementById('ts-yeni-saat').value;
-            AsistDB.save(db);
-            tarihSaatModalKapat();
             tumGorunumleriYenile();
         }
 
