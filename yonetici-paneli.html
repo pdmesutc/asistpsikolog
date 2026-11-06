@@ -2,33 +2,40 @@
 <html lang="tr" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>AsistPsikolog | Yönetici Paneli</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="db.js"></script>
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
         :root { --primary: #256839; --primary-dark: #12612d; }
     </style>
 </head>
-<body class="bg-slate-100 text-slate-900 min-h-screen flex flex-col md:flex-row">
+<body class="bg-slate-100 text-slate-900 min-h-screen flex flex-col md:flex-row pb-20 md:pb-0">
 
-    <!-- SOL DİKEY MENÜ (Mobilde Üst/Responsive Bar) -->
+    <!-- SOL DİKEY MENÜ (Masaüstü ve Tablet) -->
     <aside class="w-full md:w-72 bg-white border-r border-slate-200 flex flex-col justify-between shrink-0 sticky top-0 md:h-screen z-40 shadow-xs">
         <div class="overflow-y-auto">
-            <div class="h-20 px-6 flex items-center space-x-3.5 border-b border-slate-100">
-                <div class="w-10 h-10 rounded-xl bg-[#256839] flex items-center justify-center text-white text-lg shadow-md">
-                    <i class="fa-solid fa-user-shield"></i>
+            <div class="h-20 px-5 sm:px-6 flex items-center justify-between border-b border-slate-100">
+                <div class="flex items-center space-x-3.5">
+                    <div class="w-10 h-10 rounded-xl bg-[#256839] flex items-center justify-center text-white text-lg shadow-md shrink-0">
+                        <i class="fa-solid fa-user-shield"></i>
+                    </div>
+                    <div>
+                        <span class="text-xl font-black tracking-tight text-slate-900">asist<span class="text-[#256839]">psikolog</span></span>
+                        <span class="block text-[10px] tracking-widest text-slate-500 font-extrabold uppercase">Yönetici Paneli</span>
+                    </div>
                 </div>
-                <div>
-                    <span class="text-xl font-black tracking-tight text-slate-900">asist<span class="text-[#256839]">psikolog</span></span>
-                    <span class="block text-[10px] tracking-widest text-slate-500 font-extrabold uppercase">Yönetici Paneli</span>
-                </div>
+
+                <!-- Mobilde Hızlı Çıkış İkonu -->
+                <button onclick="yoneticiCikisYap()" class="md:hidden w-9 h-9 rounded-xl bg-red-50 text-red-600 flex items-center justify-center cursor-pointer hover:bg-red-100 transition" title="Çıkış">
+                    <i class="fa-solid fa-right-from-bracket text-xs"></i>
+                </button>
             </div>
 
-            <!-- Hızlı Panel Geçişi -->
+            <!-- Hızlı Geçiş (Gözlem Modu) -->
             <div class="p-4 border-b border-slate-100 bg-emerald-50/40 space-y-2">
                 <span class="text-[10px] font-extrabold text-[#256839] uppercase tracking-wider block">Hızlı Panel Geçişi (Gözlem)</span>
                 <div class="relative" id="asistan-gecis-kapsayici">
@@ -47,33 +54,33 @@
                 </a>
             </div>
 
-            <!-- Menü Butonları (Mobil Kaydırılabilir / Dikey) -->
-            <nav class="p-4 space-y-1.5 flex flex-wrap md:flex-col gap-1 md:gap-0">
-                <button onclick="tabDegistir('subeler')" id="btn-subeler" class="tab-btn py-2.5 px-3 md:py-3 md:px-4 rounded-xl font-bold text-xs transition flex items-center space-x-2 md:space-x-3 bg-[#256839] text-white shadow-xs cursor-pointer">
-                    <i class="fa-solid fa-building w-5 text-center"></i><span>Şube & Odalar</span>
+            <!-- Navigasyon Butonları (Mobilde Yatay Kaydırılabilir, Masaüstünde Dikey) -->
+            <nav class="p-3 sm:p-4 space-y-1 md:space-y-1.5 flex md:flex-col overflow-x-auto gap-1 md:gap-0 text-xs font-bold shrink-0">
+                <button onclick="tabDegistir('subeler')" id="btn-subeler" class="tab-btn whitespace-nowrap py-2.5 px-3 md:py-3 md:px-4 rounded-xl transition flex items-center space-x-2 md:space-x-3 bg-[#256839] text-white shadow-xs cursor-pointer shrink-0">
+                    <i class="fa-solid fa-building w-4 text-center"></i><span>Şube & Odalar</span>
                 </button>
-                <button onclick="tabDegistir('asistanlar')" id="btn-asistanlar" class="tab-btn py-2.5 px-3 md:py-3 md:px-4 rounded-xl font-bold text-xs transition flex items-center space-x-2 md:space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer">
-                    <i class="fa-solid fa-headset w-5 text-center"></i><span>Asistanlar</span>
+                <button onclick="tabDegistir('asistanlar')" id="btn-asistanlar" class="tab-btn whitespace-nowrap py-2.5 px-3 md:py-3 md:px-4 rounded-xl transition flex items-center space-x-2 md:space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer shrink-0">
+                    <i class="fa-solid fa-headset w-4 text-center"></i><span>Asistanlar</span>
                 </button>
-                <button onclick="tabDegistir('psikologlar')" id="btn-psikologlar" class="tab-btn py-2.5 px-3 md:py-3 md:px-4 rounded-xl font-bold text-xs transition flex items-center space-x-2 md:space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer">
-                    <i class="fa-solid fa-user-doctor w-5 text-center"></i><span>Psikologlar & Oranlar</span>
+                <button onclick="tabDegistir('psikologlar')" id="btn-psikologlar" class="tab-btn whitespace-nowrap py-2.5 px-3 md:py-3 md:px-4 rounded-xl transition flex items-center space-x-2 md:space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer shrink-0">
+                    <i class="fa-solid fa-user-doctor w-4 text-center"></i><span>Psikologlar</span>
                 </button>
-                <button onclick="tabDegistir('firmalar')" id="btn-firmalar" class="tab-btn py-2.5 px-3 md:py-3 md:px-4 rounded-xl font-bold text-xs transition flex items-center space-x-2 md:space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer">
-                    <i class="fa-solid fa-handshake w-5 text-center"></i><span>Kurumsal Firmalar</span>
+                <button onclick="tabDegistir('firmalar')" id="btn-firmalar" class="tab-btn whitespace-nowrap py-2.5 px-3 md:py-3 md:px-4 rounded-xl transition flex items-center space-x-2 md:space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer shrink-0">
+                    <i class="fa-solid fa-handshake w-4 text-center"></i><span>Kurumsal Firmalar</span>
                 </button>
-                <button onclick="tabDegistir('fiyatlar')" id="btn-fiyatlar" class="tab-btn py-2.5 px-3 md:py-3 md:px-4 rounded-xl font-bold text-xs transition flex items-center space-x-2 md:space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer">
-                    <i class="fa-solid fa-tags w-5 text-center"></i><span>Fiyat Modülü</span>
+                <button onclick="tabDegistir('fiyatlar')" id="btn-fiyatlar" class="tab-btn whitespace-nowrap py-2.5 px-3 md:py-3 md:px-4 rounded-xl transition flex items-center space-x-2 md:space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer shrink-0">
+                    <i class="fa-solid fa-tags w-4 text-center"></i><span>Fiyat Modülü</span>
                 </button>
-                <button onclick="tabDegistir('sms-sablonlari')" id="btn-sms-sablonlari" class="tab-btn py-2.5 px-3 md:py-3 md:px-4 rounded-xl font-bold text-xs transition flex items-center space-x-2 md:space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer">
-                    <i class="fa-solid fa-envelope-open-text w-5 text-center"></i><span>SMS Şablonları</span>
+                <button onclick="tabDegistir('sms-sablonlari')" id="btn-sms-sablonlari" class="tab-btn whitespace-nowrap py-2.5 px-3 md:py-3 md:px-4 rounded-xl transition flex items-center space-x-2 md:space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer shrink-0">
+                    <i class="fa-solid fa-envelope-open-text w-4 text-center"></i><span>SMS Şablonları</span>
                 </button>
-                <button onclick="tabDegistir('muhasebe')" id="btn-muhasebe" class="tab-btn py-2.5 px-3 md:py-3 md:px-4 rounded-xl font-bold text-xs transition flex items-center space-x-2 md:space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer">
-                    <i class="fa-solid fa-chart-line w-5 text-center"></i><span>Muhasebe & İstatistik</span>
+                <button onclick="tabDegistir('muhasebe')" id="btn-muhasebe" class="tab-btn whitespace-nowrap py-2.5 px-3 md:py-3 md:px-4 rounded-xl transition flex items-center space-x-2 md:space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer shrink-0">
+                    <i class="fa-solid fa-chart-line w-4 text-center"></i><span>Muhasebe & Kasa</span>
                 </button>
             </nav>
         </div>
 
-        <!-- Oturum ve Çıkış Alanı -->
+        <!-- Masaüstü Oturum ve Çıkış Alanı -->
         <div class="p-4 border-t border-slate-100 bg-slate-50/60 hidden md:block">
             <div class="flex items-center justify-between">
                 <div class="truncate pr-2">
@@ -89,7 +96,7 @@
     </aside>
 
     <!-- SAĞ ANA İÇERİK -->
-    <main class="flex-grow p-4 sm:p-6 md:p-10 max-w-7xl w-full mx-auto overflow-y-auto space-y-8">
+    <main class="flex-grow p-4 sm:p-6 md:p-10 max-w-7xl w-full mx-auto overflow-y-auto space-y-6 sm:space-y-8">
         
         <!-- 1. ŞUBE & ODALAR -->
         <div id="tab-subeler" class="tab-content space-y-6">
@@ -97,9 +104,9 @@
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                     <div>
                         <h2 class="text-xl font-extrabold text-slate-900">Şube ve Oda Yönetimi</h2>
-                        <p class="text-xs text-slate-500">Şubeleri, çalışma saatlerini ve odaları yönetin.</p>
+                        <p class="text-xs text-slate-500">Şubeleri, çalışma saatlerini ve odaları yönetin. Boş olan her oda tüm seanslar için kullanılabilir.</p>
                     </div>
-                    <button onclick="subeFormunuAc('yeni')" class="bg-[#256839] hover:bg-[#12612d] text-white px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-2 shadow-sm cursor-pointer">
+                    <button onclick="subeFormunuAc('yeni')" class="bg-[#256839] hover:bg-[#12612d] text-white px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-2 shadow-sm cursor-pointer w-full sm:w-auto">
                         <i class="fa-solid fa-plus"></i><span>Yeni Şube Ekle</span>
                     </button>
                 </div>
@@ -134,7 +141,7 @@
                         <div class="bg-white p-4 rounded-2xl border border-emerald-200 space-y-3">
                             <label class="font-bold text-slate-800 block">Şube Odaları</label>
                             <div id="oda-listesi-container" class="space-y-2"></div>
-                            <button type="button" onclick="odaSatiriEkle('', '', 'yetiskin')" class="mt-2 bg-emerald-50 text-[#256839] border border-emerald-200 px-3.5 py-1.5 rounded-xl font-bold flex items-center space-x-1.5 cursor-pointer">
+                            <button type="button" onclick="odaSatiriEkle('', '')" class="mt-2 bg-emerald-50 text-[#256839] border border-emerald-200 px-3.5 py-1.5 rounded-xl font-bold flex items-center space-x-1.5 cursor-pointer">
                                 <i class="fa-solid fa-plus text-xs"></i><span>Yeni Oda Ekle</span>
                             </button>
                         </div>
@@ -145,7 +152,7 @@
                     </form>
                 </div>
 
-                <div id="sube-liste-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+                <div id="sube-liste-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6"></div>
             </div>
         </div>
 
@@ -157,7 +164,7 @@
                         <h2 class="text-xl font-extrabold text-slate-900">Asistan Yönetimi</h2>
                         <p class="text-xs text-slate-500">Asistan ekleyin, şubelerini ve giriş bilgilerini güncelleyin.</p>
                     </div>
-                    <button onclick="asistanFormunuAc('yeni')" class="bg-[#256839] hover:bg-[#12612d] text-white px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-2 shadow-sm cursor-pointer">
+                    <button onclick="asistanFormunuAc('yeni')" class="bg-[#256839] hover:bg-[#12612d] text-white px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-2 shadow-sm cursor-pointer w-full sm:w-auto">
                         <i class="fa-solid fa-plus"></i><span>Yeni Asistan Ekle</span>
                     </button>
                 </div>
@@ -177,7 +184,7 @@
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <div>
-                                <label class="block font-bold text-slate-700 mb-1">Telefon Numarası (10 Hane)</label>
+                                <label class="block font-bold text-slate-700 mb-1">Telefon (10 Hane)</label>
                                 <input type="text" id="input-asistan-tel" required placeholder="5076012945" class="w-full bg-white p-2.5 rounded-xl border border-slate-200 font-medium">
                             </div>
                             <div>
@@ -191,24 +198,24 @@
                         </div>
                         <div class="flex justify-end space-x-2 pt-2 border-t border-emerald-200/60">
                             <button type="button" onclick="asistanFormunuKapat()" class="bg-white border px-4 py-2 rounded-xl font-bold cursor-pointer">Vazgeç</button>
-                            <button type="submit" class="bg-[#256839] text-white px-6 py-2 rounded-xl font-bold shadow-md cursor-pointer">Asistanı Kaydet</button>
+                            <button type="submit" class="bg-[#256839] text-white px-6 py-2 rounded-xl font-bold shadow-md cursor-pointer">Kaydet</button>
                         </div>
                     </form>
                 </div>
 
-                <div id="asistan-liste-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+                <div id="asistan-liste-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6"></div>
             </div>
         </div>
 
-        <!-- 3. PSİKOLOGLAR & ORANLAR (ARŞİVLE/PASİFE AL VE TEKRAR AKTİFLEŞTİR) -->
+        <!-- 3. PSİKOLOGLAR & ORANLAR (PASİFE AL / AKTİFLEŞTİR VE KALICI SİL) -->
         <div id="tab-psikologlar" class="tab-content hidden space-y-6">
             <div class="bg-white p-5 sm:p-8 rounded-3xl border border-slate-200 shadow-xs">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                     <div>
                         <h2 class="text-xl font-extrabold text-slate-900">Psikologlar & Hak Ediş Oranları</h2>
-                        <p class="text-xs text-slate-500">Uzmanları ekleyin, giriş şifrelerini, görev şubelerini ve ofis kesinti yüzdelerini belirleyin.</p>
+                        <p class="text-xs text-slate-500">Uzmanları ekleyin, yetkili şubelerini, görev alanlarını ve ofis payı oranlarını belirleyin.</p>
                     </div>
-                    <button onclick="psikologFormunuAc('yeni')" class="bg-[#256839] hover:bg-[#12612d] text-white px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-2 shadow-sm cursor-pointer">
+                    <button onclick="psikologFormunuAc('yeni')" class="bg-[#256839] hover:bg-[#12612d] text-white px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-2 shadow-sm cursor-pointer w-full sm:w-auto">
                         <i class="fa-solid fa-plus"></i><span>Yeni Uzman Ekle</span>
                     </button>
                 </div>
@@ -223,7 +230,7 @@
                                 <input type="text" id="input-psikolog-ad" required placeholder="Örn: Uzm. Psk. Nurperi HASTÜRK" class="w-full bg-white p-2.5 rounded-xl border border-slate-200 font-bold">
                             </div>
                             <div>
-                                <label class="block font-bold text-slate-700 mb-1">Telefon Numarası (10 Hane)</label>
+                                <label class="block font-bold text-slate-700 mb-1">Telefon (10 Hane)</label>
                                 <input type="text" id="input-psikolog-tel" required placeholder="5059283434" class="w-full bg-white p-2.5 rounded-xl border border-slate-200 font-medium">
                             </div>
                             <div>
@@ -265,12 +272,12 @@
 
                         <div class="flex justify-end space-x-2 pt-2 border-t border-emerald-200/60">
                             <button type="button" onclick="psikologFormunuKapat()" class="bg-white border px-4 py-2 rounded-xl font-bold cursor-pointer">Vazgeç</button>
-                            <button type="submit" class="bg-[#256839] text-white px-6 py-2 rounded-xl font-bold shadow-md cursor-pointer">Uzmanı Kaydet</button>
+                            <button type="submit" class="bg-[#256839] text-white px-6 py-2 rounded-xl font-bold shadow-md cursor-pointer">Kaydet</button>
                         </div>
                     </form>
                 </div>
 
-                <div id="psikolog-liste-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+                <div id="psikolog-liste-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6"></div>
             </div>
         </div>
 
@@ -280,9 +287,9 @@
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                     <div>
                         <h2 class="text-xl font-extrabold text-slate-900">Kurumsal Firmalar</h2>
-                        <p class="text-xs text-slate-500">Anlaşmalı kurumları ve yetkili şubeleri yönetin.</p>
+                        <p class="text-xs text-slate-500">Anlaşmalı kurumları ve yetkili uzmanları yönetin.</p>
                     </div>
-                    <button onclick="firmaFormunuAc('yeni')" class="bg-[#256839] hover:bg-[#12612d] text-white px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-2 shadow-sm cursor-pointer">
+                    <button onclick="firmaFormunuAc('yeni')" class="bg-[#256839] hover:bg-[#12612d] text-white px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-2 shadow-sm cursor-pointer w-full sm:w-auto">
                         <i class="fa-solid fa-plus"></i><span>Yeni Firma Ekle</span>
                     </button>
                 </div>
@@ -318,21 +325,21 @@
                         </div>
                         <div class="flex justify-end space-x-2 pt-2 border-t border-emerald-200/60">
                             <button type="button" onclick="firmaFormunuKapat()" class="bg-white border px-4 py-2 rounded-xl font-bold cursor-pointer">Vazgeç</button>
-                            <button type="submit" class="bg-[#256839] text-white px-6 py-2 rounded-xl font-bold shadow-md cursor-pointer">Firmayı Kaydet</button>
+                            <button type="submit" class="bg-[#256839] text-white px-6 py-2 rounded-xl font-bold shadow-md cursor-pointer">Kaydet</button>
                         </div>
                     </form>
                 </div>
 
-                <div id="firma-liste-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+                <div id="firma-liste-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6"></div>
             </div>
         </div>
 
-        <!-- 5. YÖNETİCİ FİYAT MODÜLÜ (Yetişkin, Çocuk, Ergen, Çift Sabit Fiyatları) -->
+        <!-- 5. YÖNETİCİ FİYAT MODÜLÜ -->
         <div id="tab-fiyatlar" class="tab-content hidden space-y-6">
-            <div class="bg-white p-5 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-6">
+            <div class="bg-white p-5 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-5">
                 <div>
                     <h2 class="text-xl font-extrabold text-slate-900">Merkez Hizmet Fiyatlandırma Modülü</h2>
-                    <p class="text-xs text-slate-500">Asistanlar randevu açarken veya ödeme alırken bu fiyatlar varsayılan olarak gelir.</p>
+                    <p class="text-xs text-slate-500">Asistanlar veya uzmanlar seans oluştururken bu tutarlar varsayılan olarak gelir.</p>
                 </div>
 
                 <form onsubmit="fiyatlariKaydet(event)" class="space-y-4 text-xs max-w-xl">
@@ -355,21 +362,21 @@
                         </div>
                     </div>
                     <div>
-                        <button type="submit" class="bg-[#256839] hover:bg-[#12612d] text-white px-7 py-3 rounded-xl font-extrabold shadow-md cursor-pointer transition">Fiyatları Güncelle</button>
+                        <button type="submit" class="bg-[#256839] hover:bg-[#12612d] text-white px-7 py-3 rounded-xl font-extrabold shadow-md cursor-pointer transition w-full sm:w-auto">Fiyatları Güncelle</button>
                     </div>
                 </form>
             </div>
         </div>
 
-        <!-- 6. SMS & İLETİŞİM ŞABLONLARI MODÜLÜ -->
+        <!-- 6. SMS & İLETİŞİM ŞABLONLARI -->
         <div id="tab-sms-sablonlari" class="tab-content hidden space-y-6">
-            <div class="bg-white p-5 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-6">
+            <div class="bg-white p-5 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-5">
                 <div>
                     <h2 class="text-xl font-extrabold text-slate-900">SMS & İletişim Şablonları</h2>
-                    <p class="text-xs text-slate-500">Asistanların toplu hatırlatma ve bilgilendirme mesajlarında kullandığı şablonlar.</p>
+                    <p class="text-xs text-slate-500">Asistanların randevu hatırlatma ve bilgilendirme mesajlarında kullandığı standart metinler.</p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 text-xs">
                     <div class="bg-slate-50 p-5 rounded-2xl border space-y-3">
                         <h3 class="font-extrabold text-slate-900 text-sm">📅 Randevu Hatırlatma Şablonu</h3>
                         <textarea id="sablon-hatirlatma" rows="4" class="w-full bg-white p-3 rounded-xl border font-medium">Sayın [Danışan Adi], [Tarih] saat [Saat]'de [Uzman Adi] ile randevunuz bulunmaktadır. Sağlıklı günler dileriz. - Hera Psikoloji</textarea>
@@ -384,87 +391,95 @@
             </div>
         </div>
 
-        <!-- 7. GELİŞMİŞ MUHASEBE -->
-        <div id="tab-muhasebe" class="tab-content hidden space-y-8">
-            <div class="bg-white p-5 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-6">
+        <!-- 7. GELİŞMİŞ MUHASEBE (DENGELİ MOBİL KART DÜZENİ VE MASRAF ENTEGRASYONLU) -->
+        <div id="tab-muhasebe" class="tab-content hidden space-y-6 sm:space-y-8">
+            <div class="bg-white p-5 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-5">
                 
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
                     <div>
                         <h2 class="text-xl font-extrabold text-slate-900">Merkez ve Şube Muhasebesi</h2>
-                        <p class="text-xs text-slate-500">KDV'li seanslarda vergi tutarı ayrıştırılır; ofis net kârından asistanların girdiği masraflar düşülür.</p>
+                        <p class="text-xs text-slate-500">KDV ayrıştırmalı ciro, ofis giderleri düşülmüş net saf kâr ve hak edişler.</p>
                     </div>
 
                     <div class="flex items-center space-x-2">
-                        <span class="text-xs font-bold text-slate-500">Şube Filtresi:</span>
-                        <select id="muh-sube-secimi" onchange="ofisMuhasebeHesapla()" class="bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2 font-extrabold text-xs text-slate-800">
+                        <span class="text-xs font-bold text-slate-500">Şube:</span>
+                        <select id="muh-sube-secimi" onchange="ofisMuhasebeHesapla()" class="bg-slate-50 border border-slate-300 rounded-xl px-3 py-1.5 font-extrabold text-xs text-slate-800">
                             <option value="hepsi">Tüm Şubeler (Genel)</option>
                         </select>
                     </div>
                 </div>
 
-                <!-- Ortalanmış Tarih Şeridi -->
-                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex flex-col lg:flex-row items-center justify-between gap-4 text-xs">
-                    <div class="flex flex-wrap items-center gap-1.5 bg-white p-1 rounded-xl border border-slate-200 shadow-2xs">
-                        <button onclick="muhZamanFiltrele('gunluk')" id="mflt-gunluk" class="muh-flt-btn px-3 py-1.5 rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Gün</button>
-                        <button onclick="muhZamanFiltrele('haftalik')" id="mflt-haftalik" class="muh-flt-btn px-3 py-1.5 rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Hafta</button>
-                        <button onclick="muhZamanFiltrele('aylik')" id="mflt-aylik" class="muh-flt-btn px-3 py-1.5 rounded-lg font-bold transition bg-[#256839] text-white shadow-xs cursor-pointer">Ay</button>
-                        <button onclick="muhZamanFiltrele('ozel')" id="mflt-ozel" class="muh-flt-btn px-3 py-1.5 rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Özel Aralık</button>
+                <!-- Sadeleştirilmiş Tarih Şeridi (Bugün Butonu Kaldırılmış, Dengeli Navigasyon) -->
+                <div class="bg-slate-50 p-3 sm:p-4 rounded-2xl border border-slate-200 space-y-2.5 text-xs">
+                    <div class="grid grid-cols-4 gap-1 bg-white p-1 rounded-xl border border-slate-200 shadow-2xs">
+                        <button onclick="muhZamanFiltrele('gunluk')" id="mflt-gunluk" class="muh-flt-btn py-2 text-center rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Gün</button>
+                        <button onclick="muhZamanFiltrele('haftalik')" id="mflt-haftalik" class="muh-flt-btn py-2 text-center rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Hafta</button>
+                        <button onclick="muhZamanFiltrele('aylik')" id="mflt-aylik" class="muh-flt-btn py-2 text-center rounded-lg font-bold transition bg-[#256839] text-white shadow-xs cursor-pointer">Ay</button>
+                        <button onclick="muhZamanFiltrele('ozel')" id="mflt-ozel" class="muh-flt-btn py-2 text-center rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Özel</button>
+                    </div>
+
+                    <div id="muh-standart-nav" class="flex items-center justify-between bg-white p-1 rounded-xl border border-slate-200 shadow-2xs">
+                        <button onclick="muhTarihKaydir(-1)" class="w-10 h-9 rounded-lg hover:bg-slate-100 text-slate-700 flex items-center justify-center font-bold cursor-pointer transition"><i class="fa-solid fa-chevron-left text-xs"></i></button>
+                        <div class="px-2 font-extrabold text-slate-900 text-xs text-center truncate flex-1" id="muh-aktif-tarih-etiket"></div>
+                        <button onclick="muhTarihKaydir(1)" class="w-10 h-9 rounded-lg hover:bg-slate-100 text-slate-700 flex items-center justify-center font-bold cursor-pointer transition"><i class="fa-solid fa-chevron-right text-xs"></i></button>
                     </div>
 
                     <div id="muh-ozel-tarih-alani" class="hidden flex items-center space-x-2 bg-white p-1.5 rounded-xl border border-slate-200 shadow-2xs">
-                        <input type="date" id="muh-ozel-baslangic" class="bg-slate-50 border border-slate-200 p-1.5 rounded-lg font-bold text-slate-700 text-xs">
+                        <input type="date" id="muh-ozel-baslangic" class="w-1/2 bg-slate-50 border border-slate-200 p-2 rounded-lg font-bold text-slate-700 text-xs">
                         <span class="text-slate-400 font-bold">-</span>
-                        <input type="date" id="muh-ozel-bitis" class="bg-slate-50 border border-slate-200 p-1.5 rounded-lg font-bold text-slate-700 text-xs">
-                        <button onclick="ofisMuhasebeHesapla()" class="bg-[#256839] hover:bg-[#12612d] text-white px-3 py-1.5 rounded-lg font-bold cursor-pointer transition">Uygula</button>
+                        <input type="date" id="muh-ozel-bitis" class="w-1/2 bg-slate-50 border border-slate-200 p-2 rounded-lg font-bold text-slate-700 text-xs">
+                        <button onclick="ofisMuhasebeHesapla()" class="bg-[#256839] hover:bg-[#12612d] text-white px-3 py-2 rounded-lg font-bold cursor-pointer transition">Uygula</button>
                     </div>
 
-                    <div id="muh-standart-nav" class="flex items-center space-x-2">
-                        <button onclick="muhTarihKaydir(-1)" class="w-8 h-8 rounded-xl bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 flex items-center justify-center font-bold cursor-pointer"><i class="fa-solid fa-chevron-left text-xs"></i></button>
-                        <button onclick="muhBuguneGit()" class="bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 font-extrabold px-3 py-1.5 rounded-xl cursor-pointer">Bugün</button>
-                        <div class="px-3 py-1.5 bg-white border border-slate-200 rounded-xl font-extrabold text-slate-900 min-w-[200px] text-center" id="muh-aktif-tarih-etiket"></div>
-                        <button onclick="muhTarihKaydir(1)" class="w-8 h-8 rounded-xl bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 flex items-center justify-center font-bold cursor-pointer"><i class="fa-solid fa-chevron-right text-xs"></i></button>
-                    </div>
-
-                    <div class="flex items-center space-x-2 text-[11px]">
+                    <div class="flex items-center justify-between text-[11px] px-1">
                         <span class="font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-xl border border-emerald-200" id="muh-sayac-bireysel">0 Bireysel</span>
                         <span class="font-bold text-blue-800 bg-blue-50 px-2.5 py-1 rounded-xl border border-blue-200" id="muh-sayac-kurumsal">0 Kurumsal</span>
                     </div>
                 </div>
 
-                <!-- 5 Temel Muhasebe Metriği (KDV ve Masraf Düşülmüş) -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-                    <div class="bg-slate-50 p-5 rounded-2xl border">
-                        <span class="text-[10px] font-bold text-slate-400 uppercase block">Fiziki Kasa Girişi (Brüt)</span>
-                        <h3 id="stat-ciro" class="text-2xl font-black text-slate-900 mt-1">₺0</h3>
-                        <span class="text-[10px] text-slate-400 block mt-0.5">Nakit + Havale Toplamı</span>
+                <!-- 5 MUHASEBE METRİĞİ (DENGELİ MOBİL YERLEŞİM: 1-2 Yan Yana, 3-4 Yan Yana, 5 Alta) -->
+                <div class="grid grid-cols-2 lg:grid-cols-5 gap-3">
+                    <div class="bg-emerald-50/70 p-4 rounded-2xl border border-emerald-200 flex flex-col justify-between">
+                        <span class="text-[10px] font-bold text-emerald-800 block uppercase truncate">1. Ofis Net Saf Kâr</span>
+                        <h3 id="stat-ofis" class="text-xl sm:text-2xl font-black text-[#256839] my-1">₺0</h3>
+                        <span class="text-[10px] text-emerald-700 block truncate" id="stat-ofis-arti-kdv-alt">Masraf Düşülmüş Net</span>
                     </div>
-                    <div class="bg-amber-50/80 p-5 rounded-2xl border border-amber-200">
-                        <span class="text-[10px] font-bold text-amber-800 uppercase block">Ayrılan KDV Tutarı</span>
-                        <h3 id="stat-kdv" class="text-2xl font-black text-amber-900 mt-1">₺0</h3>
-                        <span class="text-[10px] text-amber-700 block mt-0.5">Vergi Emaneti (KDV)</span>
+                    <div class="bg-amber-50/80 p-4 rounded-2xl border border-amber-200 flex flex-col justify-between">
+                        <span class="text-[10px] font-bold text-amber-800 block uppercase truncate">2. Ayrılan KDV</span>
+                        <h3 id="stat-kdv" class="text-xl sm:text-2xl font-black text-amber-900 my-1">₺0</h3>
+                        <span class="text-[10px] text-amber-700 block truncate">Vergi Emaneti</span>
                     </div>
-                    <div class="bg-emerald-50/70 p-5 rounded-2xl border border-emerald-200">
-                        <span class="text-[10px] font-bold text-emerald-800 uppercase block">Ofis Net Saf Kâr</span>
-                        <h3 id="stat-ofis" class="text-2xl font-black text-[#256839] mt-1">₺0</h3>
-                        <span class="text-[10px] text-emerald-700 block mt-0.5" id="stat-ofis-arti-kdv-alt">Masraflar Düşülmüş Net</span>
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex flex-col justify-between">
+                        <span class="text-[10px] font-bold text-slate-500 block uppercase truncate">3. Uzman Payı</span>
+                        <h3 id="stat-psikolog" class="text-xl sm:text-2xl font-black text-slate-800 my-1">₺0</h3>
+                        <span class="text-[10px] text-slate-400 block truncate">Matrahtan Hesaplanan</span>
                     </div>
-                    <div class="bg-slate-50 p-5 rounded-2xl border">
-                        <span class="text-[10px] font-bold text-slate-400 uppercase block">Uzman Hak Edişleri (Net)</span>
-                        <h3 id="stat-psikolog" class="text-2xl font-black text-slate-800 mt-1">₺0</h3>
-                        <span class="text-[10px] text-slate-400 block mt-0.5">Matrahtan Hesaplanan</span>
+                    <div class="bg-red-50/70 p-4 rounded-2xl border border-red-200 flex flex-col justify-between">
+                        <span class="text-[10px] font-bold text-red-900 block uppercase truncate">4. Toplam Masraf</span>
+                        <h3 id="stat-masraf" class="text-xl sm:text-2xl font-black text-red-900 my-1">₺0</h3>
+                        <span class="text-[10px] text-red-700 block truncate">Ofis Giderleri</span>
                     </div>
-                    <div class="bg-red-50/70 p-5 rounded-2xl border border-red-200">
-                        <span class="text-[10px] font-bold text-red-900 uppercase block">Toplam Ofis Gideri</span>
-                        <h3 id="stat-masraf" class="text-2xl font-black text-red-900 mt-1">₺0</h3>
-                        <span class="text-[10px] text-red-700 block mt-0.5">Elektrik, Su, Kırtasiye vb.</span>
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 col-span-2 lg:col-span-1 flex flex-col justify-between">
+                        <span class="text-[10px] font-bold text-slate-500 block uppercase truncate">5. Fiziki Kasa (Brüt)</span>
+                        <h3 id="stat-ciro" class="text-2xl font-black text-slate-900 my-1">₺0</h3>
+                        <span class="text-[10px] text-slate-400 block truncate">Nakit + Havale Girişi</span>
                     </div>
                 </div>
 
-                <!-- Kurumsal Firma Seans Sayıları Özeti -->
+                <!-- BU DÖNEMDE GİRİLEN OFİS MASRAFLARI DÖKÜMÜ -->
+                <div class="border border-red-200 bg-red-50/30 rounded-2xl overflow-hidden shadow-2xs">
+                    <div class="bg-red-100/60 px-4 py-2.5 border-b border-red-200 font-extrabold text-xs text-red-950 flex justify-between items-center">
+                        <span class="flex items-center"><i class="fa-solid fa-receipt mr-1.5 text-red-700"></i>Dönem İçi Genel Ofis Masrafları</span>
+                        <span class="text-[11px] font-black text-red-900" id="muh-masraf-toplam-etiket">₺0</span>
+                    </div>
+                    <div id="muhasebe-masraf-listesi" class="divide-y divide-red-100 text-xs"></div>
+                </div>
+
+                <!-- Kurumsal Firma Seans Özeti (Excel İndir Butonlu) -->
                 <div class="border border-slate-200 rounded-2xl overflow-hidden shadow-2xs">
                     <div class="bg-slate-50 px-4 py-3 border-b border-slate-200 font-extrabold text-xs text-slate-800 flex justify-between items-center">
                         <span>Kurumsal Firma Seans Sayıları Özeti</span>
-                        <span class="text-[10px] text-slate-400 font-normal">Dönem içinde gerçekleştirilen seans sayıları</span>
+                        <span class="text-[10px] text-slate-400 font-normal">Gerçekleştirilen seanslar</span>
                     </div>
                     <div id="muhasebe-firma-fatura-listesi" class="divide-y divide-slate-100 text-xs"></div>
                 </div>
@@ -472,8 +487,8 @@
                 <!-- UZMAN MATRİS TABLOSU -->
                 <div class="overflow-x-auto border border-slate-200 rounded-2xl shadow-2xs">
                     <div class="bg-slate-50 px-4 py-3 border-b border-slate-200 font-extrabold text-xs text-slate-800 flex items-center justify-between">
-                        <span>Uzman Özelinde Seans Dağılımı, KDV ve Hak Ediş Matrisi</span>
-                        <span class="text-[10px] font-semibold text-slate-400">Ofis ve Uzman payları KDV düşüldükten sonraki net matrah üzerinden hesaplanır</span>
+                        <span>Uzman Seans Dağılımı ve Hak Ediş Matrisi</span>
+                        <span class="text-[10px] font-semibold text-slate-400">Net matrah üzerinden hesaplanır</span>
                     </div>
                     <table class="w-full text-left border-collapse text-xs whitespace-nowrap">
                         <thead>
@@ -504,18 +519,48 @@
 
         function escapeHtml(str) {
             if (str === null || str === undefined) return '';
-            return String(str)
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#39;');
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
         }
 
         function numOrDefault(val, def) {
             if (val === '' || val === null || val === undefined) return def;
             let n = Number(val);
             return Number.isFinite(n) ? n : def;
+        }
+
+        function normalizeTelefon10Hane(rawTel) {
+            if (typeof AsistDB !== 'undefined' && typeof AsistDB.normalizeTel === 'function') {
+                return AsistDB.normalizeTel(rawTel);
+            }
+            let digits = String(rawTel || '').replace(/\D/g, '');
+            if (digits.length === 12 && digits.startsWith('90')) digits = digits.slice(2);
+            else if (digits.length === 11 && digits.startsWith('0')) digits = digits.slice(1);
+            return digits;
+        }
+
+        function formatTelefonGorunum(tel) {
+            let d = normalizeTelefon10Hane(tel);
+            return d.length === 10 ? `0(${d.slice(0,3)}) ${d.slice(3,6)} ${d.slice(6,8)} ${d.slice(8,10)}` : (d || '-');
+        }
+
+        function formatTarihISO(d) {
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        }
+
+        function formatTarihTurkce(d) {
+            const aylar = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
+            const gunler = ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"];
+            return `${d.getDate()} ${aylar[d.getMonth()]} ${d.getFullYear()} ${gunler[d.getDay()]}`;
+        }
+
+        function getHaftaAraligi(dateObj) {
+            let d = new Date(dateObj);
+            let day = d.getDay();
+            let diff = d.getDate() - day + (day === 0 ? -6 : 1);
+            let pazartesi = new Date(d.setDate(diff));
+            let pazar = new Date(pazartesi);
+            pazar.setDate(pazartesi.getDate() + 6);
+            return { baslangic: formatTarihISO(pazartesi), bitis: formatTarihISO(pazar) };
         }
 
         function seansFinansHesapla(s) {
@@ -541,26 +586,6 @@
             let ofisPay = Math.round(matrah * (oran / 100));
             let uzmanPay = matrah - ofisPay;
             return { brut: ucret, matrah, kdvDahil, kdvOrani, kdvTutari, ofisPay, uzmanPay, ofisKasaToplam: ofisPay + kdvTutari };
-        }
-
-        function formatTarihISO(d) {
-            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-        }
-
-        function formatTarihTurkce(d) {
-            const aylar = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
-            const gunler = ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"];
-            return `${d.getDate()} ${aylar[d.getMonth()]} ${d.getFullYear()} ${gunler[d.getDay()]}`;
-        }
-
-        function getHaftaAraligi(dateObj) {
-            let d = new Date(dateObj);
-            let day = d.getDay();
-            let diff = d.getDate() - day + (day === 0 ? -6 : 1);
-            let pazartesi = new Date(d.setDate(diff));
-            let pazar = new Date(pazartesi);
-            pazar.setDate(pazartesi.getDate() + 6);
-            return { baslangic: formatTarihISO(pazartesi), bitis: formatTarihISO(pazar) };
         }
 
         function yeniKayitId() {
@@ -634,7 +659,9 @@
             if (tabAdi === 'sms-sablonlari') smsSablonlariniYukle();
         }
 
-        // FİYAT MODÜLÜ YÖNETİMİ
+        // ==========================================
+        // FİYAT MODÜLÜ
+        // ==========================================
         function fiyatlariYukle() {
             let db = AsistDB.get();
             if (!db.fiyatlar) db.fiyatlar = { yetiskin: 1500, cocuk: 1800, ergen: 1500, cift: 2500 };
@@ -657,7 +684,9 @@
             alert("✅ Merkez seans fiyatları başarıyla güncellendi!");
         }
 
-        // SMS ŞABLONLARI YÖNETİMİ
+        // ==========================================
+        // SMS ŞABLONLARI
+        // ==========================================
         function smsSablonlariniYukle() {
             let db = AsistDB.get();
             if (!db.smsSablonlari) {
@@ -682,14 +711,16 @@
             alert("✅ SMS şablonu başarıyla kaydedildi!");
         }
 
-        // PSİKOLOG PASİFE AL / AKTİFLEŞTİR VE KALICI SİL
+        // ==========================================
+        // PSİKOLOG PASİFE AL / AKTİFLEŞTİR VE SİL
+        // ==========================================
         function psikologPasifToggle(id) {
             let db = AsistDB.get();
             let p = db.psikologlar.find(x => x.id === id);
             if (!p) return;
             let yeniDurum = (p.durum === 'pasif') ? 'aktif' : 'pasif';
             let mesaj = yeniDurum === 'pasif'
-                ? "Bu uzmanı pasif duruma (arşive) almak istediğinize emin misiniz? (Geçmiş muhasebe kayıtları bozulmaz)."
+                ? "Bu uzmanı pasif duruma (arşive) almak istediğinize emin misiniz? (Geçmiş muhasebe kayıtları korunur)."
                 : "Bu uzmanı yeniden aktif duruma getirmek istiyor musunuz?";
             if (!confirm(mesaj)) return;
 
@@ -732,7 +763,7 @@
                 }).join('');
 
                 let card = document.createElement('div');
-                card.className = "bg-slate-50 p-5 sm:p-6 rounded-2xl border border-slate-200 flex flex-col justify-between";
+                card.className = "bg-slate-50 p-4 sm:p-6 rounded-2xl border border-slate-200 flex flex-col justify-between";
                 card.innerHTML = `
                     <div>
                         <div class="flex items-center justify-between mb-2">
@@ -742,7 +773,7 @@
                         <p class="text-xs text-slate-500 mb-1"><i class="fa-solid fa-location-dot mr-1 text-[#256839]"></i> ${escapeHtml(sube.adres)}</p>
                         <div class="border-t pt-3 mb-4">
                             <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Şube Odaları:</span>
-                            <div class="flex flex-wrap gap-1.5">${odalarHtml || '<span class="text-slate-400 italic text-xs">Henüz oda eklenmemiş</span>'}</div>
+                            <div class="flex flex-wrap gap-1.5">${odalarHtml || '<span class="text-slate-400 italic text-xs">Oda eklenmemiş</span>'}</div>
                         </div>
                     </div>
                     <div class="flex justify-end space-x-2 pt-3 border-t text-xs font-bold">
@@ -832,7 +863,7 @@
             db.asistanlar.forEach(a => {
                 let sube = db.subeler.find(s => s.id === a.subeId);
                 let card = document.createElement('div');
-                card.className = "bg-slate-50 p-5 rounded-2xl border border-slate-200 flex flex-col justify-between";
+                card.className = "bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-200 flex flex-col justify-between";
                 card.innerHTML = `
                     <div class="space-y-2">
                         <div class="flex items-center justify-between">
@@ -916,14 +947,14 @@
             db.psikologlar.forEach(p => {
                 let pasifMi = p.durum === 'pasif';
                 let card = document.createElement('div');
-                card.className = `bg-slate-50 p-5 rounded-2xl border border-slate-200 flex flex-col justify-between ${pasifMi ? 'opacity-60' : ''}`;
+                card.className = `bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-200 flex flex-col justify-between ${pasifMi ? 'opacity-60' : ''}`;
                 card.innerHTML = `
                     <div class="space-y-2">
                         <div class="flex items-center justify-between">
                             <h3 class="font-extrabold text-slate-900 text-base">${escapeHtml(p.ad)}</h3>
                             <span class="text-[10px] ${pasifMi ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-[#256839]'} px-2 py-0.5 rounded font-bold">${pasifMi ? 'Pasif (Arşiv)' : 'Aktif'}</span>
                         </div>
-                        <p class="text-xs text-slate-500">Kendi Payı: %${p.oranKendi !== undefined ? p.oranKendi : 30} • Yönlendirme Payı: %${p.oranYonlendirme !== undefined ? p.oranYonlendirme : 50}</p>
+                        <p class="text-xs text-slate-500">Kendi Danışanı: %${p.oranKendi !== undefined ? p.oranKendi : 30} • Yönlendirme: %${p.oranYonlendirme !== undefined ? p.oranYonlendirme : 50}</p>
                     </div>
                     <div class="flex justify-end space-x-2 pt-4 border-t border-slate-200 mt-4 text-xs font-bold">
                         <button onclick="psikologPasifToggle(${p.id})" class="text-amber-700 hover:bg-amber-50 px-3 py-1.5 rounded-xl transition cursor-pointer">${pasifMi ? 'Aktifleştir' : 'Pasife Al (Arşivle)'}</button>
@@ -1013,7 +1044,7 @@
             grid.innerHTML = '';
             db.firmalar.forEach(f => {
                 grid.innerHTML += `
-                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 flex flex-col justify-between">
+                    <div class="bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-200 flex flex-col justify-between">
                         <div>
                             <h3 class="font-extrabold text-slate-900 text-base mb-1">${escapeHtml(f.adi)}</h3>
                             <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-[#256839]">${escapeHtml(f.durum)}</span>
@@ -1084,7 +1115,7 @@
         }
 
         // ==========================================
-        // 5. MUHASEBE VE İSTATİSTİK
+        // 5. GELİŞMİŞ MUHASEBE VE MASRAF DÖKÜMÜ
         // ==========================================
         function muhasebeSubeSecenekleriniDoldur() {
             let db = AsistDB.get();
@@ -1119,8 +1150,6 @@
             ofisMuhasebeHesapla();
         }
 
-        function muhBuguneGit() { yoneticiSeciliTarih = new Date(); ofisMuhasebeHesapla(); }
-
         function ofisMuhasebeHesapla() {
             let db = AsistDB.get();
             if(document.getElementById('muh-aktif-tarih-etiket')) {
@@ -1133,18 +1162,31 @@
                 return subeUygun && s.durum === 'odendi';
             });
 
+            let subeMasraflari = (db.masraflar || []).filter(m => (seciliSubeVal === 'hepsi') || (m.subeId === parseInt(seciliSubeVal, 10)));
+            let filtrelenmisMasraflar = [];
+
             if (seciliZamanPeriyodu === 'gunluk') {
                 let iso = formatTarihISO(yoneticiSeciliTarih);
                 filtrelenmis = filtrelenmis.filter(s => s.tarih === iso);
+                filtrelenmisMasraflar = subeMasraflari.filter(m => m.tarih === iso);
             } else if (seciliZamanPeriyodu === 'haftalik') {
                 let aralik = getHaftaAraligi(yoneticiSeciliTarih);
                 filtrelenmis = filtrelenmis.filter(s => s.tarih >= aralik.baslangic && s.tarih <= aralik.bitis);
+                filtrelenmisMasraflar = subeMasraflari.filter(m => m.tarih >= aralik.baslangic && m.tarih <= aralik.bitis);
             } else if (seciliZamanPeriyodu === 'aylik') {
                 let ayPrefix = `${yoneticiSeciliTarih.getFullYear()}-${String(yoneticiSeciliTarih.getMonth() + 1).padStart(2, '0')}`;
                 filtrelenmis = filtrelenmis.filter(s => s.tarih.startsWith(ayPrefix));
+                filtrelenmisMasraflar = subeMasraflari.filter(m => m.tarih && m.tarih.startsWith(ayPrefix));
+            } else if (seciliZamanPeriyodu === 'ozel') {
+                let bas = document.getElementById('muh-ozel-baslangic').value;
+                let bit = document.getElementById('muh-ozel-bitis').value;
+                if(bas && bit) {
+                    filtrelenmis = filtrelenmis.filter(s => s.tarih >= bas && s.tarih <= bit);
+                    filtrelenmisMasraflar = subeMasraflari.filter(m => m.tarih >= bas && m.tarih <= bit);
+                }
             }
 
-            let fizikiCiro = 0, toplamKdv = 0, ofisBrüt = 0, uzmanPayToplam = 0, kurumsalSeans = 0, bireyselSeans = 0;
+            let fizikiCiro = 0, toplamKdv = 0, ofisBrut = 0, uzmanPayToplam = 0, kurumsalSeans = 0, bireyselSeans = 0;
             let firmaSeansMap = {}, uzmanMap = {};
 
             filtrelenmis.forEach(s => {
@@ -1157,14 +1199,14 @@
                     kurumsalSeans++;
                     let fId = s.firmaId || 0;
                     uzmanMap[uzKey].firmaAdetleri[fId] = (uzmanMap[uzKey].firmaAdetleri[fId] || 0) + 1;
-                    if(!firmaSeansMap[fId]) firmaSeansMap[fId] = { adi: db.firmalar.find(f => f.id === fId)?.adi || 'Kurum', adet: 0 };
+                    if(!firmaSeansMap[fId]) firmaSeansMap[fId] = { id: fId, adi: db.firmalar.find(f => f.id === fId)?.adi || 'Kurum', adet: 0 };
                     firmaSeansMap[fId].adet++;
                 } else {
                     bireyselSeans++;
                     let f = seansFinansHesapla(s);
                     fizikiCiro += f.brut;
                     toplamKdv += f.kdvTutari;
-                    ofisBrüt += f.ofisPay;
+                    ofisBrut += f.ofisPay;
                     uzmanPayToplam += f.uzmanPay;
                     if (s.basvuruTuru === 'kendi') uzmanMap[uzKey].kendiAdet++; else uzmanMap[uzKey].ofisAdet++;
                     uzmanMap[uzKey].kdv += f.kdvTutari;
@@ -1173,45 +1215,74 @@
                 }
             });
 
-            // Masrafları hesapla ve ofis net saf kârından düş
-            let toplamMasraf = 0;
-            (db.masraflar || []).forEach(m => {
-                let mSubeUygun = (seciliSubeVal === 'hepsi') || (m.subeId === parseInt(seciliSubeVal, 10));
-                if (mSubeUygun) {
-                    if (seciliZamanPeriyodu === 'aylik' && m.tarih && m.tarih.startsWith(`${yoneticiSeciliTarih.getFullYear()}-${String(yoneticiSeciliTarih.getMonth() + 1).padStart(2, '0')}`)) {
-                        toplamMasraf += numOrDefault(m.tutar, 0);
-                    } else if (seciliZamanPeriyodu === 'gunluk' && m.tarih === formatTarihISO(yoneticiSeciliTarih)) {
-                        toplamMasraf += numOrDefault(m.tutar, 0);
-                    } else if (seciliZamanPeriyodu === 'hepsi') {
-                        toplamMasraf += numOrDefault(m.tutar, 0);
-                    } else {
-                        toplamMasraf += numOrDefault(m.tutar, 0); // Varsayılan dönem
-                    }
-                }
-            });
+            let toplamMasraf = filtrelenmisMasraflar.reduce((acc, m) => acc + numOrDefault(m.tutar, 0), 0);
+            let ofisNetSafKar = ofisBrut - toplamMasraf;
 
-            let ofisNetSafKar = ofisBrüt - toplamMasraf;
-
-            document.getElementById('stat-ciro').innerText = '₺' + fizikiCiro.toLocaleString('tr-TR');
-            document.getElementById('stat-kdv').innerText = '₺' + toplamKdv.toLocaleString('tr-TR');
+            // 1. Ofis Net Saf Kâr
             document.getElementById('stat-ofis').innerText = '₺' + ofisNetSafKar.toLocaleString('tr-TR');
+            document.getElementById('stat-ofis-arti-kdv-alt').innerText = toplamMasraf > 0
+                ? `Brüt: ₺${ofisBrut.toLocaleString('tr-TR')} • Gider: -₺${toplamMasraf.toLocaleString('tr-TR')}`
+                : 'Gider Yok • Net Kâr';
+
+            // 2. KDV
+            document.getElementById('stat-kdv').innerText = '₺' + toplamKdv.toLocaleString('tr-TR');
+            // 3. Uzman Payı
             document.getElementById('stat-psikolog').innerText = '₺' + uzmanPayToplam.toLocaleString('tr-TR');
-            if (document.getElementById('stat-masraf')) document.getElementById('stat-masraf').innerText = '₺' + toplamMasraf.toLocaleString('tr-TR');
-            if (document.getElementById('stat-firma-alacak')) document.getElementById('stat-firma-alacak').innerText = kurumsalSeans + " Seans";
+            // 4. Masraflar
+            document.getElementById('stat-masraf').innerText = '₺' + toplamMasraf.toLocaleString('tr-TR');
+            // 5. Fiziki Ciro
+            document.getElementById('stat-ciro').innerText = '₺' + fizikiCiro.toLocaleString('tr-TR');
 
-            if (document.getElementById('muh-sayac-bireysel')) document.getElementById('muh-sayac-bireysel').innerText = `${bireyselSeans} Bireysel`;
-            if (document.getElementById('muh-sayac-kurumsal')) document.getElementById('muh-sayac-kurumsal').innerText = `${kurumsalSeans} Kurumsal`;
+            document.getElementById('muh-sayac-bireysel').innerText = `${bireyselSeans} Bireysel`;
+            document.getElementById('muh-sayac-kurumsal').innerText = `${kurumsalSeans} Kurumsal`;
+            document.getElementById('muh-masraf-toplam-etiket').innerText = '₺' + toplamMasraf.toLocaleString('tr-TR');
 
+            // Masraflar Listesi
+            const masrafListEl = document.getElementById('muhasebe-masraf-listesi');
+            if (masrafListEl) {
+                masrafListEl.innerHTML = '';
+                if (filtrelenmisMasraflar.length === 0) {
+                    masrafListEl.innerHTML = `<div class="p-3 text-center text-slate-400 italic">Bu döneme ait masraf kaydı bulunmuyor.</div>`;
+                } else {
+                    filtrelenmisMasraflar.forEach(m => {
+                        let subeObj = db.subeler.find(s => s.id === m.subeId);
+                        masrafListEl.innerHTML += `
+                            <div class="flex justify-between items-center p-2.5 bg-white text-xs">
+                                <div>
+                                    <span class="font-extrabold text-slate-800">${escapeHtml(m.ad)}</span>
+                                    <span class="text-slate-400 text-[10px] block">${escapeHtml(m.tarih)} • ${escapeHtml(subeObj ? subeObj.adi : '')}</span>
+                                </div>
+                                <strong class="text-red-900 font-extrabold">-₺${numOrDefault(m.tutar, 0).toLocaleString('tr-TR')}</strong>
+                            </div>
+                        `;
+                    });
+                }
+            }
+
+            // Kurumsal Firma Fatura / Seans Listesi (Excel Çıktılı)
             const faturaC = document.getElementById('muhasebe-firma-fatura-listesi');
             if(faturaC) {
                 faturaC.innerHTML = '';
                 for (let fId in firmaSeansMap) {
                     let it = firmaSeansMap[fId];
-                    faturaC.innerHTML += `<div class="flex justify-between items-center p-3.5 bg-white text-xs"><span class="font-extrabold text-slate-900">${escapeHtml(it.adi)}</span><span class="bg-blue-100 text-blue-900 px-3 py-1 rounded-xl font-black text-xs">${it.adet} Seans</span></div>`;
+                    faturaC.innerHTML += `
+                        <div class="flex justify-between items-center p-3 bg-white text-xs">
+                            <span class="font-extrabold text-slate-900">${escapeHtml(it.adi)}</span>
+                            <div class="flex items-center space-x-2">
+                                <span class="bg-blue-100 text-blue-900 px-3 py-1 rounded-xl font-black text-xs">${it.adet} Seans</span>
+                                <button onclick="yoneticiFirmaExcelIndir(${it.id})" class="bg-white hover:bg-emerald-50 text-emerald-800 border border-emerald-300 px-2 py-0.5 rounded-lg text-xs font-bold cursor-pointer transition flex items-center space-x-1" title="Excel İndir">
+                                    <i class="fa-solid fa-file-excel text-[#256839]"></i><span>İndir</span>
+                                </button>
+                            </div>
+                        </div>
+                    `;
                 }
-                if (Object.keys(firmaSeansMap).length === 0) faturaC.innerHTML = `<div class="p-3.5 text-center text-slate-400 italic">Döneme ait kurumsal seans bulunmuyor.</div>`;
+                if (Object.keys(firmaSeansMap).length === 0) {
+                    faturaC.innerHTML = `<div class="p-3.5 text-center text-slate-400 italic">Döneme ait tamamlanmış kurumsal seans bulunmuyor.</div>`;
+                }
             }
 
+            // Uzman Matris Tablosu
             const theadTr = document.getElementById('muhasebe-tablo-header-tr');
             const tbody = document.getElementById('muhasebe-uzman-tablo-body');
             let tumFirmalar = db.firmalar || [];
@@ -1238,7 +1309,55 @@
                     tr.innerHTML = r;
                     tbody.appendChild(tr);
                 }
+                if (Object.keys(uzmanMap).length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="${6 + tumFirmalar.length}" class="p-4 text-center text-slate-400 italic">Döneme ait seans bulunmuyor.</td></tr>`;
+                }
             }
+        }
+
+        // Yönetici Paneli Kurumsal Firma Excel (CSV) İndirme
+        function yoneticiFirmaExcelIndir(firmaId) {
+            let db = AsistDB.get();
+            let f = db.firmalar.find(x => x.id === firmaId);
+            if (!f) return;
+
+            let seciliSubeVal = document.getElementById('muh-sube-secimi').value;
+            let kurumsalSeanslar = db.seanslar.filter(s => {
+                let subeUygun = (seciliSubeVal === 'hepsi') || (s.subeId === parseInt(seciliSubeVal, 10));
+                return subeUygun && s.basvuruTuru === 'firma' && s.firmaId === firmaId && s.durum === 'odendi';
+            });
+
+            if (seciliZamanPeriyodu === 'gunluk') {
+                kurumsalSeanslar = kurumsalSeanslar.filter(k => k.tarih === formatTarihISO(yoneticiSeciliTarih));
+            } else if (seciliZamanPeriyodu === 'haftalik') {
+                let a = getHaftaAraligi(yoneticiSeciliTarih);
+                kurumsalSeanslar = kurumsalSeanslar.filter(k => k.tarih >= a.baslangic && k.tarih <= a.bitis);
+            } else if (seciliZamanPeriyodu === 'aylik') {
+                let p = `${yoneticiSeciliTarih.getFullYear()}-${String(yoneticiSeciliTarih.getMonth() + 1).padStart(2, '0')}`;
+                kurumsalSeanslar = kurumsalSeanslar.filter(k => k.tarih.startsWith(p));
+            }
+
+            if (kurumsalSeanslar.length === 0) {
+                alert("Seçilen dönemde bu firmaya ait tamamlanmış seans bulunmuyor!");
+                return;
+            }
+
+            let csvContent = "\uFEFF";
+            csvContent += "Tarih;Saat;Şube;Danışan Adı Soyadı;Telefon;Uzman Psikolog;Hizmet Türü;Seans Durumu\n";
+
+            kurumsalSeanslar.forEach(rawS => {
+                let s = AsistDB.resolveSeans(rawS, db);
+                csvContent += `"${s.tarih}";"${s.saat}";"${s.subeAdi}";"${s.danisanAdi}";"${s.danisanTel}";"${s.hizmet || 'Bireysel'}";"Tamamlandı"\n`;
+            });
+
+            let blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            let url = URL.createObjectURL(blob);
+            let link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", `${f.adi.replace(/\s+/g, '_')}_Yonetici_Seans_Raporu.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
     </script>
 </body>

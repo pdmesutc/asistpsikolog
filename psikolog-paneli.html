@@ -2,18 +2,18 @@
 <html lang="tr" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>AsistPsikolog | Uzman Çalışma Masası</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="db.js"></script>
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
         :root { --primary: #256839; --primary-dark: #12612d; }
     </style>
 </head>
-<body class="bg-slate-100 text-slate-900 min-h-screen flex flex-col md:flex-row pb-20 md:pb-0">
+<body class="bg-slate-100 text-slate-900 min-h-screen flex flex-col md:flex-row pb-24 md:pb-0">
 
     <!-- SOL DİKEY MENÜ (Masaüstü ve Tablet) -->
     <aside class="w-full md:w-72 bg-white border-r border-slate-200 flex flex-col justify-between shrink-0 sticky top-0 md:h-screen z-40 shadow-xs">
@@ -41,33 +41,32 @@
                 <a href="yonetici-paneli.html" class="font-black text-[#256839] hover:underline">Panele Dön →</a>
             </div>
 
-            <!-- Menü Butonları -->
-            <nav class="p-4 space-y-1.5 hidden md:block">
-                <button onclick="psikologSekmeDegistir('gorusmeler')" id="pbtn-gorusmeler" class="psikolog-nav-btn w-full py-3 px-4 rounded-xl transition flex items-center space-x-3 bg-[#256839] text-white shadow-xs cursor-pointer text-xs font-bold">
+            <!-- Masaüstü Navigasyon -->
+            <nav class="p-4 space-y-1.5 hidden md:block text-xs font-bold">
+                <button onclick="psikologSekmeDegistir('gorusmeler')" id="pbtn-gorusmeler" class="psikolog-nav-btn w-full py-3 px-4 rounded-xl transition flex items-center space-x-3 bg-[#256839] text-white shadow-xs cursor-pointer">
                     <i class="fa-solid fa-calendar-day w-5 text-center"></i>
                     <span>Görüşmelerim</span>
                     <span id="badge-psk-seans" class="ml-auto bg-white/20 text-white text-[10px] px-2 py-0.5 rounded-full">0</span>
                 </button>
-                <button onclick="psikologSekmeDegistir('randevu-olustur')" id="pbtn-randevu-olustur" class="psikolog-nav-btn w-full py-3 px-4 rounded-xl transition flex items-center space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer text-xs font-bold">
+                <button onclick="psikologSekmeDegistir('randevu-olustur')" id="pbtn-randevu-olustur" class="psikolog-nav-btn w-full py-3 px-4 rounded-xl transition flex items-center space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer">
                     <i class="fa-solid fa-calendar-plus w-5 text-center text-[#256839]"></i>
                     <span>Randevu Oluştur</span>
                 </button>
-                <button onclick="psikologSekmeDegistir('danisanlar')" id="pbtn-danisanlar" class="psikolog-nav-btn w-full py-3 px-4 rounded-xl transition flex items-center space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer text-xs font-bold">
+                <button onclick="psikologSekmeDegistir('danisanlar')" id="pbtn-danisanlar" class="psikolog-nav-btn w-full py-3 px-4 rounded-xl transition flex items-center space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer">
                     <i class="fa-solid fa-address-book w-5 text-center"></i>
                     <span>Danışan Rehberi</span>
                 </button>
-                <button onclick="psikologSekmeDegistir('calisma-saatleri')" id="pbtn-calisma-saatleri" class="psikolog-nav-btn w-full py-3 px-4 rounded-xl transition flex items-center space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer text-xs font-bold">
+                <button onclick="psikologSekmeDegistir('calisma-saatleri')" id="pbtn-calisma-saatleri" class="psikolog-nav-btn w-full py-3 px-4 rounded-xl transition flex items-center space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer">
                     <i class="fa-solid fa-clock w-5 text-center text-[#256839]"></i>
                     <span>Çalışma Saatlerim</span>
                 </button>
-                <button onclick="psikologSekmeDegistir('firma-rapor')" id="pbtn-firma-rapor" class="psikolog-nav-btn w-full py-3 px-4 rounded-xl transition flex items-center space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer text-xs font-bold">
+                <button onclick="psikologSekmeDegistir('firma-rapor')" id="pbtn-firma-rapor" class="psikolog-nav-btn w-full py-3 px-4 rounded-xl transition flex items-center space-x-3 text-slate-600 hover:bg-slate-50 cursor-pointer">
                     <i class="fa-solid fa-building-user w-5 text-center"></i>
                     <span>Kurumsal Firma Raporu</span>
                 </button>
             </nav>
         </div>
 
-        <!-- Oturum ve Çıkış Alanı -->
         <div class="p-4 border-t border-slate-100 bg-slate-50/50 hidden md:block">
             <div class="flex items-center justify-between">
                 <div class="truncate pr-2">
@@ -82,21 +81,21 @@
         </div>
     </aside>
 
-    <!-- MOBİL ALT MENÜ BARI (Mobil Parmak Dostu UX) -->
-    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 z-50 flex items-center justify-around p-2 text-[10px] font-extrabold text-slate-600 shadow-lg">
-        <button onclick="psikologSekmeDegistir('gorusmeler')" class="flex flex-col items-center py-1 px-2.5 rounded-xl hover:text-[#256839]">
-            <i class="fa-solid fa-calendar-day text-base mb-0.5"></i><span>Seanslarım</span>
+    <!-- MOBİL ALT MENÜ BARI: Görüşmeler -> Randevu -> Rehber -> Saatlerim -> Kurumsal -->
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 z-40 flex items-center justify-around py-2 px-1 text-[10px] font-extrabold shadow-lg">
+        <button onclick="psikologSekmeDegistir('gorusmeler')" id="pmbtn-gorusmeler" class="psk-mobile-nav-btn flex flex-col items-center py-1 px-1.5 rounded-xl transition text-[#256839] font-black cursor-pointer">
+            <i class="fa-solid fa-calendar-day text-base mb-0.5"></i><span>Seanslar</span>
         </button>
-        <button onclick="psikologSekmeDegistir('randevu-olustur')" class="flex flex-col items-center py-1 px-2.5 rounded-xl text-[#256839]">
+        <button onclick="psikologSekmeDegistir('randevu-olustur')" id="pmbtn-randevu-olustur" class="psk-mobile-nav-btn flex flex-col items-center py-1 px-1.5 rounded-xl transition text-slate-400 font-bold cursor-pointer">
             <i class="fa-solid fa-calendar-plus text-base mb-0.5"></i><span>+ Randevu</span>
         </button>
-        <button onclick="psikologSekmeDegistir('danisanlar')" class="flex flex-col items-center py-1 px-2.5 rounded-xl hover:text-[#256839]">
+        <button onclick="psikologSekmeDegistir('danisanlar')" id="pmbtn-danisanlar" class="psk-mobile-nav-btn flex flex-col items-center py-1 px-1.5 rounded-xl transition text-slate-400 font-bold cursor-pointer">
             <i class="fa-solid fa-address-book text-base mb-0.5"></i><span>Danışanlar</span>
         </button>
-        <button onclick="psikologSekmeDegistir('calisma-saatleri')" class="flex flex-col items-center py-1 px-2.5 rounded-xl hover:text-[#256839]">
-            <i class="fa-solid fa-clock text-base mb-0.5"></i><span>Saatler</span>
+        <button onclick="psikologSekmeDegistir('calisma-saatleri')" id="pmbtn-calisma-saatleri" class="psk-mobile-nav-btn flex flex-col items-center py-1 px-1.5 rounded-xl transition text-slate-400 font-bold cursor-pointer">
+            <i class="fa-solid fa-clock text-base mb-0.5"></i><span>Saatlerim</span>
         </button>
-        <button onclick="psikologSekmeDegistir('firma-rapor')" class="flex flex-col items-center py-1 px-2.5 rounded-xl hover:text-[#256839]">
+        <button onclick="psikologSekmeDegistir('firma-rapor')" id="pmbtn-firma-rapor" class="psk-mobile-nav-btn flex flex-col items-center py-1 px-1.5 rounded-xl transition text-slate-400 font-bold cursor-pointer">
             <i class="fa-solid fa-building-user text-base mb-0.5"></i><span>Kurumsal</span>
         </button>
     </nav>
@@ -105,7 +104,7 @@
     <main class="flex-grow p-4 sm:p-6 md:p-10 max-w-7xl w-full mx-auto overflow-y-auto space-y-6">
 
         <!-- 1. GÖRÜŞMELERİM -->
-        <div id="psekm-gorusmeler" class="psikolog-sekme space-y-6">
+        <div id="psekm-gorusmeler" class="psikolog-sekme space-y-4 sm:space-y-6">
             <div class="bg-white p-5 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-5">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-100 gap-3">
                     <div>
@@ -122,8 +121,8 @@
             </div>
         </div>
 
-        <!-- 2. RANDEVU OLUŞTUR (2. SIRADA HİZMET TÜRÜ, DİNAMİK ALANLAR VE ODA KISITLAMASIZ MİMARİ) -->
-        <div id="psekm-randevu-olustur" class="psikolog-sekme hidden space-y-6">
+        <!-- 2. RANDEVU OLUŞTUR -->
+        <div id="psekm-randevu-olustur" class="psikolog-sekme hidden space-y-4 sm:space-y-6">
             <div class="bg-white p-5 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-5">
                 <div class="border-b pb-3">
                     <h2 class="text-xl font-extrabold text-slate-900">Randevu Oluştur (Kendi Danışanım)</h2>
@@ -133,7 +132,6 @@
                 <form id="psk-randevu-form" onsubmit="pskMusaittlikSorgula(event)" class="space-y-4 text-xs">
                     <input type="hidden" id="psk-secili-danisan-id" value="">
                     
-                    <!-- ADIM 1 & 2: ŞUBE SEÇİMİ VE 2. SIRADA HİZMET TÜRÜ -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-emerald-50/70 p-4 rounded-2xl border border-emerald-200">
                         <div>
                             <label class="block font-bold text-emerald-950 mb-1">1. Randevu Açılacak Şubeyi Seçin</label>
@@ -150,7 +148,7 @@
                         </div>
                     </div>
 
-                    <!-- TAKİP EDEN UZMAN BİLGİ / TAVSİYE KUTUSU -->
+                    <!-- Takip Eden Uzman Bilgi Kutusu -->
                     <div id="psk-takip-eden-uzman-kutu" class="hidden bg-emerald-50/90 border border-emerald-300 p-3.5 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                         <div class="flex items-start space-x-2.5">
                             <i class="fa-solid fa-user-check text-[#256839] text-base mt-0.5"></i>
@@ -162,7 +160,6 @@
                         <span class="text-[10px] font-extrabold bg-white text-[#256839] border border-emerald-200 px-2.5 py-1 rounded-xl shrink-0 self-start sm:self-center">Klinik Süreklilik</span>
                     </div>
 
-                    <!-- ADIM 3 & 4: DANIŞAN ADI SOYADI VE TELEFONU -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div class="relative">
                             <label class="block font-bold text-slate-700 mb-1" id="psk-lbl-danisan-ad">3. Danışan Adı Soyadı</label>
@@ -182,7 +179,7 @@
                         </div>
                     </div>
 
-                    <!-- DİNAMİK ÇİFT SEANSI İKİNCİ DANIŞAN ALANLARI -->
+                    <!-- Çift Seansı İkinci Danışan -->
                     <div id="pr-ikinci-danisan-kapsayici" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-4 bg-purple-50/70 p-4 rounded-2xl border border-purple-200">
                         <div>
                             <label class="block font-bold text-purple-950 mb-1">İkinci Danışan (Eş) Adı Soyadı</label>
@@ -200,13 +197,13 @@
                         </div>
                     </div>
 
-                    <!-- DİNAMİK ÇOCUK VE ERGEN EBEVEYN ALANLARI -->
+                    <!-- Çocuk ve Ergen Ebeveyn -->
                     <div id="pr-ebeveyn-kapsayici" class="hidden space-y-3 bg-amber-50/70 p-4 rounded-2xl border border-amber-200">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-amber-200">
                             <span class="font-extrabold text-amber-950 text-xs"><i class="fa-solid fa-people-roof mr-1.5 text-[#256839]"></i>Anne & Baba İletişim Bilgileri</span>
                             <label class="flex items-center space-x-1.5 cursor-pointer font-extrabold text-amber-900 bg-amber-100 px-3 py-1 rounded-xl">
                                 <input type="checkbox" id="pr-ebeveyn-gorusmesi" class="rounded text-[#256839] w-4 h-4">
-                                <span>Sadece Anne - Baba Görüşmesi (Çocuk / Ergen Katılmayacak)</span>
+                                <span>Sadece Anne - Baba Görüşmesi (Çocuk / Ergen Yok)</span>
                             </label>
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
@@ -243,11 +240,10 @@
                         </div>
                     </div>
 
-                    <!-- ADIM 5 & 6: SEANS TARİHİ VE SAATİ -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
                         <div>
                             <label class="block font-bold text-slate-700 mb-1">5. Seans Tarihi (Geçmiş Seçilemez)</label>
-                            <input type="date" id="pr-tarih" required onchange="pskFormSubeDegisti()" class="w-full bg-slate-50 p-2.5 rounded-xl border border-slate-200 font-medium">
+                            <input type="date" id="pr-tarih" required onchange="pskAkilliVarsayilanSaatAyarla(); pskFormSubeDegisti();" class="w-full bg-slate-50 p-2.5 rounded-xl border border-slate-200 font-medium">
                         </div>
                         <div>
                             <label class="block font-bold text-slate-700 mb-1">6. Seans Saati</label>
@@ -269,7 +265,7 @@
                     </div>
 
                     <div class="text-right pt-2">
-                        <button type="submit" class="bg-[#256839] hover:bg-[#12612d] text-white px-7 py-2.5 rounded-xl font-bold cursor-pointer transition shadow-sm w-full sm:w-auto">
+                        <button type="submit" class="bg-[#256839] hover:bg-[#12612d] text-white px-7 py-3 rounded-xl font-bold cursor-pointer transition shadow-sm w-full sm:w-auto">
                             <i class="fa-solid fa-magnifying-glass mr-1.5"></i>Müsaitlik Sorgula
                         </button>
                     </div>
@@ -279,15 +275,15 @@
                     <div class="p-3.5 rounded-2xl border text-xs" id="psk-uzman-durum-kutu"></div>
                     <div class="space-y-2">
                         <div class="flex items-center justify-between">
-                            <span class="font-extrabold text-slate-800 text-xs block">Seçilen Şubenin Odaları ve Müsaitlik Durumu:</span>
-                            <span class="text-[10px] text-slate-400 font-semibold">Tüm hizmetler için boş olan her oda seçilebilir</span>
+                            <span class="font-extrabold text-slate-800 text-xs block">Seçilen Şubenin Odaları ve Uygunluk Durumu:</span>
+                            <span class="text-[10px] text-slate-400 font-semibold">Boş olan her oda seçilebilir</span>
                         </div>
                         <div id="pr-oda-kart-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-3"></div>
                     </div>
                     <div class="flex flex-col sm:flex-row justify-between items-center pt-2 gap-3">
                         <p class="font-bold text-slate-700 text-xs">Seçilen Oda: <span id="pr-secim-oda-yazi" class="text-slate-400 italic">Seçilmedi</span></p>
-                        <button onclick="pskRandevuyuKesinlestir()" id="pr-btn-onayla" disabled class="opacity-50 cursor-not-allowed bg-[#256839] text-white px-7 py-2.5 rounded-xl font-bold text-xs shadow-md w-full sm:w-auto">
-                            Randevuyu Kesinleştir
+                        <button onclick="pskRandevuyuKesinlestir()" id="pr-btn-onayla" disabled class="opacity-50 cursor-not-allowed bg-[#256839] text-white px-7 py-3 rounded-xl font-bold text-xs shadow-md w-full sm:w-auto transition">
+                            Randevuyu Kesinleştir (Oda Seçiniz)
                         </button>
                     </div>
                 </div>
@@ -295,12 +291,12 @@
         </div>
 
         <!-- 3. DANIŞAN REHBERİ -->
-        <div id="psekm-danisanlar" class="psikolog-sekme hidden space-y-6">
+        <div id="psekm-danisanlar" class="psikolog-sekme hidden space-y-4 sm:space-y-6">
             <div class="bg-white p-5 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-4">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-3">
                     <div>
                         <h2 class="text-xl font-extrabold text-slate-900">Danışan Rehberim (<span id="psk-rehber-sayisi">0</span>)</h2>
-                        <p class="text-xs text-slate-500">Yalnızca sizinle görüşmesi bulunan danışanlar ve ebeveyn kayıtları listelenir.</p>
+                        <p class="text-xs text-slate-500">Yalnızca sizinle görüşmesi bulunan danışanlar listelenir.</p>
                     </div>
                     <input type="text" id="psk-danisan-arama-input" onkeyup="pskRehberiCiz()" placeholder="Danışan, Ebeveyn veya Tel Ara..." class="p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs w-full sm:w-64">
                 </div>
@@ -321,7 +317,7 @@
         </div>
 
         <!-- 4. ÇALIŞMA SAATLERİ -->
-        <div id="psekm-calisma-saatleri" class="psikolog-sekme hidden space-y-6">
+        <div id="psekm-calisma-saatleri" class="psikolog-sekme hidden space-y-4 sm:space-y-6">
             <div class="bg-white p-5 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-6">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-100 gap-3">
                     <div>
@@ -339,61 +335,60 @@
             </div>
         </div>
 
-        <!-- 5. KURUMSAL FİRMA RAPORU (KASA ŞERİDİ STİLİ VE EXCEL CSV ÇIKTISI) -->
-        <div id="psekm-firma-rapor" class="psikolog-sekme hidden space-y-6">
-            <div class="bg-white p-5 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-6">
-                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+        <!-- 5. KURUMSAL FİRMA RAPORU (DENGELİ TARİH GEZGİNİ VE EXCEL ÇIKTISI) -->
+        <div id="psekm-firma-rapor" class="psikolog-sekme hidden space-y-4 sm:space-y-6">
+            <div class="bg-white p-5 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-5">
+                <div class="flex items-center justify-between pb-3 border-b border-slate-100">
                     <div>
                         <h2 class="text-xl font-extrabold text-slate-900">Kurumsal Firma Seans Raporu</h2>
-                        <p class="text-xs text-slate-500">Anlaşmalı kurumsal danışan seanslarınız ve tek tıkla Excel (CSV) çıktısı.</p>
+                        <p class="text-xs text-slate-500">Seçilen dönemdeki kurumsal danışan seanslarınız ve Excel çıktısı.</p>
                     </div>
                 </div>
 
-                <!-- Şerit Filtresi -->
-                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex flex-col lg:flex-row items-center justify-between gap-4 text-xs">
-                    <div class="flex flex-wrap items-center gap-1.5 bg-white p-1 rounded-xl border border-slate-200 shadow-2xs">
-                        <button onclick="pskFirmaPeriyotDegistir('gun')" id="pfflt-gun" class="psk-firma-flt-btn px-3 py-1.5 rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Gün</button>
-                        <button onclick="pskFirmaPeriyotDegistir('hafta')" id="pfflt-hafta" class="psk-firma-flt-btn px-3 py-1.5 rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Hafta</button>
-                        <button onclick="pskFirmaPeriyotDegistir('ay')" id="pfflt-ay" class="psk-firma-flt-btn px-3 py-1.5 rounded-lg font-bold transition bg-[#256839] text-white shadow-xs cursor-pointer">Ay</button>
-                        <button onclick="pskFirmaPeriyotDegistir('ozel')" id="pfflt-ozel" class="psk-firma-flt-btn px-3 py-1.5 rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Özel Aralık</button>
+                <!-- Şerit Filtresi (Bugün Butonu Kaldırıldı, Dengeli Navigasyon) -->
+                <div class="bg-slate-50 p-3 sm:p-4 rounded-2xl border border-slate-200 space-y-2.5 text-xs">
+                    <div class="grid grid-cols-4 gap-1 bg-white p-1 rounded-xl border border-slate-200 shadow-2xs">
+                        <button onclick="pskFirmaPeriyotDegistir('gun')" id="pfflt-gun" class="psk-firma-flt-btn py-2 text-center rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Gün</button>
+                        <button onclick="pskFirmaPeriyotDegistir('hafta')" id="pfflt-hafta" class="psk-firma-flt-btn py-2 text-center rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Hafta</button>
+                        <button onclick="pskFirmaPeriyotDegistir('ay')" id="pfflt-ay" class="psk-firma-flt-btn py-2 text-center rounded-lg font-bold transition bg-[#256839] text-white shadow-xs cursor-pointer">Ay</button>
+                        <button onclick="pskFirmaPeriyotDegistir('ozel')" id="pfflt-ozel" class="psk-firma-flt-btn py-2 text-center rounded-lg font-bold transition text-slate-600 hover:bg-slate-50 cursor-pointer">Özel</button>
+                    </div>
+
+                    <div id="psk-firma-standart-nav" class="flex items-center justify-between bg-white p-1 rounded-xl border border-slate-200 shadow-2xs">
+                        <button onclick="pskFirmaTarihKaydir(-1)" class="w-10 h-9 rounded-lg hover:bg-slate-100 text-slate-700 flex items-center justify-center font-bold cursor-pointer transition"><i class="fa-solid fa-chevron-left text-xs"></i></button>
+                        <div class="px-2 font-extrabold text-slate-900 text-xs text-center truncate flex-1" id="psk-firma-aktif-tarih-etiket"></div>
+                        <button onclick="pskFirmaTarihKaydir(1)" class="w-10 h-9 rounded-lg hover:bg-slate-100 text-slate-700 flex items-center justify-center font-bold cursor-pointer transition"><i class="fa-solid fa-chevron-right text-xs"></i></button>
                     </div>
 
                     <div id="psk-firma-ozel-tarih-alani" class="hidden flex items-center space-x-2 bg-white p-1.5 rounded-xl border border-slate-200 shadow-2xs">
-                        <input type="date" id="psk-firma-ozel-baslangic" class="bg-slate-50 border border-slate-200 p-1.5 rounded-lg font-bold text-slate-700 text-xs">
+                        <input type="date" id="psk-firma-ozel-baslangic" class="w-1/2 bg-slate-50 border border-slate-200 p-2 rounded-lg font-bold text-slate-700 text-xs">
                         <span class="text-slate-400 font-bold">-</span>
-                        <input type="date" id="psk-firma-ozel-bitis" class="bg-slate-50 border border-slate-200 p-1.5 rounded-lg font-bold text-slate-700 text-xs">
-                        <button onclick="pskFirmaRaporlariniCiz()" class="bg-[#256839] hover:bg-[#12612d] text-white px-3 py-1.5 rounded-lg font-bold cursor-pointer transition">Uygula</button>
+                        <input type="date" id="psk-firma-ozel-bitis" class="w-1/2 bg-slate-50 border border-slate-200 p-2 rounded-lg font-bold text-slate-700 text-xs">
+                        <button onclick="pskFirmaRaporlariniCiz()" class="bg-[#256839] hover:bg-[#12612d] text-white px-3 py-2 rounded-lg font-bold cursor-pointer transition">Uygula</button>
                     </div>
 
-                    <div id="psk-firma-standart-nav" class="flex items-center space-x-2">
-                        <button onclick="pskFirmaTarihKaydir(-1)" class="w-8 h-8 rounded-xl bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 flex items-center justify-center font-bold cursor-pointer"><i class="fa-solid fa-chevron-left text-xs"></i></button>
-                        <button onclick="pskFirmaBuguneGit()" class="bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 font-extrabold px-3 py-1.5 rounded-xl cursor-pointer">Bugün</button>
-                        <div class="px-3 py-1.5 bg-white border border-slate-200 rounded-xl font-extrabold text-slate-900 min-w-[200px] text-center" id="psk-firma-aktif-tarih-etiket"></div>
-                        <button onclick="pskFirmaTarihKaydir(1)" class="w-8 h-8 rounded-xl bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 flex items-center justify-center font-bold cursor-pointer"><i class="fa-solid fa-chevron-right text-xs"></i></button>
-                    </div>
-
-                    <div class="flex items-center space-x-2 text-[11px]">
+                    <div class="flex items-center justify-between text-[11px] px-1">
                         <span class="font-bold text-blue-900 bg-blue-50 px-2.5 py-1 rounded-xl border border-blue-200" id="psk-firma-sayac-seans">0 Seans</span>
                         <span class="font-bold text-slate-700 bg-white px-2.5 py-1 rounded-xl border border-slate-200" id="psk-firma-sayac-kurum">0 Kurum</span>
                     </div>
                 </div>
 
-                <div id="psk-firma-rapor-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+                <div id="psk-firma-rapor-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
             </div>
         </div>
 
     </main>
 
-    <!-- DANIŞAN DETAY PENCERESİ (İptalsiz Kronolojik Seans Numaralandırma & Firma Ayrımı) -->
-    <div id="psk-danisan-detay-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center z-50 p-4">
-        <div class="bg-white max-w-lg w-full p-6 rounded-3xl shadow-xl space-y-4 text-xs">
+    <!-- DETAY PENCERESİ MODAL -->
+    <div id="psk-danisan-detay-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4">
+        <div class="bg-white max-w-lg w-full p-5 sm:p-6 rounded-3xl shadow-2xl space-y-4 text-xs max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between pb-3 border-b border-slate-100">
                 <h3 id="pd-baslik" class="font-extrabold text-slate-900 text-sm"></h3>
-                <button onclick="pskDetayKapat()" class="text-slate-400 font-bold cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
+                <button onclick="pskDetayKapat()" class="text-slate-400 font-bold p-1 cursor-pointer"><i class="fa-solid fa-xmark text-base"></i></button>
             </div>
             <div id="pd-es-bilgi-kutusu" class="hidden bg-purple-50 border border-purple-200 p-3 rounded-2xl flex items-center justify-between"></div>
             <div id="pd-ebeveyn-bilgi-kutusu" class="hidden bg-amber-50 border border-amber-200 p-3 rounded-2xl text-[11px] text-amber-950 font-medium"></div>
-            <div id="pd-seans-listesi" class="space-y-2 max-h-64 overflow-y-auto pr-1"></div>
+            <div id="pd-seans-listesi" class="space-y-2 max-h-60 overflow-y-auto pr-1"></div>
         </div>
     </div>
 
@@ -490,6 +485,38 @@
             return false;
         }
 
+        function pskAkilliVarsayilanSaatAyarla() {
+            const saatSelect = document.getElementById('pr-saat');
+            const tarihInput = document.getElementById('pr-tarih');
+            if (!saatSelect || !tarihInput) return;
+
+            let bugunISO = formatTarihISO(new Date());
+            if (tarihInput.value === bugunISO) {
+                let simdiSaat = new Date().getHours() + 1;
+                let uygunSaat = String(Math.max(9, Math.min(20, simdiSaat))).padStart(2, '0') + ':00';
+                if ([...saatSelect.options].some(o => o.value === uygunSaat)) {
+                    saatSelect.value = uygunSaat;
+                }
+            }
+        }
+
+        function pskKontrolOnayButon() {
+            const btn = document.getElementById('pr-btn-onayla');
+            if (!btn) return;
+
+            if (pskSecilenOdaId) {
+                btn.disabled = false;
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                btn.classList.add('hover:bg-[#12612d]', 'cursor-pointer', 'shadow-md', 'active:scale-95');
+                btn.innerHTML = `<i class="fa-solid fa-check mr-1.5"></i>Randevuyu Kesinleştir`;
+            } else {
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+                btn.classList.remove('hover:bg-[#12612d]', 'cursor-pointer', 'shadow-md', 'active:scale-95');
+                btn.innerHTML = `Randevuyu Kesinleştir (Oda Seçiniz)`;
+            }
+        }
+
         function pskTakipEdenUzmanBul(danisanId, dbInstance = null) {
             if (!danisanId) return null;
             let db = dbInstance || AsistDB.get();
@@ -527,6 +554,7 @@
             if (!tarihInput.value || tarihInput.value < bugunISO) {
                 tarihInput.value = bugunISO;
             }
+            pskAkilliVarsayilanSaatAyarla();
         }
 
         function uzmanSeciciyiDoldur(db) {
@@ -573,7 +601,6 @@
             pskHizmetTuruDegisti(hizmetSel.value);
         }
 
-        // HİZMET TÜRÜ DEĞİŞİMİ
         function pskHizmetTuruDegisti(tur) {
             const lblAd = document.getElementById('psk-lbl-danisan-ad');
             const lblTel = document.getElementById('psk-lbl-danisan-tel');
@@ -672,6 +699,7 @@
             uzmanSeciciyiDoldur(db);
             varsayilanTarihiAyarla();
             pskRandevuSubeSecenekleriniDoldur();
+            pskKontrolOnayButon();
             pskSeanslariCiz();
             pskRehberiCiz();
             subeSecimButonlariniCiz();
@@ -727,9 +755,15 @@
 
         function pskFormSubeDegisti() {
             pskSecilenOdaId = null;
+            document.getElementById('pr-secim-oda-yazi').innerText = "Seçilmedi";
+            document.getElementById('pr-secim-oda-yazi').className = "text-slate-400 italic";
+            pskKontrolOnayButon();
             document.getElementById('psk-sonuc-alani').classList.add('hidden');
         }
 
+        // ==========================================
+        // DÜZELTİLMİŞ SEKME VE ALT MENÜ RENK YÖNETİMİ
+        // ==========================================
         function psikologSekmeDegistir(sekmeAdi) {
             document.querySelectorAll('.psikolog-sekme').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.psikolog-nav-btn').forEach(btn => {
@@ -742,6 +776,18 @@
                 aktifBtn.classList.remove('text-slate-600', 'hover:bg-slate-50');
                 aktifBtn.classList.add('bg-[#256839]', 'text-white', 'shadow-xs');
             }
+
+            // Mobil Alt Menü Aktif Renk Güncellemesi: Görüşmelerim, Randevu, Danışanlar, Saatlerim, Kurumsal
+            document.querySelectorAll('.psk-mobile-nav-btn').forEach(mbtn => {
+                mbtn.classList.remove('text-[#256839]', 'font-black');
+                mbtn.classList.add('text-slate-400', 'font-bold');
+            });
+            const mAktif = document.getElementById('pmbtn-' + sekmeAdi);
+            if (mAktif) {
+                mAktif.classList.remove('text-slate-400', 'font-bold');
+                mAktif.classList.add('text-[#256839]', 'font-black');
+            }
+
             if(sekmeAdi === 'gorusmeler') pskSeanslariCiz();
             if(sekmeAdi === 'randevu-olustur') varsayilanTarihiAyarla();
             if(sekmeAdi === 'danisanlar') pskRehberiCiz();
@@ -789,7 +835,7 @@
                     }
 
                     list.innerHTML += `
-                        <div class="bg-slate-50/80 p-4 rounded-2xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+                        <div class="bg-slate-50/80 p-3.5 sm:p-4 rounded-2xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
                             <div class="flex items-center space-x-3.5">
                                 <span class="font-black text-slate-900 w-12 text-sm">${escapeHtml(s.saat)}</span>
                                 <div>
@@ -941,7 +987,8 @@
 
             pskSecilenOdaId = null;
             document.getElementById('pr-secim-oda-yazi').innerText = "Seçilmedi";
-            document.getElementById('pr-btn-onayla').disabled = true;
+            document.getElementById('pr-secim-oda-yazi').className = "text-slate-400 italic";
+            pskKontrolOnayButon();
 
             const uzmanKutu = document.getElementById('psk-uzman-durum-kutu');
             let kontrol = pskUygunlukKontrolEt(db, secilenSubeId, tarih, saat, hizmet);
@@ -968,11 +1015,11 @@
                     card.className = "p-3 border-2 border-emerald-500 rounded-xl cursor-pointer text-center hover:bg-emerald-50 transition";
                     card.onclick = function() {
                         pskSecilenOdaId = oda.id;
-                        document.querySelectorAll('#pr-oda-kart-grid div').forEach(k => k.classList.remove('ring-4', 'ring-[#256839]'));
-                        this.classList.add('ring-4', 'ring-[#256839]');
+                        document.querySelectorAll('#pr-oda-kart-grid div').forEach(k => k.classList.remove('ring-4', 'ring-[#256839]', 'bg-emerald-200'));
+                        this.classList.add('ring-4', 'ring-[#256839]', 'bg-emerald-200');
                         document.getElementById('pr-secim-oda-yazi').innerText = oda.adi;
-                        document.getElementById('pr-btn-onayla').disabled = false;
-                        document.getElementById('pr-btn-onayla').classList.remove('opacity-50', 'cursor-not-allowed');
+                        document.getElementById('pr-secim-oda-yazi').className = "text-[#256839] font-black";
+                        pskKontrolOnayButon();
                     };
                     card.innerHTML = `<span class="font-extrabold block text-slate-900">${escapeHtml(oda.adi)}</span><span class="text-[10px] text-emerald-800 font-bold">✅ Boş Oda</span>`;
                 } else {
@@ -1026,7 +1073,6 @@
                 });
             }
 
-            // Çift Seansında Eş Kaydı
             let ikinciDanisanId = null;
             if (hizmet === 'Çift' && ikinciAd) {
                 if (typeof AsistDB.ciftDanisanSenkronizeEt === 'function') {
@@ -1137,7 +1183,6 @@
             });
         }
 
-        // DANIŞAN DETAY PENCERESİ (İptalsiz Seans Numaralandırma & Sadece Firma İbaresi)
         function pskDanisanDetayAc(danisanId) {
             let db = AsistDB.get();
             let d = db.danisanlar.find(x => x.id === danisanId);
@@ -1152,7 +1197,6 @@
                 .filter(s => (s.danisanId === d.id || s.ikinciDanisanId === d.id) && s.uzmanId === AKTIF_UZMAN_ID)
                 .sort((a,b) => a.tarih.localeCompare(b.tarih) || a.saat.localeCompare(b.saat));
 
-            // İptal olmayan seansları kronolojik numaralandır
             let sayac = 0;
             let noMap = {};
             seanslar.forEach(s => {
@@ -1162,7 +1206,6 @@
                 }
             });
 
-            // En son seans en üstte
             let sirali = seanslar.slice().reverse();
 
             if (sirali.length === 0) {
@@ -1313,9 +1356,6 @@
             alert(`✅ ${sube ? sube.adi : 'Şube'} için çalışma saatleriniz kaydedildi!`);
         }
 
-        // ==========================================
-        // 5. PSİKOLOG KURUMSAL FİRMA RAPORU & EXCEL CSV ÇIKTISI
-        // ==========================================
         function pskFirmaPeriyotDegistir(p) {
             pskFirmaAktifPeriyot = p;
             document.querySelectorAll('.psk-firma-flt-btn').forEach(b => {
@@ -1340,11 +1380,6 @@
             pskFirmaRaporlariniCiz();
         }
 
-        function pskFirmaBuguneGit() {
-            pskFirmaSeciliTarih = new Date();
-            pskFirmaRaporlariniCiz();
-        }
-
         function pskFirmaRaporlariniCiz() {
             let db = AsistDB.get();
             const labelEl = document.getElementById('psk-firma-aktif-tarih-etiket');
@@ -1357,8 +1392,7 @@
             let kurumsalSeanslar = db.seanslar.filter(s => s.uzmanId === AKTIF_UZMAN_ID && s.basvuruTuru === 'firma');
 
             if (pskFirmaAktifPeriyot === 'gun') {
-                let seciliISO = formatTarihISO(pskFirmaSeciliTarih);
-                kurumsalSeanslar = kurumsalSeanslar.filter(k => k.tarih === seciliISO);
+                kurumsalSeanslar = kurumsalSeanslar.filter(k => k.tarih === formatTarihISO(pskFirmaSeciliTarih));
             } else if (pskFirmaAktifPeriyot === 'hafta') {
                 let aralik = getHaftaAraligi(pskFirmaSeciliTarih);
                 kurumsalSeanslar = kurumsalSeanslar.filter(k => k.tarih >= aralik.baslangic && k.tarih <= aralik.bitis);
@@ -1379,32 +1413,32 @@
                 let iptal = fSeanslar.filter(s => s.durum === 'iptal').length;
 
                 let kart = document.createElement('div');
-                kart.className = "bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3";
+                kart.className = "bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3";
                 kart.innerHTML = `
                     <div class="flex items-center justify-between pb-2 border-b border-slate-200">
-                        <h4 class="font-extrabold text-slate-900 text-sm">${escapeHtml(f.adi)}</h4>
-                        <div class="flex items-center space-x-2">
+                        <h4 class="font-extrabold text-slate-900 text-sm truncate">${escapeHtml(f.adi)}</h4>
+                        <div class="flex items-center space-x-1.5 shrink-0">
                             <span class="bg-blue-100 text-blue-900 px-2 py-0.5 rounded-lg text-xs font-black">${fSeanslar.length} Seans</span>
-                            <button onclick="pskFirmaExcelIndir(${f.id})" class="bg-white hover:bg-emerald-50 text-emerald-800 border border-emerald-300 px-2.5 py-1 rounded-xl text-xs font-bold cursor-pointer transition flex items-center space-x-1" title="Excel (CSV) İndir">
+                            <button onclick="pskFirmaExcelIndir(${f.id})" class="bg-white hover:bg-emerald-50 text-emerald-800 border border-emerald-300 px-2.5 py-1 rounded-xl text-xs font-bold cursor-pointer transition flex items-center space-x-1" title="Excel İndir">
                                 <i class="fa-solid fa-file-excel text-[#256839]"></i><span>İndir</span>
                             </button>
                         </div>
                     </div>
                     <div class="flex items-center space-x-2 text-[11px] font-bold">
-                        <span class="bg-emerald-50 text-[#256839] border border-emerald-200 px-2 py-0.5 rounded-lg">${tamamlanan} Tamamlandı</span>
+                        <span class="bg-emerald-50 text-[#256839] border border-emerald-200 px-2 py-0.5 rounded-lg">${tamamlanan} Tamam</span>
                         <span class="bg-amber-50 text-amber-800 border border-amber-200 px-2 py-0.5 rounded-lg">${bekleyen} Bekliyor</span>
                         <span class="bg-red-50 text-red-700 border border-red-200 px-2 py-0.5 rounded-lg">${iptal} İptal</span>
                     </div>
-                    <div class="space-y-1.5 max-h-48 overflow-y-auto text-xs">
+                    <div class="space-y-1.5 max-h-40 overflow-y-auto text-xs">
                         ${fSeanslar.length > 0 ? fSeanslar.map(rawS => {
                             let s = AsistDB.resolveSeans(rawS, db);
                             return `
                                 <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-slate-200">
-                                    <div>
-                                        <span class="font-bold text-slate-900">${escapeHtml(s.danisanAdi)}</span>
-                                        <span class="text-slate-400 text-[10px] block">${escapeHtml(s.tarih)} - ${escapeHtml(s.saat)} (${escapeHtml(s.subeAdi)})</span>
+                                    <div class="truncate pr-2">
+                                        <span class="font-bold text-slate-900 block truncate">${escapeHtml(s.danisanAdi)}</span>
+                                        <span class="text-slate-400 text-[10px] block">${escapeHtml(s.tarih)} - ${escapeHtml(s.saat)}</span>
                                     </div>
-                                    <span class="text-[10px] font-extrabold ${s.durum==='odendi'?'text-emerald-700':(s.durum==='iptal'?'text-red-600':'text-amber-700')}">${escapeHtml(s.durum)}</span>
+                                    <span class="text-[10px] font-extrabold shrink-0 ${s.durum==='odendi'?'text-emerald-700':(s.durum==='iptal'?'text-red-600':'text-amber-700')}">${escapeHtml(s.durum)}</span>
                                 </div>
                             `;
                         }).join('') : '<p class="text-[11px] text-slate-400 italic">Dönemde seans bulunmuyor.</p>'}
@@ -1418,7 +1452,6 @@
             }
         }
 
-        // Psikolog Paneli Kurumsal Firma Excel (CSV) İndirme
         function pskFirmaExcelIndir(firmaId) {
             let db = AsistDB.get();
             let f = db.firmalar.find(x => x.id === firmaId);
